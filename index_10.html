@@ -58,6 +58,7 @@
     <!-- <script src="js/TrackballControls.js"></script> -->
     <script src="js/OBJLoader.js"></script>
     <script src="js/Detector.js"></script>
+    <script src="js/audioModule.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
     <!-- <script src="js/DeviceOrientationControls.js"></script> -->
@@ -92,12 +93,8 @@
     var isHitRight = false;
     var rays;
 
-    //audio
-    var audioList = new Array();
-    audioList[0] = new Audio("audio/dysturb.mp3");
-    audioList[1] = new Audio("audio/dysturb_1.mp3");
-    audioList[2] = new Audio("audio/dysturb_2.mp3");
-
+    var audioPaths = ["./audio/dysturb.mp3", "./audio/dysturb_1.mp3", "./audio/dysturb_2.mp3"];
+    var audioList; // initialized later
 
     //mobile
     var mouse_x;
@@ -127,13 +124,14 @@
     var hit1 = false;
     var hit2 = false;
 
+
     videoList[0] = document.createElement('video');
-    videoList[0].src = "videos/time_laps_3.mp4";
+    videoList[0].src = "./videos/time_laps_3.mp4";
     videoList[0].autoplay = true;
     videoList[0].load();
 
     videoList[1] = document.createElement('video');
-    videoList[1].src = "videos/time_laps_4.mp4";
+    videoList[1].src = "./videos/time_laps_4.mp4";
     videoList[1].autoplay = true;
     videoList[1].load();
     // function onVideoBeginsFullScreen() {}
@@ -143,7 +141,7 @@
     // }
 
     videoList[2] = document.createElement('video');
-    videoList[2].src = "videos/time_laps_3.mp4";
+    videoList[2].src = "./videos/time_laps_3.mp4";
     videoList[2].autoplay = true;
     videoList[2].load();
     //videoList[2].shouldPlay = true;
@@ -399,7 +397,6 @@
                     case 68: // d
                         moveRight = false;
                         break;
-
                 }
 
                 // if(currentKeyCode==38){
@@ -425,14 +422,14 @@
             // }, true);
 
             //model Jason collider
-            new THREE.JSONLoader().load('hiRes/cubeColliders.js', function(geometry) {
+            new THREE.JSONLoader().load('./hiRes/cubeColliders.js', function(geometry) {
                 var objectCollider = new THREE.Mesh(geometry);
 
                 objectCollider.position.set(0, 0, 0);
                 objectCollider.scale.set(2, 2, 2);
 
-            scene.add(objectCollider);
-            collidableMeshList.push(objectCollider);
+                scene.add(objectCollider);
+                // collidableMeshList.push(objectCollider);
             });
 
             //model Jason
@@ -455,14 +452,6 @@
             //     loadingComplete = true;
             // });
 
-
-
-            //call audioPlayer function
-            //audioPlay(i);
-            //call movieScreens function
-            // movieScreens(0);
-            // movieScreens(1);
-            // movieScreens(2);
 
             for (var i = 0; i < videoList.length; i++) {
                 var videoImage = document.createElement('canvas');
@@ -587,12 +576,31 @@
             // collidableMeshList.frustumCulled = false;
             render();
 
+            //audio
+            var audioPaths = ["./audio/dysturb.mp3", "./audio/dysturb_1.mp3", "./audio/dysturb_2.mp3"];
+            audioList = makeAudio(audioPaths, camera, movieScreenArray);
+
         }
 
-        function audioPlay(audioNum) {
-            //AUDIO
-            audioList[audioNum].play();
+        // play audio + video, and pause the rest
+        function mediaPlay(num) {
+            var mediaLength = audioList.length;
 
+            for (var i = 0; i < mediaLength; i++) {
+                if (i == num) {
+                    if (!audioList[i].isPlaying) {
+                        audioList[i].play();
+                        videoList[i].play();
+                    }
+                } else {
+                    try {
+                        audioList[i].pause();
+                    } catch(e) {
+                        // console.lo
+                    }
+                    videoList[i].pause();
+                }
+            }
         }
 
         function movieScreens(videoNum) {
@@ -743,15 +751,9 @@
 
                             //console.log('hit0');
                             hit0 = true;
+
                             //stop walking
-                            audioPlay(0);
-                            audioList[1].pause();
-                            audioList[2].pause();
-                            videoList[0].play();
-                            videoList[1].pause();
-                            videoList[2].pause();
-
-
+                            mediaPlay(0);
                         }
 
                         var collisionResults1 = ray.intersectObject(movieScreenArray[1]);
@@ -762,13 +764,7 @@
                             // if (!videoList[1].isInZone) videoList[1].isInZone = true;
                             // if (!videoList[1].shouldPlay) videoList[1].shouldPlay = true;
                             //stop walking
-                            audioPlay(1);
-                            audioList[0].pause();
-                            audioList[2].pause();
-                            //if (videoList[1].shouldPlay && videoList[1].isInZone) 
-                            videoList[1].play();
-                            videoList[0].pause();
-                            videoList[2].pause();
+                            mediaPlay(1);
 
                         }
                         // else {
@@ -780,15 +776,10 @@
                         var collisionResults2 = ray.intersectObject(movieScreenArray[2]);
                         if (collisionResults2.length > 0 && collisionResults2[0].distance < directionVector.length()) {
 
-                            //console.log('hit2');
                             hit2 = true;
+
                             //stop walking
-                            audioPlay(2);
-                            audioList[0].pause();
-                            audioList[1].pause();
-                            videoList[2].play();
-                            videoList[0].pause();
-                            videoList[1].pause();
+                            mediaPlay(2);
 
                         }
 
