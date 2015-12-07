@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<!-- <title>three.js - pointerlock controls</title> -->
+	<style>
+	html, body {
+		width: 100%;
+		height: 100%;
+	}
+
+	body {
+		background-color: #ffffff;
+		margin: 0;
+		overflow: hidden;
+		font-family: arial;
+	}
+
+	#blocker {
+
+		position: absolute;
+
+		width: 100%;
+		height: 100%;
+
+		background-color: rgba(0,0,0,0.5);
+
+	}
+
+	#instructions {
+
+		width: 100%;
+		height: 100%;
+
+		display: -webkit-box;
+		display: -moz-box;
+		display: box;
+
+		-webkit-box-orient: horizontal;
+		-moz-box-orient: horizontal;
+		box-orient: horizontal;
+
+		-webkit-box-pack: center;
+		-moz-box-pack: center;
+		box-pack: center;
+
+		-webkit-box-align: center;
+		-moz-box-align: center;
+		box-align: center;
+
+		color: #ffffff;
+		text-align: center;
+
+		cursor: pointer;
+
+	}
+
+	</style>
+</head>
+<body style="background-color:black">>
+	<p style="color:white" > < > ∧ ∨ = Move, MOUSE = Look around</p><button id="btn" data-clipboard-text= "<object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'/></object>">Get Embed</button>
+	<div id="container"></div>
+	<script src="js/Three.js"></script>
+	<script src="js/three.min.js"></script>
+	<script src="js/Octree.js"></script>
+	<script src="js/PointerLockControls.js"></script>
+	<!-- <script src="js/TrackballControls.js"></script> -->
+	<script src="js/OBJLoader.js"></script>
+	<script src="js/Detector.js"></script>
+	<script src="js/libs/stats.min.js"></script>
+	<script src="clipboard.js-master/dist/clipboard.min.js"></script>
+
+		<!-- <div id="blocker">
+
+			<div id="instructions">
+				<span style="font-size:40px">Click to play</span>
+				<br />
+				(W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+			</div>
+
+		</div>
+	-->
+	<script>
+
+	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+	var camera, scene, renderer;
+	var geometry, material, mesh;
+	var controls;
+	var MovingCube;
+
+	var objects = [];
+
+	var raycaster;
+
+	var container, stats;
+
+	var cross;
+
+	var isHit = false;
+
+	//audio
+	var audioList = new Array();
+	audioList[0]=new Audio("audio/dysturb.mp3");
+	audioList[1]=new Audio("audio/Dysturb_1.mov");
+	audioList[2]=new Audio("audio/Dysturb_2.mov");
+
+	// custom global variables
+	var videoImageContext = [];
+	var videoTexture = [];
+	var videoList = new Array();
+		videoList[0] = document.createElement('video');
+		videoList[0].src="videos/time_laps.mov";
+
+		videoList[1] = document.createElement('video');
+		videoList[1].src = "videos/time_laps_1.mov";
+
+		videoList[2] = document.createElement('video');
+		videoList[2].src = "videos/time_laps.mov";
+
+	var movieScreenArray = [];
+
+	//collidar
+	var collidableMeshList = [];
+//
+			// var blocker = document.getElementById( 'blocker' );
+			// var instructions = document.getElementById( 'instructions' );
+
+			// // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+			// var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+			// if ( havePointerLock ) {
+
+			// 	var element = document.body;
+
+			// 	var pointerlockchange = function ( event ) {
+
+			// 		if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+
+			// 			controlsEnabled = true;
+			// 			controls.enabled = true;
+
+			// 			blocker.style.display = 'none';
+
+			// 		} else {
+
+			// 			controls.enabled = false;
+
+			// 			blocker.style.display = '-webkit-box';
+			// 			blocker.style.display = '-moz-box';
+			// 			blocker.style.display = 'box';
+
+			// 			instructions.style.display = '';
+
+			// 		}
+
+			// 	};
+
+			// 	var pointerlockerror = function ( event ) {
+
+			// 		instructions.style.display = '';
+
+			// 	};
+
+			// 	// Hook pointer lock state change events
+			// 	document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+			// 	document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+			// 	document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+
+			// 	document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+			// 	document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+			// 	document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+
+			// 	instructions.addEventListener( 'click', function ( event ) {
+
+			// 		instructions.style.display = 'none';
+
+			// 		// Ask the browser to lock the pointer
+			// 		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+
+			// 		if ( /Firefox/i.test( navigator.userAgent ) ) {
+
+			// 			var fullscreenchange = function ( event ) {
+
+			// 				if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+
+			// 					document.removeEventListener( 'fullscreenchange', fullscreenchange );
+			// 					document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+
+			// 					element.requestPointerLock();
+			// 				}
+
+			// 			};
+
+			// 			document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+			// 			document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+
+			// 			element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+			// 			element.requestFullscreen();
+
+			// 		} else {
+
+			// 			element.requestPointerLock();
+
+			// 		}
+
+			// 	}, false );
+
+			// } else {
+
+			// 	instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+
+			// }
+//
+			var controlsEnabled = true;
+
+			var moveForward = false;
+			var moveBackward = false;
+			var moveLeft = false;
+			var moveRight = false;
+			var canJump = false;
+
+			var prevTime = performance.now();
+			var velocity = new THREE.Vector3(0,0,0);
+			//touch
+			document.body.addEventListener("touchstart", handleStart, false);
+			document.body.addEventListener("touchend", handleEnd, false);
+
+			var videoNum = 1;
+
+			function handleStart(evt) {
+
+				evt.preventDefault();
+				moveForward = true;
+
+			}
+
+			function handleEnd(evt) {
+				evt.preventDefault();
+				moveForward = false;
+			}
+
+			init();
+			animate();
+
+			//clipboard
+			var btn = document.getElementById('btn');
+			var clipboard = new Clipboard(btn);
+			clipboard.on('success', function(e) {
+				console.log(e);
+			});
+			clipboard.on('error', function(e) {
+				console.log(e);
+			});
+
+			function copyToClipboard(text) {
+				window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+			}
+
+
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 500;
+				//scene
+				scene = new THREE.Scene();
+				//scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+
+				var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.55 );
+				light.position.set( 0.5, 1, 0.75 );
+				scene.add( light );
+
+				controls = new THREE.PointerLockControls( camera );
+				scene.add( controls.getObject() );
+
+				var onKeyDown = function ( event ) {
+
+					//console.log(event);
+
+					//console.log('keydown! --> ' + event.keyCode);
+
+					switch ( event.keyCode ) {
+
+						case 38: // up
+						case 87: // w
+						moveForward = true;
+						break;
+
+						case 37: // left
+						case 65: // a
+						moveLeft = true; 
+						break;
+
+						case 40: // down
+						case 83: // s
+						moveBackward = true;
+						break;
+
+						case 39: // right
+						case 68: // d
+						moveRight = true;
+						break;
+
+						case 32: // space
+						if ( canJump === true ) velocity.y += 350;
+						canJump = false;
+						break;
+
+					}
+
+				};
+
+				var onKeyUp = function ( event ) {
+
+					///console.log('keyup! --> ' + event.keyCode);
+
+					var currentKeyCode = event.keyCode;
+
+					switch(currentKeyCode) {
+
+						case 38: // up
+						moveForward = false;
+						break;							
+						case 87: // w
+						moveForward = false;
+						break;
+						case 37: // left
+						moveLeft = false;
+						break;
+						case 65: // a
+						moveLeft = false;
+						break;
+						case 40: // down
+						moveBackward = false;
+						break;						
+						case 83: // s
+						moveBackward = false;
+						break;
+						case 39: // right
+						moveRight = false;
+						break;
+						case 68: // d
+						moveRight = false;
+						break;
+
+					}
+
+					// if(currentKeyCode==38){
+					// 	moveForward = false;
+					// }
+					// if else(currentKeyCode==87){
+					// 	moveForward = false;
+					// }	
+					// if else(currentKeyCode==37){
+					// 	moveLeft = false;
+					// }										
+
+
+
+				};
+
+				document.addEventListener( 'keydown', onKeyDown, false );
+				document.addEventListener( 'keyup', onKeyUp, false );
+
+				raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
+
+				//full screens
+				// document.body.addEventListener('f', function() {
+				//   THREEx.FullScreen.request();
+				// }, true);
+
+				// texture
+
+				// var manager = new THREE.LoadingManager();
+				// manager.onProgress = function ( item, loaded, total ) {
+
+				// 	console.log( item, loaded, total );
+
+				// };
+
+				// var texture = new THREE.Texture();
+
+
+				// var onProgress = function ( xhr ) {
+				// 	if ( xhr.lengthComputable ) {
+				// 		var percentComplete = xhr.loaded / xhr.total * 100;
+				// 		console.log( Math.round(percentComplete, 2) + '% downloaded' );
+				// 	}
+				// };
+
+				// var onError = function ( xhr ) {
+				// };
+
+
+				// var loader = new THREE.ImageLoader( manager );
+				// loader.load( 'hiRes/facade1_02_00.png', function ( image ) {
+
+				// 	texture.image = image;
+				// 	texture.needsUpdate = true;
+
+				// } );
+
+
+				//model
+
+				// var loader = new THREE.OBJLoader( manager );
+				// loader.load( 'hiRes/cityBlock03.obj', function ( object ) {
+
+				// 	object.traverse( function ( child ) {
+
+				// 		if ( child instanceof THREE.Mesh ) {
+
+				// 			child.material.map = texture;
+
+				// 		}
+
+				// 	} );
+
+				// 	object.position.set(0,0,0);
+				// 	//object.rotation.y=180;
+				// 	object.scale.set(1,1,1);
+				// 	scene.add( object );
+				// 	collidableMeshList.push(object);
+				// 	object.frustumCulled = false;
+
+				// }, onProgress, onError );
+				
+				//model Jason
+				new THREE.JSONLoader().load('hiRes/cityBlock03.js', function(geometry, materials) {
+				     var material = new THREE.MeshFaceMaterial(materials);
+				     material.side = THREE.DoubleSide;
+				     //material.doubleSided = true;
+
+				     var object = new THREE.Mesh(geometry, material);
+
+				     object.position.set(0,0,0);
+				     object.scale.set(2,2,2);
+				     
+				     // object.updateMatrix();
+				     // object.overdraw = true;
+				     scene.add( object );
+				     //collidableMeshList.push(object);
+				 });
+
+
+
+
+				//CUBE
+				var cubeGeometry = new THREE.CubeGeometry(30,30,30);
+				var wireMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe:true } );
+				//transparent:true, opacity:0.8, 
+				MovingCube = new THREE.Mesh( cubeGeometry, wireMaterial );
+				MovingCube.position.set(0, 50, 0);
+				scene.add( MovingCube );
+				
+				//call audioPlayer function
+				//audioPlay(i);
+				//call movieScreens function
+				movieScreens(0);
+				movieScreens(1);
+				movieScreens(2);
+
+				for(var i =0; i<videoList.length; i++ ){
+					var videoImage = document.createElement( 'canvas' );
+					videoImage.width = 1120;
+					videoImage.height = 638;
+
+					videoImageContext[i] = videoImage.getContext( '2d' );
+					// background color if no video present
+					videoImageContext[i].fillStyle = '#000000';
+					videoImageContext[i].fillRect( 0, 0, videoImage.width, videoImage.height );
+
+					videoTexture[i] = new THREE.Texture( videoImage );
+					videoTexture[i].minFilter = THREE.LinearFilter;
+					videoTexture[i].magFilter = THREE.LinearFilter;
+					
+					var movieMaterial = new THREE.MeshBasicMaterial( { map: videoTexture[i], overdraw: true, side:THREE.DoubleSide } );
+					// the geometry on which the movie will be displayed;
+					// 		movie image will be scaled to fit these dimensions.
+					var movieGeometry = new THREE.PlaneGeometry(350, 200, 3, 3 );
+
+					movieScreenArray.push( new THREE.Mesh( movieGeometry, movieMaterial ) );
+
+					//push this screen to the collidibale list
+					collidableMeshList.push(movieScreenArray[i]);
+
+				}
+
+				//position the screens and add them to the scene
+				//1
+				movieScreenArray[0].position.set(987,70,-1234);
+				
+				//2
+				movieScreenArray[1].position.set(130,70,-690);
+				//3
+				movieScreenArray[2].position.set(-990,70,-800);
+				movieScreenArray[2].rotation.y = 1.6;
+
+				//add screens into the scene
+				scene.add(movieScreenArray[0]);
+				scene.add(movieScreenArray[1]);
+				scene.add(movieScreenArray[2]);
+				camera.position.set(0,80,300);
+
+
+				//camera.lookAt(movieScreenArray[0].position);
+
+				//SKYBOX/FOG
+				var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+				var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x330000, side: THREE.FrontSide  } );
+				var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+				// scene.add(skyBox);
+				scene.fog = new THREE.FogExp2( 0x330000, 0.00025 );
+
+				// lights
+
+				// light = new THREE.DirectionalLight( 0xffffff );
+				// light.position.set( 1, 1, 1 );
+				// scene.add( light );
+
+				// light = new THREE.DirectionalLight( 0x002288 );
+				// light.position.set( -1, -1, -1 );
+				// scene.add( light );
+
+				//spot light1              (hex, intensity, distance, angle, exponent, decay)
+				light = new THREE.SpotLight(0xFFCC66, 1 , 0 , 0.1 , 9 , 0.1);
+				light.position.set(-42.34,17,227);
+				light.shadowCameraVisible = true;
+				light.shadowDarkness = 0.95;
+				// must enable shadow casting ability for the light
+				light.castShadow = true;
+				scene.add(light);
+				light.target = MovingCube;
+
+				light = new THREE.AmbientLight( 0x404040);
+				scene.add( light );
+
+				// light = new THREE.PointLight( 0xff0040, 1, 50 );
+				// scene.add( light );
+				
+				// renderer
+
+				renderer = new THREE.WebGLRenderer();
+				//renderer.setClearColor( 0xffffff );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				container = document.getElementById( 'container' );
+				container.appendChild( renderer.domElement );
+
+				//FPS
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				stats.domElement.style.zIndex = 100;
+				// container.appendChild( stats.domElement );
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+				collidableMeshList.frustumCulled = false;
+				
+				movieScreenArray.frustumCulled = false;
+				collidableMeshList.frustumCulled = false;
+				render();
+
+			}
+
+			function audioPlay(audioNum){
+				//AUDIO
+				audioList[audioNum].play();
+
+			}
+
+			function movieScreens(videoNum){
+				// VIDEO //
+				///////////
+				// create the video element
+				// video = document.createElement( 'video' );
+			   //ideo = document.getElementsByTagName( 'video' );
+				// video.id = 'video';
+				// video.type = ' video/ogg; codecs="theora, vorbis" ';
+				//video.src = "videos/time_laps.mov";
+			
+				//video.src = "videos/time_laps.mov";
+				videoList[videoNum].pause();
+				//video.loop = true;
+			//videoList[videoNum].play();	
+				// alternative method -- 
+				// create DIV in HTML:
+				// <video id="myVideo" autoplay style="display:none">
+				//		<source src="videos/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
+				// </video>
+				// and set JS variable:
+				// video = document.getElementById( 'myVideo' );
+
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+
+				//controls.handleResize();
+
+				render();
+
+			}
+			
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				update();
+				render();
+				//controls.update();				
+
+			}
+
+			function update() {
+				//collidar
+
+				if ( controlsEnabled ) {
+					raycaster.ray.origin.copy( controls.getObject().position );
+					// raycaster.ray.origin.copy( MovingCube.position );
+					raycaster.ray.origin.y -= 10;
+
+					var intersections = raycaster.intersectObjects( objects );
+
+					var isOnObject = intersections.length > 0;
+
+					var time = performance.now();
+					var delta = ( time - prevTime ) / 300;
+
+					velocity.x -= velocity.x * 10.0 * delta;
+					velocity.z -= velocity.z * 10.0 * delta;
+
+					//velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+					if ( moveForward ) velocity.z -= 400.0 * delta;
+					if ( moveBackward ) velocity.z += 400.0 * delta;
+
+					if ( moveLeft ) velocity.x -= 400.0 * delta;
+					if ( moveRight ) velocity.x += 400.0 * delta;
+
+					if ( isOnObject === true ) {
+						velocity.y = Math.max( 0, velocity.y );
+
+						canJump = true;
+					}
+
+					controls.getObject().translateX( velocity.x * delta );
+					controls.getObject().translateY( velocity.y * delta );
+					controls.getObject().translateZ( velocity.z * delta );
+					//console.log(MovingCube.position);
+					
+
+					if ( controls.getObject().position.y < 10 ) {
+
+						velocity.y = 0;
+						controls.getObject().position.y = 10;
+
+						canJump = true;
+
+					}
+
+					prevTime = time;
+
+				}
+					// if ( collisionResults.length > 0 && collisionResults[1].distance < directionVector.length() ){
+					// 	console.log('hit');
+					// 	//isHit = true;
+					// 	video1.play();
+					// } 	
+					// if ( collisionResults.length > 0 && collisionResults[2].distance < directionVector.length() ){
+					// 	console.log('hit');
+					// 	//isHit = true;
+					// 	video2.play();
+					// } 	
+
+				MovingCube.position.set(controls.position().x, controls.position().y, controls.position().z);
+
+				var originPoint = MovingCube.position.clone();
+				
+				for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++){		
+					var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
+					var globalVertex = localVertex.applyMatrix4( MovingCube.matrix );
+					var directionVector = globalVertex.sub( MovingCube.position );
+					//Raycaster( origin, direction, near, far )
+					// origin — The origin vector where the ray casts from.
+					// direction — The direction vector that gives direction to the ray. Should be normalized.
+					var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+					var collisionResults = ray.intersectObject( movieScreenArray[0]);
+					for ( var i = 0; i < collisionResults.length; i++ ) {
+					if ( collisionResults.length > 0 && collisionResults[i].distance < directionVector.length() ){
+						console.log('hit0');
+						console.log(movieScreenArray[0].position);
+						//stop walking
+						audioPlay(0);
+						audioList[1].pause();
+						audioList[2].pause();
+						videoList[0].play();
+						videoList[1].pause();
+						videoList[2].pause();
+						moveForward = false;
+					}
+					}
+					
+					var collisionResults1 = ray.intersectObject( movieScreenArray[1]);
+					for ( var i = 0; i < collisionResults1.length; i++ ) {
+					if ( collisionResults1.length > 0 && collisionResults1[i].distance < directionVector.length() ){
+						console.log('hit1');
+						//stop walking
+						audioPlay(1);
+						audioList[0].pause();
+						audioList[2].pause();
+						videoList[1].play();
+						videoList[0].pause();
+						videoList[2].pause();
+						moveForward = false;
+					}
+					}
+					
+					var collisionResults2 = ray.intersectObject( movieScreenArray[2]);
+					for ( var i = 0; i < collisionResults2.length; i++ ) {
+					if ( collisionResults2.length > 0 && collisionResults2[i].distance < directionVector.length() ){
+						console.log('hit2');
+						//stop walking
+						audioPlay(2);
+						audioList[0].pause();
+						audioList[1].pause();
+						videoList[2].play();
+						videoList[0].pause();
+						videoList[1].pause();
+						moveForward = false;
+					}
+					}
+	
+					var collisionResults = ray.intersectObjects(collidableMeshList);
+					if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ){	
+							// moveForward = false;	
+							// velocity.x = 0;
+				}
+				}
+
+				// controls.update();
+				stats.update();
+			}
+
+// need an array of videos
+
+// for(var i=0;i<videos.length;i++){
+	//checkVideoCollision(i)
+//}
+
+// function checkVideCollision(index){
+// 	var collisionResults = ray.intersectObjects( collidableMeshList );
+// 	if ( collisionResults.length > 0 && collisionResults[i].distance < directionVector.length() ){
+// 		console.log('hit');
+// 		//isHit = true;
+// 		videos[i].video.play();
+// 	} 						
+// }
+
+
+
+function render() {
+
+
+				//console.log(isHit);
+				if ( videoList[0].readyState === videoList[0].HAVE_ENOUGH_DATA ) {
+
+					for(var i =0; i<videoList.length; i++){
+						// videoImageContext.drawImage( videoList[1], 0, 0 );
+						videoImageContext[i].drawImage( videoList[i], 0, 0);
+
+						if ( videoTexture[i] ) 
+							videoTexture[i].needsUpdate = true;
+
+					}
+
+				}
+
+				renderer.render( scene, camera );
+
+			}
+
+			</script>
+		</body>
+		</html>
+
+

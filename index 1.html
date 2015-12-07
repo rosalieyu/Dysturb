@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- <title>three.js - pointerlock controls</title> -->
+		<style>
+			html, body {
+				width: 100%;
+				height: 100%;
+			}
+
+			body {
+				background-color: #ffffff;
+				margin: 0;
+				overflow: hidden;
+				font-family: arial;
+			}
+
+			#blocker {
+
+				position: absolute;
+
+				width: 100%;
+				height: 100%;
+
+				background-color: rgba(0,0,0,0.5);
+
+			}
+
+			#instructions {
+
+				width: 100%;
+				height: 100%;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #ffffff;
+				text-align: center;
+
+				cursor: pointer;
+
+			}
+
+		</style>
+	</head>
+	<body>
+		
+		<audio controls autoplay>
+ 		 <source src="audio/dysturb.mp3" type="audio/mpeg">
+		</audio>
+		<button id="btn" data-clipboard-text= "<object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'/></object>">Get Embed</button>
+
+		<div id="container"></div>
+		<script src="js/Three.js"></script>
+		<script src="js/three.min.js"></script>
+		<script src="js/PointerLockControls.js"></script>
+<!-- <script src="js/TrackballControls.js"></script> -->
+		<script src="js/OBJLoader.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="clipboard.js-master/dist/clipboard.min.js"></script>
+
+		<!-- <div id="blocker">
+
+			<div id="instructions">
+				<span style="font-size:40px">Click to play</span>
+				<br />
+				(W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+			</div>
+
+		</div>
+ -->
+		<script>
+
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var camera, scene, renderer;
+			var geometry, material, mesh;
+			var controls;
+
+			var objects = [];
+
+			var raycaster;
+
+			var container, stats;
+
+			var cross;
+
+			// custom global variables
+			var video, videoImage, videoImageContext, videoTexture;
+			//collidar
+			var collidableMeshList = [];
+
+			// var blocker = document.getElementById( 'blocker' );
+			// var instructions = document.getElementById( 'instructions' );
+
+			// // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+			// var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+			// if ( havePointerLock ) {
+
+			// 	var element = document.body;
+
+			// 	var pointerlockchange = function ( event ) {
+
+			// 		if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+
+			// 			controlsEnabled = true;
+			// 			controls.enabled = true;
+
+			// 			blocker.style.display = 'none';
+
+			// 		} else {
+
+			// 			controls.enabled = false;
+
+			// 			blocker.style.display = '-webkit-box';
+			// 			blocker.style.display = '-moz-box';
+			// 			blocker.style.display = 'box';
+
+			// 			instructions.style.display = '';
+
+			// 		}
+
+			// 	};
+
+			// 	var pointerlockerror = function ( event ) {
+
+			// 		instructions.style.display = '';
+
+			// 	};
+
+			// 	// Hook pointer lock state change events
+			// 	document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+			// 	document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+			// 	document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+
+			// 	document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+			// 	document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+			// 	document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+
+			// 	instructions.addEventListener( 'click', function ( event ) {
+
+			// 		instructions.style.display = 'none';
+
+			// 		// Ask the browser to lock the pointer
+			// 		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+
+			// 		if ( /Firefox/i.test( navigator.userAgent ) ) {
+
+			// 			var fullscreenchange = function ( event ) {
+
+			// 				if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+
+			// 					document.removeEventListener( 'fullscreenchange', fullscreenchange );
+			// 					document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+
+			// 					element.requestPointerLock();
+			// 				}
+
+			// 			};
+
+			// 			document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+			// 			document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+
+			// 			element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+			// 			element.requestFullscreen();
+
+			// 		} else {
+
+			// 			element.requestPointerLock();
+
+			// 		}
+
+			// 	}, false );
+
+			// } else {
+
+			// 	instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+
+			// }
+
+			var controlsEnabled = true;
+
+			var moveForward = false;
+			var moveBackward = false;
+			var moveLeft = false;
+			var moveRight = false;
+			var canJump = false;
+
+			var prevTime = performance.now();
+			var velocity = new THREE.Vector3(0,0,0);
+			//touch
+			document.body.addEventListener("touchstart", handleStart, false);
+			document.body.addEventListener("touchend", handleEnd, false);
+			  
+			function handleStart(evt) {
+
+				  evt.preventDefault();
+				  moveForward = true;
+
+			}
+
+			function handleEnd(evt) {
+					  evt.preventDefault();
+					  moveForward = false;
+			}
+
+			init();
+			animate();
+
+			//clipboard
+			var btn = document.getElementById('btn');
+    		var clipboard = new Clipboard(btn);
+    		clipboard.on('success', function(e) {
+        	console.log(e);
+        	    });
+   			clipboard.on('error', function(e) {
+       		console.log(e);
+   			 });
+
+			function copyToClipboard(text) {
+			    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+			}
+			
+
+				function init() {
+
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.z = 500;
+				//scene
+				scene = new THREE.Scene();
+				//scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+
+				var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+				light.position.set( 0.5, 1, 0.75 );
+				scene.add( light );
+
+				controls = new THREE.PointerLockControls( camera );
+				scene.add( controls.getObject() );
+
+				var onKeyDown = function ( event ) {
+
+					switch ( event.keyCode ) {
+
+						case 38: // up
+						case 87: // w
+							moveForward = true;
+							break;
+
+						case 37: // left
+						case 65: // a
+							moveLeft = true; 
+							break;
+
+						case 40: // down
+						case 83: // s
+							moveBackward = true;
+							break;
+
+						case 39: // right
+						case 68: // d
+							moveRight = true;
+							break;
+
+						case 32: // space
+							if ( canJump === true ) velocity.y += 350;
+							canJump = false;
+							break;
+
+					}
+
+				};
+
+				var onKeyUp = function ( event ) {
+
+					switch( event.keyCode ) {
+
+						case 38: // up
+						case 87: // w
+							moveForward = false;
+							break;
+
+						case 37: // left
+						case 65: // a
+							moveLeft = false;
+							break;
+
+						case 40: // down
+						case 83: // s
+							moveBackward = false;
+							break;
+
+						case 39: // right
+						case 68: // d
+							moveRight = false;
+							break;
+
+					}
+
+				};
+
+				document.addEventListener( 'keydown', onKeyDown, false );
+				document.addEventListener( 'keyup', onKeyUp, false );
+
+				raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
+
+				// texture
+
+				var manager = new THREE.LoadingManager();
+				manager.onProgress = function ( item, loaded, total ) {
+
+					console.log( item, loaded, total );
+
+				};
+
+				var texture = new THREE.Texture();
+	
+
+				var onProgress = function ( xhr ) {
+					if ( xhr.lengthComputable ) {
+						var percentComplete = xhr.loaded / xhr.total * 100;
+						console.log( Math.round(percentComplete, 2) + '% downloaded' );
+					}
+				};
+
+				var onError = function ( xhr ) {
+				};
+
+
+				var loader = new THREE.ImageLoader( manager );
+				loader.load( 'hiRes/dysturb_test2.jpg', function ( image ) {
+
+					texture.image = image;
+					texture.needsUpdate = true;
+
+				} );
+		
+
+				// model
+
+				var loader = new THREE.OBJLoader( manager );
+				loader.load( 'hiRes/dysturb_test2.obj', function ( object ) {
+
+					object.traverse( function ( child ) {
+
+						if ( child instanceof THREE.Mesh ) {
+
+							child.material.map = texture;
+
+						}
+
+					} );
+
+					object.position.set(0,-10,800);;
+					object.scale.set(8,8,8);
+					scene.add( object );
+					collidableMeshList.push(object);
+
+				}, onProgress, onError );
+
+
+							// VIDEO //
+				///////////
+				
+				// create the video element
+				video = document.createElement( 'video' );
+				// video.id = 'video';
+				// video.type = ' video/ogg; codecs="theora, vorbis" ';
+				video.src = "videos/time_laps.mov";
+				video.load(); // must call after setting/changing source
+				video.play();
+				video.loop= true;
+				
+				// alternative method -- 
+				// create DIV in HTML:
+				// <video id="myVideo" autoplay style="display:none">
+				//		<source src="videos/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
+				// </video>
+				// and set JS variable:
+				// video = document.getElementById( 'myVideo' );
+				
+				videoImage = document.createElement( 'canvas' );
+				videoImage.width = 1120;
+				videoImage.height = 638;
+
+				videoImageContext = videoImage.getContext( '2d' );
+				// background color if no video present
+				videoImageContext.fillStyle = '#000000';
+				videoImageContext.fillRect( 0, 0, videoImage.width, videoImage.height );
+
+				videoTexture = new THREE.Texture( videoImage );
+				videoTexture.minFilter = THREE.LinearFilter;
+				videoTexture.magFilter = THREE.LinearFilter;
+				
+				var movieMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, overdraw: true, side:THREE.DoubleSide } );
+				// the geometry on which the movie will be displayed;
+				// 		movie image will be scaled to fit these dimensions.
+				var movieGeometry = new THREE.PlaneGeometry(420, 240, 3, 3 );
+				var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
+				movieScreen.position.set(-150,70,-170);
+				scene.add(movieScreen);
+				collidableMeshList.push(movieScreen);
+				
+				camera.position.set(0,150,300);
+				camera.lookAt(movieScreen.position);
+							
+
+				// SKYBOX/FOG
+				// var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+				// var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
+				// var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+				// // scene.add(skyBox);
+				// scene.fog = new THREE.FogExp2( 0x9999ff, 0.00025 );
+
+				// lights
+
+				light = new THREE.DirectionalLight( 0xffffff );
+				light.position.set( 1, 1, 1 );
+				scene.add( light );
+
+				// light = new THREE.DirectionalLight( 0x002288 );
+				// light.position.set( -1, -1, -1 );
+				// scene.add( light );
+
+				light = new THREE.AmbientLight( 0x404040);
+				scene.add( light );
+
+				light = new THREE.PointLight( 0xff0040, 1, 50 );
+				scene.add( light );
+				
+				// renderer
+
+				renderer = new THREE.WebGLRenderer();
+				//renderer.setClearColor( 0xffffff );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				container = document.getElementById( 'container' );
+				container.appendChild( renderer.domElement );
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				stats.domElement.style.zIndex = 100;
+				container.appendChild( stats.domElement );
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+				render();
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			
+				//controls.handleResize();
+
+				render();
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				render();
+				//controls.update();
+
+				if ( controlsEnabled ) {
+					raycaster.ray.origin.copy( controls.getObject().position );
+					raycaster.ray.origin.y -= 10;
+
+
+
+					var intersections = raycaster.intersectObjects( objects );
+
+					var isOnObject = intersections.length > 0;
+ 					
+				
+					var time = performance.now();
+					var delta = ( time - prevTime ) / 300;
+
+					velocity.x -= velocity.x * 10.0 * delta;
+					velocity.z -= velocity.z * 10.0 * delta;
+
+					//velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+					if ( moveForward ) velocity.z -= 400.0 * delta;
+					if ( moveBackward ) velocity.z += 400.0 * delta;
+
+					if ( moveLeft ) velocity.x -= 400.0 * delta;
+					if ( moveRight ) velocity.x += 400.0 * delta;
+
+					if ( isOnObject === true ) {
+						velocity.y = Math.max( 0, velocity.y );
+
+						canJump = true;
+					}
+
+					controls.getObject().translateX( velocity.x * delta );
+					controls.getObject().translateY( velocity.y * delta );
+					controls.getObject().translateZ( velocity.z * delta );
+
+					if ( controls.getObject().position.y < 10 ) {
+
+						velocity.y = 0;
+						controls.getObject().position.y = 10;
+
+						canJump = true;
+
+					}
+
+					prevTime = time;
+
+				}
+			}
+
+			function update() {
+			video.play();
+			video.loop();
+			//collidar
+					var originPoint = controls.getObject().position.clone();
+	
+					for (var vertexIndex = 0; vertexIndex < controls.getObject().geometry.vertices.length; vertexIndex++)
+					{		
+						var localVertex = controls.geometry.vertices[vertexIndex].clone();
+						var globalVertex = localVertex.applyMatrix4( controls.getObject().matrix );
+						var directionVector = globalVertex.sub( controls.getObject().position );
+						
+						var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+						var collisionResults = raycaster.intersectObjects( collidableMeshList );
+						if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
+							console.log('hit');
+							video.stop();
+					}
+				
+			controls.update();
+			stats.update();
+			}
+
+
+
+			function render() {
+
+				
+				if ( video.readyState === video.HAVE_ENOUGH_DATA ) {
+		
+					videoImageContext.drawImage( video, 0, 0 );
+					if ( videoTexture ) 
+						videoTexture.needsUpdate = true;
+			}
+
+				renderer.render( scene, camera );
+				stats.update();
+
+			}
+
+		</script>
+	</body>
+</html>

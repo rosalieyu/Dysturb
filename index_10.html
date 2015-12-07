@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+    }
+    
+    body {
+        background-color: #ffffff;
+        margin: 0;
+        overflow: hidden;
+        font-family: arial;
+    }
+    
+    #blocker {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    #instructions {
+        width: 100%;
+        height: 100%;
+        display: -webkit-box;
+        display: -moz-box;
+        display: box;
+        -webkit-box-orient: horizontal;
+        -moz-box-orient: horizontal;
+        box-orient: horizontal;
+        -webkit-box-pack: center;
+        -moz-box-pack: center;
+        box-pack: center;
+        -webkit-box-align: center;
+        -moz-box-align: center;
+        box-align: center;
+        color: #ffffff;
+        text-align: center;
+        cursor: pointer;
+    }
+    </style>
+</head>
+
+<body style="background-color:black">>
+    <p style="color:white">
+        <> ∧ ∨ = Move, MOUSE = Look around</p>
+    <button id="btn" data-clipboard-text="<object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'/></object>">Get Embed</button>
+    <div id="container"></div>
+    <script src="js/Three.js"></script>
+    <script src="js/three.min.js"></script>
+    <script src="js/Octree.js"></script>
+    <script src="js/PointerLockControls.js"></script>
+    <!-- <script src="js/TrackballControls.js"></script> -->
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="clipboard.js-master/dist/clipboard.min.js"></script>
+    <!-- <script src="js/DeviceOrientationControls.js"></script> -->
+    <!-- <div id="blocker">
+
+            <div id="instructions">
+                <span style="font-size:40px">Click to play</span>
+                <br />
+                (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+            </div>
+
+        </div>
+    -->
+    <script>
+    if (!Detector.webgl) Detector.addGetWebGLMessage();
+    var camera, scene, renderer;
+    var geometry, material, mesh;
+    var controls;
+    var MovingCube;
+    var CameraCube;
+
+    var objects = [];
+    var raycaster;
+    var container, stats;
+    var cross;
+
+    var isHit = false;
+    var isHitFront = false;
+    var isHitBack = false;
+    var isHitLeft = false;
+    var isHitRight = false;
+    var rays;
+
+    //audio
+    var audioList = new Array();
+    audioList[0] = new Audio("audio/dysturb.mp3");
+    audioList[1] = new Audio("audio/dysturb_1.mp3");
+    audioList[2] = new Audio("audio/dysturb_2.mp3");
+
+
+    //mobile
+    var mouse_x;
+    var mouse_y;
+    var videoIsLoaded = false;
+    var thisIsTouchDevice = false;
+    var whichMobile = "";
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        console.log("I'm iOS!");
+        whichMobile = "iOS_mobile";
+    }
+    if (isTouchDevice()) thisIsTouchDevice = true;
+    //
+    var lastTime0 = Date.now();
+    var lastTime1 = Date.now();
+    var lastTime2 = Date.now();
+    var time0;
+    var time1;
+    var time2;
+
+    var movieScreenArray = [];
+    // custom global variables
+    var videoImageContext = [];
+    var videoTexture = [];
+    var videoList = new Array();
+    var hit0 = false;
+    var hit1 = false;
+    var hit2 = false;
+    videoList[0] = document.createElement('video');
+    videoList[0].src = "videos/time_laps_3.mp4";
+    videoList[0].autoplay = true;
+    videoList[0].load();
+
+    videoList[1] = document.createElement('video');
+    videoList[1].src = "videos/time_laps_4.mp4";
+    videoList[1].autoplay = true;
+    videoList[1].load();
+    // function onVideoBeginsFullScreen() {}
+
+    // function onVideo1EndsFullScreen() {
+    //     videoList[1].shouldPlay = false;
+    // }
+
+    videoList[2] = document.createElement('video');
+    videoList[2].src = "videos/time_laps_3.mp4";
+    videoList[2].autoplay = true;
+    videoList[2].load();
+    //videoList[2].shouldPlay = true;
+
+    //
+    for (var i = 0; i < videoList.length; i++) {
+        videoList[i].addEventListener("contextmenu", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }, false);
+
+        // hide the controls if they're visible
+        if (videoList[i].hasAttribute("controls")) {
+            videoList[i].removeAttribute("controls")
+        }
+         }
+
+        //collidar
+        var collidableMeshList = [];
+
+        //
+        var controlsEnabled = true;
+
+        var moveForward = false;
+        var moveBackward = false;
+        var moveLeft = false;
+        var moveRight = false;
+        var canJump = false;
+
+        var prevTime = performance.now();
+        var velocity = new THREE.Vector3(0, 0, 0);
+
+        //touch
+        // window.history.replaceState(null, null, "http://www.rosalieyu.com/dysturb/test_3/index_5.html");
+        //if (thisIsTouchDevice) 
+        document.body.addEventListener("touchstart", handleStart, false);
+        document.body.addEventListener("touchstart", get_mouse_coords, false);
+        document.body.addEventListener("touchmove", handleMove, false);
+        document.body.addEventListener("touchend", handleEnd, false);
+
+        var videoNum = 1;
+
+        function handleStart(evt) {
+
+            evt.preventDefault();
+            moveForward = true;
+
+            // if (!videoIsLoaded) {
+            //     videoList[1].load();
+            //     videoIsLoaded = true;
+            // }
+
+            // if (hit0) {
+            //     videoList[0].play();
+            // }
+            // if (hit1) {
+            //     videoList[1].play();
+            // }
+            // if (hit2) {
+            //     videoList[2].play();
+            // }
+
+        }
+
+        function get_mouse_coords(evt) {
+            mouse_x = evt.pageX;
+            mouse_y = evt.pageY;
+
+        }
+
+        function handleMove(evt) {
+            evt.preventDefault();
+            moveForward = false;
+            moveBackward = false;
+
+            var new_mouse_x = evt.pageX;
+            if ((new_mouse_x - mouse_x) > 60) {
+                moveLeft = true;
+                moveRight = false;
+
+            } else if ((new_mouse_x - mouse_x) < -60) {
+                moveRight = true;
+                moveLeft = false;
+
+            }
+            if (evt.scale < 1.0) {
+                moveForward = false;
+                moveBackward = true;
+            } else if (evt.scale > 1.0) {
+                moveBackward = false;
+                moveForward = true;
+            }
+
+
+        }
+
+        function handleEnd(evt) {
+            evt.preventDefault();
+            moveForward = false;
+            moveBackward = false;
+            moveLeft = false;
+            moveRight = false;
+        }
+
+        function isTouchDevice() {
+            return 'handleStart' in window || !!(navigator.msMaxTouchPoints);
+        }
+
+
+        init();
+        animate();
+
+        //clipboard
+        var btn = document.getElementById('btn');
+        var clipboard = new Clipboard(btn);
+        clipboard.on('success', function(e) {
+            console.log(e);
+        });
+        clipboard.on('error', function(e) {
+            console.log(e);
+        });
+
+        function copyToClipboard(text) {
+            window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+        }
+
+
+        function init() {
+            //CUBE
+            var cubeGeometry = new THREE.CubeGeometry(600, 500, 350);
+            var wireMaterial = new THREE.MeshBasicMaterial({
+                color: 0xff0000,
+                wireframe: true,
+                //transparent: true,
+                //opacity: 0
+            });
+            MovingCube = new THREE.Mesh(cubeGeometry, wireMaterial);
+            MovingCube.position.set(0, -50, -300);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+
+            cubeGeometry = new THREE.CubeGeometry(30, 30, 100);
+            wireMaterial = new THREE.MeshBasicMaterial({
+                wireframe: true,
+                //transparent: true,
+                //opacity: 0
+            });
+            CameraCube = new THREE.Mesh(cubeGeometry, wireMaterial);
+            // CameraCube.position.set(0, 200, 0);
+
+            camera.add(MovingCube);
+            camera.add(CameraCube);
+
+
+            //camera.position.z = 500;
+            //scene
+            scene = new THREE.Scene();
+            //scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+
+            var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.55);
+            light.position.set(0.5, 1, 0.75);
+            scene.add(light);
+
+            var ambient = new THREE.AmbientLight(0x101030);
+            scene.add(ambient);
+
+            var directionalLight = new THREE.DirectionalLight(0xffeedd);
+            directionalLight.position.set(0, 0, 1);
+            scene.add(directionalLight);
+
+            controls = new THREE.PointerLockControls(camera);
+            scene.add(controls.getObject());
+
+            var onKeyDown = function(event) {
+
+                //console.log(event);
+
+                //console.log('keydown! --> ' + event.keyCode);
+
+                switch (event.keyCode) {
+                    case 'touchstart':
+                    case 38: // up
+                    case 87: // w
+                        moveForward = true;
+                        break;
+
+                    case 37: // left
+                    case 65: // a
+                        moveLeft = true;
+                        break;
+
+                    case 40: // down
+                    case 83: // s
+                        moveBackward = true;
+                        break;
+
+                    case 'touchmove':
+                    case 39: // right
+                    case 68: // d
+                        moveRight = true;
+                        break;
+
+                    case 32: // space
+                        if (canJump === true) velocity.y += 350;
+                        canJump = false;
+                        break;
+
+                }
+
+            };
+
+            // Set the rays : one vector for every potential direction
+            rays = [
+                new THREE.Vector3(0, 0, 1), // z  // backward
+                new THREE.Vector3(1, 0, 1), // x, z // backward right
+                new THREE.Vector3(1, 0, 0), // x    // right
+                new THREE.Vector3(1, 0, -1), // x, -z // forward right
+                new THREE.Vector3(0, 0, -1), // -z   // forward
+                new THREE.Vector3(-1, 0, -1), // -x, -z // forward left
+                new THREE.Vector3(-1, 0, 0), // -x  // left
+                new THREE.Vector3(-1, 0, 1) // -z  // backward left
+            ];
+
+            var onKeyUp = function(event) {
+
+                ///console.log('keyup! --> ' + event.keyCode);
+
+                var currentKeyCode = event.keyCode;
+
+                switch (currentKeyCode) {
+
+                    case 38: // up
+                        moveForward = false;
+                        break;
+                    case 87: // w
+                        moveForward = false;
+                        break;
+                    case 37: // left
+                        moveLeft = false;
+                        break;
+                    case 65: // a
+                        moveLeft = false;
+                        break;
+                    case 40: // down
+                        moveBackward = false;
+                        break;
+                    case 83: // s
+                        moveBackward = false;
+                        break;
+                    case 39: // right
+                        moveRight = false;
+                        break;
+                    case 68: // d
+                        moveRight = false;
+                        break;
+
+                }
+
+                // if(currentKeyCode==38){
+                //  moveForward = false;
+                // }
+                // if else(currentKeyCode==87){
+                //  moveForward = false;
+                // }    
+                // if else(currentKeyCode==37){
+                //  moveLeft = false;
+                // }                                        
+
+            };
+
+            document.addEventListener('keydown', onKeyDown, false);
+            document.addEventListener('keyup', onKeyUp, false);
+
+            raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+
+            //full screens
+            // document.body.addEventListener('f', function() {
+            //   THREEx.FullScreen.request();
+            // }, true);
+            //model Jason collider
+            // new THREE.JSONLoader().load('hiRes/cubeColliders.js', function(geometry) {
+            //     var objectCollider = new THREE.Mesh(geometry);
+
+            //     objectCollider.position.set(0, 0, 0);
+            //     objectCollider.scale.set(2, 2, 2);
+
+            //     //scene.add(objectCollider);
+            //     //collidableMeshList.push(objectCollider);
+            // });
+
+            //model Jason
+            new THREE.JSONLoader().load('hiRes/mainScene02.js', function(geometry, materials) {
+                var material = new THREE.MeshFaceMaterial(materials);
+                for (var i = 0; i < materials.length; i++)
+                    materials[i].side = THREE.DoubleSide;
+                //material.side = THREE.DoubleSide;
+                //material.doubleSided = true;
+
+                var object = new THREE.Mesh(geometry, material);
+
+                object.position.set(0, 0, 0);
+                object.scale.set(2, 2, 2);
+
+                // object.updateMatrix();
+                // object.overdraw = true;
+                scene.add(object);
+                collidableMeshList.push(object);
+            });
+
+
+
+            //call audioPlayer function
+            //audioPlay(i);
+            //call movieScreens function
+            movieScreens(0);
+            movieScreens(1);
+            movieScreens(2);
+
+            for (var i = 0; i < videoList.length; i++) {
+                var videoImage = document.createElement('canvas');
+                videoImage.width = 350;
+                videoImage.height = 169;
+
+                videoImageContext[i] = videoImage.getContext('2d');
+                // background color if no video present
+                videoImageContext[i].fillStyle = '#000000';
+                videoImageContext[i].fillRect(0, 0, videoImage.width, videoImage.height);
+
+                videoTexture[i] = new THREE.Texture(videoImage);
+                videoTexture[i].minFilter = THREE.LinearFilter;
+                videoTexture[i].magFilter = THREE.LinearFilter;
+
+                var movieMaterial = new THREE.MeshBasicMaterial({
+                    map: videoTexture[i],
+                    overdraw: true,
+                    side: THREE.DoubleSide
+                });
+                // the geometry on which the movie will be displayed;
+                //      movie image will be scaled to fit these dimensions.
+                var movieGeometry = new THREE.PlaneGeometry(550, 265, 3, 3);
+
+                movieScreenArray.push(new THREE.Mesh(movieGeometry, movieMaterial));
+
+                //push this screen to the collidibale list
+                //collidableMeshList.push(movieScreenArray[i]);
+
+            }
+
+            //position the screens and add them to the scene
+            //1
+            movieScreenArray[0].position.set(950, 70, -3400);
+            movieScreenArray[0].rotation.y = 0.2;
+
+            //2
+            movieScreenArray[1].position.set(-430, 70, -890);
+            movieScreenArray[1].rotation.y = 2.16;
+            //3
+            movieScreenArray[2].position.set(-260, 70, -400);
+            movieScreenArray[2].rotation.y = 1.52;
+
+            //add screens into the scene
+            scene.add(movieScreenArray[0]);
+            scene.add(movieScreenArray[1]);
+            scene.add(movieScreenArray[2]);
+            //camera.position.set(0,80,300);
+
+
+            //camera.lookAt(movieScreenArray[0].position);
+
+            //SKYBOX/FOG
+            // var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
+            // var skyBoxMaterial = new THREE.MeshBasicMaterial({
+            //     color: 0x330000,
+            //     side: THREE.DoubleSide
+            // });
+            // var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
+            // scene.add(skyBox);
+
+
+            scene.fog = new THREE.FogExp2(0x330000, 0.00025);
+
+            // lights
+
+            light = new THREE.DirectionalLight(0xffffff);
+            light.position.set(1, 1, 1);
+            scene.add(light);
+
+            light = new THREE.DirectionalLight(0x002288);
+            light.position.set(-1, -1, -1);
+            scene.add(light);
+
+            //spot light1              (hex, intensity, distance, angle, exponent, decay)
+            light = new THREE.SpotLight(0xFFCC66, 1, 0, 0.1, 9, 0.1);
+            light.position.set(-42.34, 17, 227);
+            light.shadowCameraVisible = true;
+            light.shadowDarkness = 0.95;
+            // must enable shadow casting ability for the light
+            light.castShadow = true;
+            scene.add(light);
+            light.target = MovingCube;
+
+            //point light
+            light = new THREE.PointLight(0xff0000, 1, 100);
+            light.position.set(130, 70, -690);
+            scene.add(light);
+
+            light = new THREE.AmbientLight(0x404040);
+            scene.add(light);
+
+            // light = new THREE.PointLight( 0xff0040, 1, 50 );
+            // scene.add( light );
+
+
+            // renderer
+
+            renderer = new THREE.WebGLRenderer();
+            //set background color
+            renderer.setClearColor(0x00001a);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            container = document.getElementById('container');
+            container.appendChild(renderer.domElement);
+
+            //FPS
+            stats = new Stats();
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.top = '0px';
+            stats.domElement.style.zIndex = 100;
+            // container.appendChild( stats.domElement );
+            //
+
+            window.addEventListener('resize', onWindowResize, false);
+
+            // collidableMeshList.frustumCulled = false;
+
+            // movieScreenArray.frustumCulled = false;
+            // collidableMeshList.frustumCulled = false;
+            render();
+
+        }
+
+        function audioPlay(audioNum) {
+            //AUDIO
+            audioList[audioNum].play();
+
+        }
+
+        function movieScreens(videoNum) {
+            // VIDEO //
+            ///////////
+            // create the video element
+            // video = document.createElement( 'video' );
+            //ideo = document.getElementsByTagName( 'video' );
+            // video.id = 'video';
+            // video.type = ' video/ogg; codecs="theora, vorbis" ';
+            //video.src = "videos/time_laps.mov";
+
+            //video.src = "videos/time_laps.mov";
+            // videoList[videoNum].load();
+            // videoList[videoNum].pause();
+            //video.loop = true;
+            //videoList[videoNum].play();   
+            // alternative method -- 
+            // create DIV in HTML:
+            // <video id="myVideo" autoplay style="display:none">
+            //      <source src="videos/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
+            // </video>
+            // and set JS variable:
+            // video = document.getElementById( 'myVideo' );
+
+
+        }
+
+        function onWindowResize() {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+
+            //controls.handleResize();
+
+            render();
+
+        }
+
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+            update();
+            render();
+            //controls.update();                
+
+        }
+
+        function update() {
+
+            //collision
+            // MovingCube.position.set(controls.position().x, controls.position().y - 50, controls.position().z - 300);
+            //var originPoint = MovingCube.position.clone();
+
+            //!
+            MovingCube.updateMatrixWorld();
+            CameraCube.updateMatrixWorld();
+
+            for (var vertexIndex = 0; vertexIndex < CameraCube.geometry.vertices.length; vertexIndex++) {
+                var localVertex = CameraCube.geometry.vertices[vertexIndex].clone();
+                var globalVertex = localVertex.applyMatrix4(CameraCube.matrix);
+                var directionVector = globalVertex.sub(CameraCube.position);
+                //Raycaster( origin, direction, near, far )
+                // origin — The origin vector where the ray casts from.
+                // direction — The direction vector that gives direction to the ray. Should be normalized.
+                // And the "RayCaster", able to test for intersections    
+                ray = new THREE.Raycaster();
+                // For each ray
+                for (i = 0; i < rays.length; i += 1) {
+                    // We reset the raycaster to this direction
+                    var cubeWorldPos = new THREE.Vector3();
+                    cubeWorldPos.setFromMatrixPosition(CameraCube.matrixWorld);
+                    ray.set(cubeWorldPos, rays[i]);
+
+                    // Test if we intersect with any obstacle mesh
+                    var collisionResults = ray.intersectObjects(collidableMeshList);
+                    // And disable that direction if we do
+                    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
+
+                        //console.log('we have hit!');
+
+                        //isHit = true;
+
+                        if (i == 0 || i == 1 || i == 6) {
+
+                            isHitBack = true;
+                            isHitFront = false;
+                            isHitRight = false;
+                            isHitLeft = false;
+                            //console.log("isHitBack " + isHitBack);
+
+                        } else if (i == 3 || i == 4 || i == 5) {
+
+                            isHitBack = false;
+                            isHitFront = true;
+                            isHitRight = false;
+                            isHitLeft = false;
+                            //console.log("isHitFront " + isHitFront);
+
+                        } else if (i == 5 || i == 6 || i == 7) {
+
+                            isHitBack = false;
+                            isHitFront = false;
+                            isHitRight = false;
+                            isHitLeft = true;
+                            //console.log("isHitLeft " + isHitLeft);
+
+                        } else if (i == 1 || i == 2 || i == 3) {
+
+                            isHitBack = false;
+                            isHitFront = false;
+                            isHitRight = true;
+                            isHitLeft = false;
+                            //console.log("isHitRight " + isHitRight);
+
+                        }
+
+
+                    } else {
+
+                        //isHit = false;
+                        //console.log("isHit = false");
+                    }
+
+                    //movie collider
+                    for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++) {
+                        var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
+                        var globalVertex = localVertex.applyMatrix4(MovingCube.matrix);
+                        var directionVector = globalVertex.sub(MovingCube.position);
+                        //Raycaster( origin, direction, near, far )
+                        // origin — The origin vector where the ray casts from.
+                        // direction — The direction vector that gives direction to the ray. Should be normalized.
+                        // And the "RayCaster", able to test for intersections    
+                        ray = new THREE.Raycaster();
+                        // For each ray
+                        // We reset the raycaster to this direction
+                        var cubeWorldPos = new THREE.Vector3();
+                        cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
+                        ray.set(cubeWorldPos, rays[i]);
+
+                        var collisionResults0 = ray.intersectObject(movieScreenArray[0]);
+                        if (collisionResults0.length > 0 && collisionResults0[0].distance < directionVector.length()) {
+
+                            console.log('hit0');
+                            hit0 = true;
+                            //stop walking
+                            audioPlay(0);
+                            audioList[1].pause();
+                            audioList[2].pause();
+                            videoList[0].play();
+                            videoList[1].pause();
+                            videoList[2].pause();
+
+
+                        }
+
+                        var collisionResults1 = ray.intersectObject(movieScreenArray[1]);
+                        if (collisionResults1.length > 0 && collisionResults1[0].distance < directionVector.length()) {
+
+                            console.log('hit1');
+                            hit1 = true;
+                            // if (!videoList[1].isInZone) videoList[1].isInZone = true;
+                            // if (!videoList[1].shouldPlay) videoList[1].shouldPlay = true;
+                            //stop walking
+                            audioPlay(1);
+                            audioList[0].pause();
+                            audioList[2].pause();
+                            //if (videoList[1].shouldPlay && videoList[1].isInZone) 
+                            videoList[1].play();
+                            videoList[0].pause();
+                            videoList[2].pause();
+
+                        }
+                        // else {
+                        //     videoList[1].isInZone = false;
+                        //     videoList[1].shouldPlay = false;
+                        // }
+
+
+                        var collisionResults2 = ray.intersectObject(movieScreenArray[2]);
+                        if (collisionResults2.length > 0 && collisionResults2[0].distance < directionVector.length()) {
+
+                            console.log('hit2');
+                            hit2 = true;
+                            //stop walking
+                            audioPlay(2);
+                            audioList[0].pause();
+                            audioList[1].pause();
+                            videoList[2].play();
+                            videoList[0].pause();
+                            videoList[1].pause();
+
+                        }
+
+                    }
+                }
+
+
+                if (controlsEnabled) {
+                    raycaster.ray.origin.copy(controls.getObject().position);
+                    // raycaster.ray.origin.copy( MovingCube.position );
+                    raycaster.ray.origin.y -= 10;
+
+                    var intersections = raycaster.intersectObjects(objects);
+
+                    var isOnObject = intersections.length > 0;
+
+                    var controlTime = performance.now();
+                    var delta = (controlTime - prevTime) / 300;
+
+
+                    velocity.x -= velocity.x;
+                    velocity.z -= velocity.z;
+
+                    //velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+                    //if moveforad == true, collision check == false
+
+                    // if ( moveForward && isHitFront == false ) 
+                    //   velocity.z -= 400.0 * delta;
+
+                    // if ( moveBackward && isHitBack == false) 
+                    //  velocity.z += 400.0 * delta;
+
+                    // if ( moveLeft && isHitLeft == false) 
+                    //  velocity.x -= 400.0 * delta;
+
+
+                    // if ( moveRight && isHitRight == false) 
+                    //  velocity.x += 400.0 * delta;
+
+                    // if (!isHitFront && !isHitBack && !isHitRight && !isHitLeft) {
+
+                    if (moveForward && !isHitFront) {
+                        velocity.z -= 6;
+                        isHitBack = false;
+                    }
+
+                    if (moveBackward && !isHitBack) {
+                        velocity.z += 6;
+                        isHitFront = false;
+                    }
+
+                    if (moveLeft && !isHitLeft) {
+                        velocity.x -= 6;
+                        isHitRight = false;
+                    }
+
+
+                    if (moveRight && !isHitRight) {
+                        velocity.x += 6;
+                        isHitLeft = false;
+                    }
+
+
+                    if (isHitFront) {
+                        if (moveBackward || moveLeft || moveRight) {
+                            isHitFront = false;
+                        }
+                    }
+
+                    if (isHitBack) {
+                        if (moveForward || moveLeft || moveRight) {
+                            isHitBack = false;
+                        }
+                    }
+
+                    if (isHitLeft) {
+                        if (moveBackward || moveForward || moveRight) {
+                            isHitLeft = false;
+                        }
+                    }
+
+                    if (isHitRight) {
+                        if (moveForward || moveLeft || moveBackward) {
+                            isHitRight = false;
+                        }
+                    }
+                    // }
+
+                    // if collider is hit
+
+                    // see what was hit... set that to be true
+
+                    // if isHitFront
+
+                    // --> the user moves left, and isHit is false, isHitFront is true
+                    // --> the user moves right, and isHit is false, isHitFront is true
+                    // --> the user moves back, and isHit is false, isHitFront is true
+
+                    // if()
+
+                    controls.getObject().translateX(velocity.x);
+                    controls.getObject().translateY(velocity.y);
+                    controls.getObject().translateZ(velocity.z);
+                    //console.log(MovingCube.position);
+
+
+                    if (controls.getObject().position.y < 10) {
+
+                        velocity.y = 0;
+                        controls.getObject().position.y = 10;
+
+                        canJump = true;
+
+                    }
+
+                    prevTime = controlTime;
+
+                }
+                // if ( collisionResults.length > 0 && collisionResults[1].distance < directionVector.length() ){
+                //  console.log('hit');
+                //  //isHit = true;
+                //  video1.play();
+                // }    
+                // if ( collisionResults.length > 0 && collisionResults[2].distance < directionVector.length() ){
+                //  console.log('hit');
+                //  //isHit = true;
+                //  video2.play();
+                // }    
+
+                // controls.update();
+                stats.update();
+            }
+        }
+
+        var framesPerSecond = 29;
+
+        function render() {
+
+            //console.log(isHit);
+            if (videoList[0].readyState === videoList[0].HAVE_ENOUGH_DATA) {
+                if (whichMobile == "iOS_mobile") {
+
+                    time0 = Date.now();
+                    var elapsed0 = (time0 - lastTime0) / 1000;
+
+                    // render
+                    // for (var i = 0; i < videoList.length; i++) {
+                    if (elapsed0 >= ((1000 / framesPerSecond) / 1000)) {
+                        videoList[0].currentTime0 = videoList[0].currentTime0 + elapsed0;
+                        videoImageContext[0].drawImage(videoList[0], 0, 0);
+                        videoImageContext[0].drawImage(videoList[0], 0, 0);
+
+                        if (videoTexture[0])
+                            videoTexture[0].needsUpdate = true;
+
+                        lastTime0 = time0;
+
+                        // if we are at the end of the video stop
+                        var currentTime0 = (Math.round(parseFloat(videoList[0].currentTime0) * 10000) / 10000);
+                        var duration0 = (Math.round(parseFloat(videoList[0].duration0) * 10000) / 10000);
+                        if (currentTime0 >= duration0) {
+                            console.log('currentTime: ' + currentTime0 + ' duration: ' + videoList[0].duration0);
+                            // restart
+                            //  videoList[0].currentTime0 = 0;
+                            // return;
+                        }
+                    }
+                    time1 = Date.now();
+                    var elapsed1 = (time1 - lastTime1) / 1000;
+
+                    // render
+                    // for (var i = 0; i < videoList.length; i++) {
+                    if (elapsed1 >= ((1000 / framesPerSecond) / 1000)) {
+                        videoList[1].currentTime1 = videoList[1].currentTime1 + elapsed1;
+                        videoImageContext[1].drawImage(videoList[1], 0, 0);
+                        videoImageContext[1].drawImage(videoList[1], 0, 0);
+
+                        if (videoTexture[1])
+                            videoTexture[1].needsUpdate = true;
+
+                        lastTime1 = time1;
+
+                        // if we are at the end of the video stop
+                        var currentTime1 = (Math.round(parseFloat(videoList[1].currentTime1) * 10000) / 10000);
+                        var duration1 = (Math.round(parseFloat(videoList[1].duration1) * 10000) / 10000);
+                        if (currentTime1 >= duration1) {
+                            console.log('currentTime: ' + currentTime1 + ' duration: ' + videoList[1].duration1);
+                            // restart
+                            //  videoList[1].currentTime1 = 0;
+                            // return;
+                        }
+                    }
+                    time2 = Date.now();
+                    var elapsed2 = (time2 - lastTime2) / 1000;
+
+                    // render
+                    // for (var i = 0; i < videoList.length; i++) {
+                    if (elapsed2 >= ((1000 / framesPerSecond) / 1000)) {
+                        videoList[2].currentTime2 = videoList[2].currentTime2 + elapsed2;
+                        videoImageContext[2].drawImage(videoList[2], 0, 0);
+                        videoImageContext[2].drawImage(videoList[2], 0, 0);
+
+                        if (videoTexture[2])
+                            videoTexture[2].needsUpdate = true;
+
+                        lastTime2 = time2;
+
+                        // if we are at the end of the video stop
+                        var currentTime2 = (Math.round(parseFloat(videoList[2].currentTime2) * 10000) / 10000);
+                        var duration2 = (Math.round(parseFloat(videoList[2].duration2) * 10000) / 10000);
+                        if (currentTime2 >= duration2) {
+                            console.log('currentTime: ' + currentTime2 + ' duration: ' + videoList[2].duration2);
+                            // restart
+                            //  videoList[2].currentTime2 = 0;
+                            // return;
+                        }
+                    }
+
+                    // }
+                } else {
+                    for (var i = 0; i < videoList.length; i++) {
+                        // if (videoList[0].readyState === videoList[0].HAVE_ENOUGH_DATA) {
+                        videoImageContext[i].drawImage(videoList[i], 0, 0);
+                        if (videoTexture[i])
+                            videoTexture[i].needsUpdate = true;
+                    }
+                }
+
+            }
+
+            renderer.render(scene, camera);
+
+        }
+    </script>
+</body>
+
+</html>
