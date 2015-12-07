@@ -83,6 +83,7 @@
     var raycaster;
     var container, stats;
     var cross;
+    var loadingComplete = false;
 
     var isHit = false;
     var isHitFront = false;
@@ -125,6 +126,7 @@
     var hit0 = false;
     var hit1 = false;
     var hit2 = false;
+
     videoList[0] = document.createElement('video');
     videoList[0].src = "videos/time_laps_3.mp4";
     videoList[0].autoplay = true;
@@ -421,44 +423,46 @@
             // document.body.addEventListener('f', function() {
             //   THREEx.FullScreen.request();
             // }, true);
+
             //model Jason collider
-            // new THREE.JSONLoader().load('hiRes/cubeColliders.js', function(geometry) {
-            //     var objectCollider = new THREE.Mesh(geometry);
+            new THREE.JSONLoader().load('hiRes/cubeColliders.js', function(geometry) {
+                var objectCollider = new THREE.Mesh(geometry);
 
-            //     objectCollider.position.set(0, 0, 0);
-            //     objectCollider.scale.set(2, 2, 2);
+                objectCollider.position.set(0, 0, 0);
+                objectCollider.scale.set(2, 2, 2);
 
-            //     //scene.add(objectCollider);
-            //     //collidableMeshList.push(objectCollider);
-            // });
+            scene.add(objectCollider);
+            collidableMeshList.push(objectCollider);
+            });
 
             //model Jason
-            new THREE.JSONLoader().load('hiRes/mainScene02.js', function(geometry, materials) {
-                var material = new THREE.MeshFaceMaterial(materials);
-                for (var i = 0; i < materials.length; i++)
-                    materials[i].side = THREE.DoubleSide;
-                //material.side = THREE.DoubleSide;
-                //material.doubleSided = true;
+            // new THREE.JSONLoader().load('hiRes/mainScene02.js', function(geometry, materials) {
+            //     var material = new THREE.MeshFaceMaterial(materials);
+            //     for (var i = 0; i < materials.length; i++)
+            //         materials[i].side = THREE.DoubleSide;
+            //     //material.side = THREE.DoubleSide;
+            //     //material.doubleSided = true;
 
-                var object = new THREE.Mesh(geometry, material);
+            //     var object = new THREE.Mesh(geometry, material);
 
-                object.position.set(0, 0, 0);
-                object.scale.set(2, 2, 2);
+            //     object.position.set(0, 0, 0);
+            //     object.scale.set(2, 2, 2);
 
-                // object.updateMatrix();
-                // object.overdraw = true;
-                scene.add(object);
-                collidableMeshList.push(object);
-            });
+            //     // object.updateMatrix();
+            //     // object.overdraw = true;
+            //     scene.add(object);
+            //     collidableMeshList.push(object);
+            //     loadingComplete = true;
+            // });
 
 
 
             //call audioPlayer function
             //audioPlay(i);
             //call movieScreens function
-            movieScreens(0);
-            movieScreens(1);
-            movieScreens(2);
+            // movieScreens(0);
+            // movieScreens(1);
+            // movieScreens(2);
 
             for (var i = 0; i < videoList.length; i++) {
                 var videoImage = document.createElement('canvas');
@@ -737,7 +741,7 @@
                         var collisionResults0 = ray.intersectObject(movieScreenArray[0]);
                         if (collisionResults0.length > 0 && collisionResults0[0].distance < directionVector.length()) {
 
-                            console.log('hit0');
+                            //console.log('hit0');
                             hit0 = true;
                             //stop walking
                             audioPlay(0);
@@ -753,7 +757,7 @@
                         var collisionResults1 = ray.intersectObject(movieScreenArray[1]);
                         if (collisionResults1.length > 0 && collisionResults1[0].distance < directionVector.length()) {
 
-                            console.log('hit1');
+                            //console.log('hit1');
                             hit1 = true;
                             // if (!videoList[1].isInZone) videoList[1].isInZone = true;
                             // if (!videoList[1].shouldPlay) videoList[1].shouldPlay = true;
@@ -776,7 +780,7 @@
                         var collisionResults2 = ray.intersectObject(movieScreenArray[2]);
                         if (collisionResults2.length > 0 && collisionResults2[0].distance < directionVector.length()) {
 
-                            console.log('hit2');
+                            //console.log('hit2');
                             hit2 = true;
                             //stop walking
                             audioPlay(2);
