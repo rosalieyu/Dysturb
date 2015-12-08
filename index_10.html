@@ -1,73 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-
-  <!-- Basic Page Needs
+    <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>#ReframeClimate</title>
-  <meta name="description" content="">
-  <meta name="author" content="Magnum Foundation">
-
-  <!-- Mobile Specific Metas
+    <meta charset="utf-8">
+    <title>#ReframeClimate</title>
+    <meta name="description" content="">
+    <meta name="author" content="Magnum Foundation">
+    <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- CSS
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/skeleton.css">
-  <link rel="stylesheet" type="text/css" href="css/models.css">
-  <link rel="stylesheet" href="css/style.css">
-
-
-  <!-- Favicon STILL NEEDED
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" type="text/css" href="css/models.css">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Favicon STILL NEEDED
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="images/favicon.png"> 
-
+    <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 
 <body>
-
-  <!-- landing section -->
-  <div class="container">
-    <section id="landing">
-      <img id="dual-logo" src="css/images/magnumdysturb.png">
-      <div class="centered-text">
-        <h1>#ReframeClimate</h1>
-        <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
-        <!-- <span id="loading">Loading...</span> -->
-        <a class="button" href="#">Step Into The Frame</a>
-      </div>
-    </section>   
-  </div>
-
-  <!-- internal section -->
-  <section id="internal">
-    <div id="overlay">
-      <div id="inner">
-        <img class="logo" id="magnum-logo" src="css/images/magnumlogo.gif"> <!-- make link and add real logo -->
-        <img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png"> <!-- make link and add real logo -->
-        <div id="nav-right">
-          <ul class="nav-element">
-            <li class="social" id="facebook"></li>
-            <li class="social" id="instagram"></li>
-            <li class="social" id="twitter"></li>
-          </ul>
-          <button id="embed" class="button nav-element" data-clipboard-text="<object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'/></object>">Embed</button>
-          <!-- <div class="menu-btn nav-element"></div> -->
-        </div>  
-
-        <div class="centered-text">
-          <p id="instructions">Use your mouse or arrow keys to move around. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</p>
-          <a class="button" href="#">Begin</a>
-        </div>  
-      </div>
+    <!-- landing section -->
+    <div class="container">
+        <section id="landing">
+              <img id="dual-logo" src="css/images/magnumdysturb.png"> 
+            <div class="centered-text">
+                <h1>#ReframeClimate</h1>
+                <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
+                <!-- <span id="loading">Loading...</span> -->
+                <a class="button" href="#">Step Into The Frame</a>
+            </div>
+        </section>
     </div>
- </section>
-
-
-
+    <!-- internal section -->
+    <section id="internal">
+        <div id="overlay">
+            <div id="inner">
+                <img class="logo" id="magnum-logo" src="css/images/magnumlogo.gif">
+                <!-- make link and add real logo -->
+                <img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png">
+                <!-- make link and add real logo -->
+                <div id="nav-right">
+                    <ul class="nav-element">
+                        <li class="social" id="facebook"></li>
+                        <li class="social" id="instagram"></li>
+                        <li class="social" id="twitter"></li>
+                    </ul>
+                    <button id="embed" class="button nav-element" data-clipboard-text="<object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'/></object>">Embed</button>
+                    <!-- <div class="menu-btn nav-element"></div> -->
+                </div>
+                <div class="centered-text">
+                    <div id="instructions">Use your mouse or arrow keys to move around. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</div>
+                    <a class="button" href="#">Begin</a>
+                </div>
+            </div>
+        </div>
+    </section>
     <script src="js/Three.js"></script>
     <script src="js/three.min.js"></script>
     <script src="js/Octree.js"></script>
@@ -79,11 +70,11 @@
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
     <!-- <script src="js/DeviceOrientationControls.js"></script> -->
     <div id="blocker">
-                   <div id="instructions">
-                <span style="font-size:40px">Click to play</span>
-                <br />
-                (< > ∧ ∨ = Move, MOUSE = Look around)
-            </div>
+        <!--         <div id="instructions">
+            <span style="font-size:40px">Click to play</span>
+            <br /> (
+            <> ∧ ∨ = Move, MOUSE = Look around)
+        </div> -->
     </div>
     <script>
     if (!Detector.webgl) Detector.addGetWebGLMessage();
@@ -148,40 +139,37 @@
     var hit1 = false;
     var hit2 = false;
 
+    var mp4Source0 = document.createElement('source');
+    mp4Source0.src = "videos/jonas_Bendiksen1-vid.mp4";
+    var webmSource0 = document.createElement('source');
+    webmSource0.src = "videos/Jonas_Bendiksen1.webm";
     videoList[0] = document.createElement('video');
-    videoList[0].src = "videos/time_laps_3.mp4";
+    videoList[0].appendChild(webmSource0);
+    videoList[0].appendChild(mp4Source0);
     videoList[0].autoplay = true;
     videoList[0].load();
 
+
+    var mp4Source1 = document.createElement('source');
+    mp4Source1.src = "videos/Giulio_Di_Sturco-vid.mp4";
+    var webmSource1 = document.createElement('source');
+    webmSource1.src = "videos/Giulio_Di_Sturco.webm";
     videoList[1] = document.createElement('video');
-    videoList[1].src = "videos/time_laps_4.mp4";
-    videoList[1].load();
+    videoList[1].appendChild(webmSource1);
+    videoList[1].appendChild(mp4Source1);
     videoList[1].autoplay = true;
     videoList[1].load();
-    // function onVideoBeginsFullScreen() {}
 
-    // function onVideo1EndsFullScreen() {
-    //     videoList[1].shouldPlay = false;
-    // }
 
+    var mp4Source2 = document.createElement('source');
+    mp4Source2.src = "videos/Ed_Ou-vid.mp4";
+    var webmSource2 = document.createElement('source');
+    webmSource2.src = "videos/Ed_Ou.webm";
     videoList[2] = document.createElement('video');
-    videoList[2].src = "videos/time_laps_3.mp4";
+    videoList[2].appendChild(webmSource2);
+    videoList[2].appendChild(mp4Source2);
     videoList[2].autoplay = true;
     videoList[2].load();
-    //videoList[2].shouldPlay = true;
-
-    //
-    // for (var i = 0; i < videoList.length; i++) {
-    //     videoList[i].addEventListener("contextmenu", function(e) {
-    //         e.preventDefault();
-    //         e.stopPropagation();
-    //     }, false);
-
-    //     // hide the controls if they're visible
-    //     if (videoList[i].hasAttribute("controls")) {
-    //         videoList[i].removeAttribute("controls")
-    //     }
-    // }
 
     //collidar
     var collidableMeshList = [];
@@ -236,9 +224,9 @@
             document.addEventListener('mozpointerlockerror', pointerlockerror, false);
             document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
 
-             instructions.addEventListener('click', function(event) {
+            instructions.addEventListener('click', function(event) {
 
-                 instructions.style.display = 'none';
+                instructions.style.display = 'none';
 
                 // Ask the browser to lock the pointer
                 element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
@@ -255,7 +243,7 @@
                             element.requestPointerLock();
                         }
 
-                     };
+                    };
 
                     document.addEventListener('fullscreenchange', fullscreenchange, false);
                     document.addEventListener('mozfullscreenchange', fullscreenchange, false);
@@ -272,8 +260,7 @@
 
             }, false);
 
-         } 
-        else {
+        } else {
 
             instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 
@@ -568,7 +555,7 @@
             scene.add(object);
             loadingComplete = true;
             collidableMeshList.push(object);
-            
+
         });
 
 
@@ -580,15 +567,13 @@
         movieScreens(1);
         movieScreens(2);
 
-<<<<<<< HEAD
+        //<< << << < HEAD
         for (var i = 0; i < videoList.length; i++) {
             var videoImage = document.createElement('canvas');
             videoImage.width = 350;
-            videoImage.height = 169;
-=======
+            videoImage.height = 169; 
             container = document.getElementById('internal');
-            container.appendChild(renderer.domElement);
->>>>>>> 60de8d03b968281e676bb8bab13eb1c9709f2217
+            //container.appendChild(renderer.domElement); //>>> >>> > 60 de8d03b968281e676bb8bab13eb1c9709f2217
 
             videoImageContext[i] = videoImage.getContext('2d');
             // background color if no video present
@@ -689,7 +674,7 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        container = document.getElementById('container');
+        container = document.getElementById('internal');
         container.appendChild(renderer.domElement);
 
         //FPS
