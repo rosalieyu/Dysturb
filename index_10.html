@@ -23,10 +23,16 @@
 </head>
 
 <body>
+    <div id="blocker">
+        <div id="instructions">
+            <span style="font-size:40px">Click to play</span>
+            <br /> ( ∧ ∨ = Move, MOUSE = Look around)
+        </div>
+    </div>
     <!-- landing section -->
     <div class="container">
         <section id="landing">
-              <img id="dual-logo" src="css/images/magnumdysturb.png"> 
+            <img id="dual-logo" src="css/images/magnumdysturb.png">
             <div class="centered-text">
                 <h1>#ReframeClimate</h1>
                 <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
@@ -53,29 +59,23 @@
                     <!-- <div class="menu-btn nav-element"></div> -->
                 </div>
                 <div class="centered-text">
-                    <div id="instructions">Use your mouse or arrow keys to move around. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</div>
+                    <!--                         <div id="instructions">Use your mouse or arrow keys to move around. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</div> -->
                     <a class="button" href="#">Begin</a>
                 </div>
             </div>
-        </div>
     </section>
+    </div>
     <script src="js/Three.js"></script>
     <script src="js/three.min.js"></script>
     <script src="js/Octree.js"></script>
     <script src="js/PointerLockControls.js"></script>
+    <script src="js/audioModule.js"></script>
     <!-- <script src="js/TrackballControls.js"></script> -->
     <script src="js/OBJLoader.js"></script>
     <script src="js/Detector.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
     <!-- <script src="js/DeviceOrientationControls.js"></script> -->
-    <div id="blocker">
-        <!--         <div id="instructions">
-            <span style="font-size:40px">Click to play</span>
-            <br /> (
-            <> ∧ ∨ = Move, MOUSE = Look around)
-        </div> -->
-    </div>
     <script>
     if (!Detector.webgl) Detector.addGetWebGLMessage();
     var camera, scene, renderer;
@@ -83,6 +83,8 @@
     var controls;
     var MovingCube;
     var CameraCube;
+    var blocker = document.getElementById('blocker');
+    var instructions = document.getElementById('instructions');
 
     var objects = [];
     var raycaster;
@@ -98,10 +100,8 @@
     var rays;
 
     //audio
-    var audioList = new Array();
-    audioList[0] = new Audio("audio/dysturb.mp3");
-    audioList[1] = new Audio("audio/dysturb_1.mp3");
-    audioList[2] = new Audio("audio/dysturb_2.mp3");
+    var audioPaths = ["./audio/dysturb.mp3", "./audio/dysturb_1.mp3", "./audio/dysturb_2.mp3"];
+    var audioList; // initialized later
 
 
     //mobile
@@ -122,6 +122,34 @@
     }
 
     if (isTouchDevice()) thisIsTouchDevice = true;
+
+    if (whichMobile !== "") {
+        blocker.style.display = 'none';
+        instructions.style.display = 'none';
+    }
+
+    // if (whichMobile=="") {
+    //     var clickDiv = document.createElement('div');
+    //     clickDiv.id = "blocker";
+    //     // ...
+    //     document.getElementsByTagName("body")[0].appendChild(clickDiv);
+
+    //     var ins = document.createElement('div');
+    //     ins.id = "instructions";
+
+    //     clickDiv.appendChild(ins);
+
+    //     var span = document.createElement('span');
+    //     // span.style = "font-size:40px";
+    //     span.innerHTML = "Click to Play!"
+    //     document.getElementById('instructions').appendChild(span);
+
+    //     console.log("create div");
+    // }
+
+    function isTouchDevice() {
+        return 'ontouchstart' in window || !!(navigator.msMaxTouchPoints);
+    }
     //
     var lastTime0 = Date.now();
     var lastTime1 = Date.now();
@@ -174,9 +202,8 @@
     //collidar
     var collidableMeshList = [];
 
-    if (whichMobile != "iOS_mobile" && whichMobile != "android_mobile") {
-        var blocker = document.getElementById('blocker');
-        var instructions = document.getElementById('instructions');
+    if (whichMobile == "") {
+
 
         // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
@@ -387,7 +414,7 @@
 
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 
-        cubeGeometry = new THREE.CubeGeometry(30, 30, 100);
+        cubeGeometry = new THREE.CubeGeometry(30, 30, 30);
         wireMaterial = new THREE.MeshBasicMaterial({
             wireframe: true,
             //transparent: true,
@@ -521,13 +548,10 @@
 
         raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
 
-        //full screens
-        // document.body.addEventListener('f', function() {
-        //   THREEx.FullScreen.request();
-        // }, true);
+
 
         //model Jason collider
-        new THREE.JSONLoader().load('hiRes/cubeColliders.js', function(geometry) {
+        new THREE.JSONLoader().load('./hiRes/cubeColliders.js', function(geometry) {
             var objectCollider = new THREE.Mesh(geometry);
 
             objectCollider.position.set(0, 0, 0);
@@ -542,36 +566,23 @@
             var material = new THREE.MeshFaceMaterial(materials);
             for (var i = 0; i < materials.length; i++)
                 materials[i].side = THREE.DoubleSide;
-            //material.side = THREE.DoubleSide;
-            //material.doubleSided = true;
 
             var object = new THREE.Mesh(geometry, material);
 
             object.position.set(0, 0, 0);
             object.scale.set(2, 2, 2);
-
-            // object.updateMatrix();
-            // object.overdraw = true;
             scene.add(object);
             loadingComplete = true;
-            collidableMeshList.push(object);
+            //collidableMeshList.push(object);
 
         });
 
-
-
-        //call audioPlayer function
-        //audioPlay(i);
-        //call movieScreens function
-        movieScreens(0);
-        movieScreens(1);
-        movieScreens(2);
 
         //<< << << < HEAD
         for (var i = 0; i < videoList.length; i++) {
             var videoImage = document.createElement('canvas');
             videoImage.width = 350;
-            videoImage.height = 169; 
+            videoImage.height = 169;
             container = document.getElementById('internal');
             //container.appendChild(renderer.domElement); //>>> >>> > 60 de8d03b968281e676bb8bab13eb1c9709f2217
 
@@ -687,45 +698,33 @@
 
         window.addEventListener('resize', onWindowResize, false);
 
-        // collidableMeshList.frustumCulled = false;
-
-        // movieScreenArray.frustumCulled = false;
-        // collidableMeshList.frustumCulled = false;
+        var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/sturco-aud.mp3", "./audio/ou-aud.mp3"];
+        audioList = makeAudio(audioPaths, camera, movieScreenArray);
         render();
 
     }
 
-    function audioPlay(audioNum) {
-        //AUDIO
-        //audioList[audioNum].play();
+    // play audio + video, and pause the rest
+    function mediaPlay(num) {
+        var mediaLength = audioList.length;
 
+        for (var i = 0; i < mediaLength; i++) {
+            if (i == num) {
+                if (!audioList[i].isPlaying) {
+                    audioList[i].play();
+                    videoList[i].play();
+                }
+            } else {
+                try {
+                    audioList[i].pause();
+                } catch (e) {
+                    // console.lo
+                }
+                videoList[i].pause();
+            }
+        }
     }
 
-    function movieScreens(videoNum) {
-        // VIDEO //
-        ///////////
-        // create the video element
-        // video = document.createElement( 'video' );
-        //ideo = document.getElementsByTagName( 'video' );
-        // video.id = 'video';
-        // video.type = ' video/ogg; codecs="theora, vorbis" ';
-        //video.src = "videos/time_laps.mov";
-
-        //video.src = "videos/time_laps.mov";
-        // videoList[videoNum].load();
-        // videoList[videoNum].pause();
-        //video.loop = true;
-        //videoList[videoNum].play();   
-        // alternative method -- 
-        // create DIV in HTML:
-        // <video id="myVideo" autoplay style="display:none">
-        //      <source src="videos/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
-        // </video>
-        // and set JS variable:
-        // video = document.getElementById( 'myVideo' );
-
-
-    }
 
     function onWindowResize() {
 
@@ -850,12 +849,10 @@
                         //console.log('hit0');
                         hit0 = true;
                         //stop walking
-                        audioPlay(0);
-                        audioList[1].pause();
-                        audioList[2].pause();
-                        videoList[0].play();
-                        videoList[1].pause();
-                        videoList[2].pause();
+                        mediaPlay(0);
+                        // videoList[0].play();
+                        // videoList[1].pause();
+                        // videoList[2].pause();
 
                     }
 
@@ -864,12 +861,10 @@
 
                         //console.log('hit1');
                         hit1 = true;
-                        audioPlay(1);
-                        audioList[0].pause();
-                        audioList[2].pause();
-                        videoList[1].play();
-                        videoList[0].pause();
-                        videoList[2].pause();
+                        mediaPlay(1);
+                        // videoList[1].play();
+                        // videoList[0].pause();
+                        // videoList[2].pause();
 
                     }
 
@@ -879,12 +874,10 @@
                         //console.log('hit2');
                         hit2 = true;
                         //stop walking
-                        audioPlay(2);
-                        audioList[0].pause();
-                        audioList[1].pause();
-                        videoList[2].play();
-                        videoList[0].pause();
-                        videoList[1].pause();
+                        mediaPlay(2);
+                        // videoList[2].play();
+                        // videoList[0].pause();
+                        // videoList[1].pause();
 
                     }
 
@@ -892,28 +885,22 @@
 
                 if (whichMobile == "android_mobile" && noTouch == false) {
                     if (hit0 == true) {
-                        audioPlay(0);
-                        audioList[1].pause();
-                        audioList[2].pause();
-                        videoList[0].play();
-                        videoList[1].pause();
-                        videoList[2].pause();
+                        mediaPlay(0);
+                        // videoList[0].play();
+                        // videoList[1].pause();
+                        // videoList[2].pause();
                     }
                     if (hit1 == true) {
-                        audioPlay(1);
-                        audioList[0].pause();
-                        audioList[2].pause();
-                        videoList[1].play();
-                        videoList[0].pause();
-                        videoList[2].pause();
+                        mediaPlay(1);
+                        // videoList[1].play();
+                        // videoList[0].pause();
+                        // videoList[2].pause();
                     }
                     if (hit2 == true) {
-                        audioPlay(2);
-                        audioList[0].pause();
-                        audioList[1].pause();
-                        videoList[2].play();
-                        videoList[0].pause();
-                        videoList[1].pause();
+                        mediaPlay(2);
+                        // videoList[2].play();
+                        // videoList[0].pause();
+                        // videoList[1].pause();
                     }
                 }
 
@@ -953,23 +940,23 @@
                     // if (!isHitFront && !isHitBack && !isHitRight && !isHitLeft) {
 
                     if (moveForward && !isHitFront) {
-                        velocity.z -= 6;
+                        velocity.z -= 1;
                         isHitBack = false;
                     }
 
                     if (moveBackward && !isHitBack) {
-                        velocity.z += 6;
+                        velocity.z += 1;
                         isHitFront = false;
                     }
 
                     if (moveLeft && !isHitLeft) {
-                        velocity.x -= 6;
+                        velocity.x -= 1;
                         isHitRight = false;
                     }
 
 
                     if (moveRight && !isHitRight) {
-                        velocity.x += 6;
+                        velocity.x += 1;
                         isHitLeft = false;
                     }
 
@@ -1028,18 +1015,7 @@
 
                     prevTime = controlTime;
                 }
-                // if ( collisionResults.length > 0 && collisionResults[1].distance < directionVector.length() ){
-                //  console.log('hit');
-                //  //isHit = true;
-                //  video1.play();
-                // }    
-                // if ( collisionResults.length > 0 && collisionResults[2].distance < directionVector.length() ){
-                //  console.log('hit');
-                //  //isHit = true;
-                //  video2.play();
-                // }    
 
-                // controls.update();
                 stats.update();
             }
         }
