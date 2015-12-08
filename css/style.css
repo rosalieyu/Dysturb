@@ -1,0 +1,202 @@
+/*Custom CSS*/
+
+/*Fonts*/
+
+@font-face {
+	font-family: HelveticaLTStd-BlkCond;
+	src: url(fonts/HelveticaLTStd-BlkCond.otf);
+}
+
+@font-face {
+	font-family: HelveticaLTStd-LightCond;
+	src: url(fonts/HelveticaLTStd-LightCond.otf);
+}
+
+
+
+/*Landing screen*/
+
+#dual-logo {
+	margin: 0 auto;
+	max-width: 150px;
+	display: block;
+	padding-top: 25px;
+	padding-bottom: 45px;
+}
+
+.centered-text {
+	margin: 0 auto;
+	color: #fff;
+	text-align: center;
+}
+
+.centered-text h1 {
+	font-family: 'HelveticaLTStd-BlkCond';
+	text-transform: uppercase;
+	font-size: 2.3em;
+	letter-spacing: 0.1rem;
+}
+
+.centered-text p {
+	font-family: 'HelveticaLTStd-LightCond';
+}
+
+#loading {
+	width: 126px;
+	margin: 0 auto;
+	display: block;
+    padding-top: 5px;
+    color: #222;
+    font-family: 'HelveticaLTStd-BlkCond';
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: #fff;
+}
+
+#landing {
+	display: none;
+}
+
+
+/* media queries for landing screen -- Larger than tablet */
+
+@media (min-width: 750px) {
+	#dual-logo {
+		max-width: 215px;
+	}
+
+	.centered-text h1 {
+		font-size: 5em;
+	}
+
+	.centered-text p {
+		font-size: 1.5em; 
+	    width: 500px;
+	    margin: 0 auto;
+	    padding-bottom: 50px;
+	    line-height: 1.5em;
+	}
+
+	.button {
+	    font-size: 34px;
+	    padding: 12px 85px 0px 85px;
+	    line-height: 4.2rem;
+	}
+}
+
+/*Internal screen*/
+
+/*#internal {
+	display: none;
+}*/
+
+#overlay {
+	display: none;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: #fff;
+}
+
+#inner {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 12px;
+}
+
+.logo {
+	max-height: 40px;
+	margin-top: 10px;
+	margin-right: 5px;
+}
+
+
+
+p#instructions {
+	margin-top: 100px;
+
+}
+
+div#nav-right {
+	float: right;
+	width: 150px;
+	padding-top: 10px;
+}
+
+.nav-element  {
+	float: left;
+}
+
+#embed {
+    font-size: 14px;
+    padding: 3px 4px 0px 4px;
+    margin-top: 3px;
+    margin-left: 10px;
+    border: none;
+}
+
+.menu-btn {
+    height: 30px;
+    width: 30px;
+    margin-top: 7px;
+    padding-right: 10px;
+    background: url(images/menu.png) no-repeat;
+}
+
+
+.social {
+	float: left;
+    height: 30px;
+    width: 30px;
+    display: block;
+    /*margin-right: 5px;*/
+    background-repeat: no-repeat;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#facebook {
+	background-image: url(images/facebook.png);
+}
+
+#instagram {
+	background-image: url(images/instagram.png);
+}
+
+#twitter {
+	background-image: url(images/twitter.png);
+}
+
+
+/* Media queries for landing screen -- Larger than tablet */
+@media (min-width: 750px) {
+	.logo {
+		max-height: 70px;
+	}
+
+	#embed {
+	    font-size: 20px;
+	    padding: 7px 20px 0px 20px;
+	    line-height: 3rem;
+	}
+
+	div#nav-right {
+	    width: 213px;
+	    margin-top: 10px;
+	}
+
+	.social {
+		margin-right: 5px;
+		margin-top: 6px;
+	}
+
+	#instructions {
+		width: 40%;
+	}
+}
