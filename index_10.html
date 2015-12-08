@@ -711,15 +711,15 @@
         for (var i = 0; i < mediaLength; i++) {
             if (i == num) {
                 if (!audioList[i].isPlaying) {
-                    audioList[i].play();
+                    try {
+                        audioList[i].play();
+                    } catch(e){}
                     videoList[i].play();
                 }
             } else {
                 try {
                     audioList[i].pause();
-                } catch (e) {
-                    // console.lo
-                }
+                } catch (e) {}
                 videoList[i].pause();
             }
         }
