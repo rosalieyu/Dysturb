@@ -505,7 +505,7 @@
             scene.add(movieScreenArray[2]);
 
             // add audio to this mesh
-            audioList.push( addAudioToMesh(audioPaths[2]) );
+            audioList.push( Audio3d.addAudioToMesh(audioPaths[2], movieScreenArray[2]) );
 
         });
 
@@ -579,7 +579,7 @@
         window.addEventListener('resize', onWindowResize, false);
 
         // time to load audio for the meshes we have so far
-        audioList = makeAudio(audioPaths, camera, movieScreenArray);
+        audioList = Audio3d.initAudio(audioPaths, camera, movieScreenArray);
 
         render();
     }
