@@ -85,25 +85,20 @@
     var CameraCube;
     var blocker = document.getElementById('blocker');
     var instructions = document.getElementById('instructions');
-
     var objects = [];
     var raycaster;
     var container, stats;
     var cross;
     var loadingComplete = false;
-
     var isHit = false;
     var isHitFront = false;
     var isHitBack = false;
     var isHitLeft = false;
     var isHitRight = false;
     var rays;
-
     //audio
-    var audioPaths = ["./audio/dysturb.mp3", "./audio/dysturb_1.mp3", "./audio/dysturb_2.mp3"];
+    var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/sturco-aud.mp3", "./audio/ou-aud.mp3"];
     var audioList; // initialized later
-
-
     //mobile
     var mouse_x;
     var mouse_y;
@@ -111,7 +106,6 @@
     var thisIsTouchDevice = false;
     var whichMobile = "";
     var noTouch = true;
-
     if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
         console.log("I'm iOS!");
         whichMobile = "iOS_mobile";
@@ -120,33 +114,25 @@
         console.log("I'm Android!");
         whichMobile = "android_mobile";
     }
-
     if (isTouchDevice()) thisIsTouchDevice = true;
-
     if (whichMobile !== "") {
         blocker.style.display = 'none';
         instructions.style.display = 'none';
     }
-
     // if (whichMobile=="") {
     //     var clickDiv = document.createElement('div');
     //     clickDiv.id = "blocker";
     //     // ...
     //     document.getElementsByTagName("body")[0].appendChild(clickDiv);
-
     //     var ins = document.createElement('div');
     //     ins.id = "instructions";
-
     //     clickDiv.appendChild(ins);
-
     //     var span = document.createElement('span');
     //     // span.style = "font-size:40px";
     //     span.innerHTML = "Click to Play!"
     //     document.getElementById('instructions').appendChild(span);
-
     //     console.log("create div");
     // }
-
     function isTouchDevice() {
         return 'ontouchstart' in window || !!(navigator.msMaxTouchPoints);
     }
@@ -157,7 +143,6 @@
     var time0;
     var time1;
     var time2;
-
     var movieScreenArray = [];
     // custom global variables
     var videoImageContext = [];
@@ -166,7 +151,6 @@
     var hit0 = false;
     var hit1 = false;
     var hit2 = false;
-
     var mp4Source0 = document.createElement('source');
     mp4Source0.src = "videos/jonas_Bendiksen1-vid.mp4";
     var webmSource0 = document.createElement('source');
@@ -176,8 +160,6 @@
     videoList[0].appendChild(mp4Source0);
     videoList[0].autoplay = true;
     videoList[0].load();
-
-
     var mp4Source1 = document.createElement('source');
     mp4Source1.src = "videos/Giulio_Di_Sturco-vid.mp4";
     var webmSource1 = document.createElement('source');
@@ -187,8 +169,6 @@
     videoList[1].appendChild(mp4Source1);
     videoList[1].autoplay = true;
     videoList[1].load();
-
-
     var mp4Source2 = document.createElement('source');
     mp4Source2.src = "videos/Ed_Ou-vid.mp4";
     var webmSource2 = document.createElement('source');
@@ -198,113 +178,68 @@
     videoList[2].appendChild(mp4Source2);
     videoList[2].autoplay = true;
     videoList[2].load();
-
     //collidar
     var collidableMeshList = [];
-
     if (whichMobile == "") {
-
-
         // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
-
         var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-
         if (havePointerLock) {
-
             var element = document.body;
-
             var pointerlockchange = function(event) {
-
                 if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
-
                     controlsEnabled = true;
                     controls.enabled = true;
-
                     blocker.style.display = 'none';
-
                 } else {
-
                     controls.enabled = false;
-
                     blocker.style.display = '-webkit-box';
                     blocker.style.display = '-moz-box';
                     blocker.style.display = 'box';
-
                     instructions.style.display = '';
-
                 }
-
             };
-
             var pointerlockerror = function(event) {
-
                 instructions.style.display = '';
-
             };
-
             // Hook pointer lock state change events
             document.addEventListener('pointerlockchange', pointerlockchange, false);
             document.addEventListener('mozpointerlockchange', pointerlockchange, false);
             document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
-
             document.addEventListener('pointerlockerror', pointerlockerror, false);
             document.addEventListener('mozpointerlockerror', pointerlockerror, false);
             document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
-
             instructions.addEventListener('click', function(event) {
-
                 instructions.style.display = 'none';
-
                 // Ask the browser to lock the pointer
                 element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-
                 if (/Firefox/i.test(navigator.userAgent)) {
-
                     var fullscreenchange = function(event) {
-
                         if (document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element) {
-
                             document.removeEventListener('fullscreenchange', fullscreenchange);
                             document.removeEventListener('mozfullscreenchange', fullscreenchange);
-
                             element.requestPointerLock();
                         }
-
                     };
-
                     document.addEventListener('fullscreenchange', fullscreenchange, false);
                     document.addEventListener('mozfullscreenchange', fullscreenchange, false);
-
                     element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
-
                     element.requestFullscreen();
-
                 } else {
-
                     element.requestPointerLock();
-
                 }
-
             }, false);
-
         } else {
-
             instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
-
         }
     }
-
     var controlsEnabled = true;
-
     var moveForward = false;
     var moveBackward = false;
     var moveLeft = false;
     var moveRight = false;
     var canJump = false;
-
     var prevTime = performance.now();
     var velocity = new THREE.Vector3(0, 0, 0);
-
     //touch
     // window.history.replaceState(null, null, "http://www.rosalieyu.com/dysturb/test_3/index_5.html");
     //if (thisIsTouchDevice) 
@@ -312,14 +247,11 @@
     document.body.addEventListener("touchstart", get_mouse_coords, false);
     document.body.addEventListener("touchmove", handleMove, false);
     document.body.addEventListener("touchend", handleEnd, false);
-
     var videoNum = 1;
 
     function handleStart(evt) {
-
         evt.preventDefault();
         moveForward = true;
-
         // if (!videoIsLoaded) {
         //     videoList[1].load();
         //     videoIsLoaded = true;
@@ -329,10 +261,8 @@
                 videoList[i].load();
                 videoList[i].play();
                 // videoList[i].pause();
-
             }
             noTouch = false;
-
             console.log("touch!");
         }
     }
@@ -340,23 +270,19 @@
     function get_mouse_coords(evt) {
         mouse_x = evt.pageX;
         mouse_y = evt.pageY;
-
     }
 
     function handleMove(evt) {
         evt.preventDefault();
         moveForward = false;
         moveBackward = false;
-
         var new_mouse_x = evt.pageX;
         if ((new_mouse_x - mouse_x) > 60) {
             moveLeft = true;
             moveRight = false;
-
         } else if ((new_mouse_x - mouse_x) < -60) {
             moveRight = true;
             moveLeft = false;
-
         }
         if (evt.scale < 1.0) {
             moveForward = false;
@@ -365,8 +291,6 @@
             moveBackward = false;
             moveForward = true;
         }
-
-
     }
 
     function handleEnd(evt) {
@@ -380,11 +304,8 @@
     function isTouchDevice() {
         return 'handleStart' in window || !!(navigator.msMaxTouchPoints);
     }
-
-
     init();
     animate();
-
     //clipboard
     var btn = document.getElementById('btn');
     var clipboard = new Clipboard(btn);
@@ -399,7 +320,6 @@
         window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
     }
 
-
     function init() {
         //CUBE
         var cubeGeometry = new THREE.CubeGeometry(600, 500, 350);
@@ -411,9 +331,7 @@
         });
         MovingCube = new THREE.Mesh(cubeGeometry, wireMaterial);
         MovingCube.position.set(0, -50, -300);
-
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-
         cubeGeometry = new THREE.CubeGeometry(30, 30, 30);
         wireMaterial = new THREE.MeshBasicMaterial({
             wireframe: true,
@@ -422,68 +340,50 @@
         });
         CameraCube = new THREE.Mesh(cubeGeometry, wireMaterial);
         // CameraCube.position.set(0, 200, 0);
-
         camera.add(MovingCube);
         camera.add(CameraCube);
-
-
         //camera.position.z = 500;
         //scene
         scene = new THREE.Scene();
         //scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
-
         var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.55);
         light.position.set(0.5, 1, 0.75);
         scene.add(light);
-
         var ambient = new THREE.AmbientLight(0x101030);
         scene.add(ambient);
-
         var directionalLight = new THREE.DirectionalLight(0xffeedd);
         directionalLight.position.set(0, 0, 1);
         scene.add(directionalLight);
-
         controls = new THREE.PointerLockControls(camera);
         scene.add(controls.getObject());
-
         var onKeyDown = function(event) {
-
             //console.log(event);
-
             //console.log('keydown! --> ' + event.keyCode);
-
             switch (event.keyCode) {
                 case 'touchstart':
                 case 38: // up
                 case 87: // w
                     moveForward = true;
                     break;
-
                 case 37: // left
                 case 65: // a
                     moveLeft = true;
                     break;
-
                 case 40: // down
                 case 83: // s
                     moveBackward = true;
                     break;
-
                 case 'touchmove':
                 case 39: // right
                 case 68: // d
                     moveRight = true;
                     break;
-
                 case 32: // space
                     if (canJump === true) velocity.y += 350;
                     canJump = false;
                     break;
-
             }
-
         };
-
         // Set the rays : one vector for every potential direction
         rays = [
             new THREE.Vector3(0, 0, 1), // z  // backward
@@ -495,15 +395,10 @@
             new THREE.Vector3(-1, 0, 0), // -x  // left
             new THREE.Vector3(-1, 0, 1) // -z  // backward left
         ];
-
         var onKeyUp = function(event) {
-
             ///console.log('keyup! --> ' + event.keyCode);
-
             var currentKeyCode = event.keyCode;
-
             switch (currentKeyCode) {
-
                 case 38: // up
                     moveForward = false;
                     break;
@@ -528,9 +423,7 @@
                 case 68: // d
                     moveRight = false;
                     break;
-
             }
-
             // if(currentKeyCode==38){
             //  moveForward = false;
             // }
@@ -540,98 +433,97 @@
             // if else(currentKeyCode==37){
             //  moveLeft = false;
             // }                                        
-
         };
-
         document.addEventListener('keydown', onKeyDown, false);
         document.addEventListener('keyup', onKeyUp, false);
-
         raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
-
-
-
         //model Jason collider
         new THREE.JSONLoader().load('./hiRes/cubeColliders.js', function(geometry) {
             var objectCollider = new THREE.Mesh(geometry);
-
             objectCollider.position.set(0, 0, 0);
             objectCollider.scale.set(2, 2, 2);
-
             //scene.add(objectCollider);
             collidableMeshList.push(objectCollider);
         });
-
         //model Jason
         new THREE.JSONLoader().load('hiRes/mainScene02.js', function(geometry, materials) {
             var material = new THREE.MeshFaceMaterial(materials);
             for (var i = 0; i < materials.length; i++)
                 materials[i].side = THREE.DoubleSide;
-
             var object = new THREE.Mesh(geometry, material);
-
             object.position.set(0, 0, 0);
             object.scale.set(2, 2, 2);
             scene.add(object);
             loadingComplete = true;
             //collidableMeshList.push(object);
-
         });
-
-
         //<< << << < HEAD
-        for (var i = 0; i < videoList.length; i++) {
+        for (var i = 0; i < 2; i++) {
             var videoImage = document.createElement('canvas');
             videoImage.width = 350;
             videoImage.height = 169;
             container = document.getElementById('internal');
             //container.appendChild(renderer.domElement); //>>> >>> > 60 de8d03b968281e676bb8bab13eb1c9709f2217
-
             videoImageContext[i] = videoImage.getContext('2d');
             // background color if no video present
             videoImageContext[i].fillStyle = '#000000';
             videoImageContext[i].fillRect(0, 0, videoImage.width, videoImage.height);
-
             videoTexture[i] = new THREE.Texture(videoImage);
             videoTexture[i].minFilter = THREE.LinearFilter;
             videoTexture[i].magFilter = THREE.LinearFilter;
-
             var movieMaterial = new THREE.MeshBasicMaterial({
                 map: videoTexture[i],
                 overdraw: true,
                 side: THREE.DoubleSide
             });
+
+
             // the geometry on which the movie will be displayed;
             //      movie image will be scaled to fit these dimensions.
             var movieGeometry = new THREE.PlaneGeometry(550, 265, 3, 3);
-
             movieScreenArray.push(new THREE.Mesh(movieGeometry, movieMaterial));
-
-            //push this screen to the collidibale list
-            //collidableMeshList.push(movieScreenArray[i]);
-
         }
+        //screen [2]
+        var videoImage1 = document.createElement('canvas');
+        videoImage1.width = 350;
+        videoImage1.height = 169;
 
+        videoImageContext[2] = videoImage1.getContext('2d');
+        // background color if no video present
+        videoImageContext[2].fillStyle = '#000000';
+        videoImageContext[2].fillRect(0, 0, videoImage.width, videoImage.height);
+        videoTexture[2] = new THREE.Texture(videoImage);
+        videoTexture[2].minFilter = THREE.LinearFilter;
+        videoTexture[2].magFilter = THREE.LinearFilter;
+        var movieMaterial1 = new THREE.MeshBasicMaterial({
+            map: videoTexture[2],
+            overdraw: true,
+            side: THREE.DoubleSide
+        });
+
+        new THREE.JSONLoader().load('hiRes/curvedPlaneVideoTexture.js', function(geometry) {
+            movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial1);
+            scene.add(movieScreenArray[2]);
+        });
+
+        //push this screen to the collidibale list
+        //collidableMeshList.push(movieScreenArray[i]);
         //position the screens and add them to the scene
         //1
         movieScreenArray[0].position.set(950, 70, -3400);
         movieScreenArray[0].rotation.y = 0.2;
-
         //2
         movieScreenArray[1].position.set(-430, 70, -890);
         movieScreenArray[1].rotation.y = 2.16;
-        //3
-        movieScreenArray[2].position.set(-260, 70, -400);
-        movieScreenArray[2].rotation.y = 1.52;
-
+        // //3
+        // movieScreenArray[2].position.set(-260, 70, -400);
+        // movieScreenArray[2].rotation.y = 1.52;
         //add screens into the scene
         scene.add(movieScreenArray[0]);
         scene.add(movieScreenArray[1]);
-        scene.add(movieScreenArray[2]);
+
         //camera.position.set(0,80,300);
-
-
         //camera.lookAt(movieScreenArray[0].position);
-
         //SKYBOX/FOG
         // var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
         // var skyBoxMaterial = new THREE.MeshBasicMaterial({
@@ -640,20 +532,14 @@
         // });
         // var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
         // scene.add(skyBox);
-
-
         scene.fog = new THREE.FogExp2(0x330000, 0.00025);
-
         // lights
-
         light = new THREE.DirectionalLight(0xffffff);
         light.position.set(1, 1, 1);
         scene.add(light);
-
         light = new THREE.DirectionalLight(0x002288);
         light.position.set(-1, -1, -1);
         scene.add(light);
-
         //spot light1              (hex, intensity, distance, angle, exponent, decay)
         light = new THREE.SpotLight(0xFFCC66, 1, 0, 0.1, 9, 0.1);
         light.position.set(-42.34, 17, 227);
@@ -663,31 +549,23 @@
         light.castShadow = true;
         scene.add(light);
         light.target = MovingCube;
-
         //point light
         light = new THREE.PointLight(0xff0000, 1, 100);
         light.position.set(130, 70, -690);
         scene.add(light);
-
         light = new THREE.AmbientLight(0x404040);
         scene.add(light);
-
         // light = new THREE.PointLight( 0xff0040, 1, 50 );
         // scene.add( light );
-
-
         // renderer
-
         renderer = new THREE.WebGLRenderer();
         //set background color
         renderer.setClearColor(0x00001a);
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
-
         container = document.getElementById('internal');
         container.appendChild(renderer.domElement);
-
         //FPS
         stats = new Stats();
         stats.domElement.style.position = 'absolute';
@@ -695,25 +573,25 @@
         stats.domElement.style.zIndex = 100;
         // container.appendChild( stats.domElement );
         //
-
         window.addEventListener('resize', onWindowResize, false);
-
-        var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/sturco-aud.mp3", "./audio/ou-aud.mp3"];
         audioList = makeAudio(audioPaths, camera, movieScreenArray);
         render();
-
     }
-
     // play audio + video, and pause the rest
     function mediaPlay(num) {
         var mediaLength = audioList.length;
-
         for (var i = 0; i < mediaLength; i++) {
             if (i == num) {
                 if (!audioList[i].isPlaying) {
                     try {
                         audioList[i].play();
+<<<<<<< HEAD
                     } catch(e){}
+=======
+                    } catch (e) {
+                        console.log(e)
+                    }
+>>>>>>> 8a518e09a8cdc3a948bfb4af6048e5a6f3b15bbe
                     videoList[i].play();
                 }
             } else {
@@ -725,42 +603,28 @@
         }
     }
 
-
     function onWindowResize() {
-
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-
         renderer.setSize(window.innerWidth, window.innerHeight);
-
-
         //controls.handleResize();
-
         render();
-
     }
 
-
     function animate() {
-
         requestAnimationFrame(animate);
-
         update();
         render();
         //controls.update();                
-
     }
 
     function update() {
-
         //collision
         // MovingCube.position.set(controls.position().x, controls.position().y - 50, controls.position().z - 300);
         //var originPoint = MovingCube.position.clone();
-
         //!
         MovingCube.updateMatrixWorld();
         CameraCube.updateMatrixWorld();
-
         for (var vertexIndex = 0; vertexIndex < CameraCube.geometry.vertices.length; vertexIndex++) {
             var localVertex = CameraCube.geometry.vertices[vertexIndex].clone();
             var globalVertex = localVertex.applyMatrix4(CameraCube.matrix);
@@ -776,57 +640,41 @@
                 var cubeWorldPos = new THREE.Vector3();
                 cubeWorldPos.setFromMatrixPosition(CameraCube.matrixWorld);
                 ray.set(cubeWorldPos, rays[i]);
-
                 // Test if we intersect with any obstacle mesh
                 var collisionResults = ray.intersectObjects(collidableMeshList);
                 // And disable that direction if we do
                 if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
-
                     //console.log('we have hit!');
-
                     //isHit = true;
-
                     if (i == 0 || i == 1 || i == 6) {
-
                         isHitBack = true;
                         isHitFront = false;
                         isHitRight = false;
                         isHitLeft = false;
                         //console.log("isHitBack " + isHitBack);
-
                     } else if (i == 3 || i == 4 || i == 5) {
-
                         isHitBack = false;
                         isHitFront = true;
                         isHitRight = false;
                         isHitLeft = false;
                         //console.log("isHitFront " + isHitFront);
-
                     } else if (i == 5 || i == 6 || i == 7) {
-
                         isHitBack = false;
                         isHitFront = false;
                         isHitRight = false;
                         isHitLeft = true;
                         //console.log("isHitLeft " + isHitLeft);
-
                     } else if (i == 1 || i == 2 || i == 3) {
-
                         isHitBack = false;
                         isHitFront = false;
                         isHitRight = true;
                         isHitLeft = false;
                         //console.log("isHitRight " + isHitRight);
-
                     }
-
-
                 } else {
-
                     //isHit = false;
                     //console.log("isHit = false");
                 }
-
                 //movie collider
                 for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++) {
                     var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
@@ -842,10 +690,8 @@
                     var cubeWorldPos = new THREE.Vector3();
                     cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
                     ray.set(cubeWorldPos, rays[i]);
-
                     var collisionResults0 = ray.intersectObject(movieScreenArray[0]);
                     if (collisionResults0.length > 0 && collisionResults0[0].distance < directionVector.length()) {
-
                         //console.log('hit0');
                         hit0 = true;
                         //stop walking
@@ -853,24 +699,18 @@
                         // videoList[0].play();
                         // videoList[1].pause();
                         // videoList[2].pause();
-
                     }
-
                     var collisionResults1 = ray.intersectObject(movieScreenArray[1]);
                     if (collisionResults1.length > 0 && collisionResults1[0].distance < directionVector.length()) {
-
                         //console.log('hit1');
                         hit1 = true;
                         mediaPlay(1);
                         // videoList[1].play();
                         // videoList[0].pause();
                         // videoList[2].pause();
-
                     }
-
                     var collisionResults2 = ray.intersectObject(movieScreenArray[2]);
                     if (collisionResults2.length > 0 && collisionResults2[0].distance < directionVector.length()) {
-
                         //console.log('hit2');
                         hit2 = true;
                         //stop walking
@@ -878,11 +718,8 @@
                         // videoList[2].play();
                         // videoList[0].pause();
                         // videoList[1].pause();
-
                     }
-
                 }
-
                 if (whichMobile == "android_mobile" && noTouch == false) {
                     if (hit0 == true) {
                         mediaPlay(0);
@@ -903,147 +740,103 @@
                         // videoList[1].pause();
                     }
                 }
-
-
                 if (controlsEnabled) {
                     raycaster.ray.origin.copy(controls.getObject().position);
                     // raycaster.ray.origin.copy( MovingCube.position );
                     raycaster.ray.origin.y -= 10;
-
                     var intersections = raycaster.intersectObjects(objects);
-
                     var isOnObject = intersections.length > 0;
-
                     var controlTime = performance.now();
                     var delta = (controlTime - prevTime) / 300;
-
-
                     velocity.x -= velocity.x;
                     velocity.z -= velocity.z;
-
                     //velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
                     //if moveforad == true, collision check == false
-
                     // if ( moveForward && isHitFront == false ) 
                     //   velocity.z -= 400.0 * delta;
-
                     // if ( moveBackward && isHitBack == false) 
                     //  velocity.z += 400.0 * delta;
-
                     // if ( moveLeft && isHitLeft == false) 
                     //  velocity.x -= 400.0 * delta;
-
-
                     // if ( moveRight && isHitRight == false) 
                     //  velocity.x += 400.0 * delta;
-
                     // if (!isHitFront && !isHitBack && !isHitRight && !isHitLeft) {
-
                     if (moveForward && !isHitFront) {
                         velocity.z -= 1;
                         isHitBack = false;
                     }
-
                     if (moveBackward && !isHitBack) {
                         velocity.z += 1;
                         isHitFront = false;
                     }
-
                     if (moveLeft && !isHitLeft) {
                         velocity.x -= 1;
                         isHitRight = false;
                     }
-
-
                     if (moveRight && !isHitRight) {
                         velocity.x += 1;
                         isHitLeft = false;
                     }
-
-
                     if (isHitFront) {
                         if (moveBackward || moveLeft || moveRight) {
                             isHitFront = false;
                         }
                     }
-
                     if (isHitBack) {
                         if (moveForward || moveLeft || moveRight) {
                             isHitBack = false;
                         }
                     }
-
                     if (isHitLeft) {
                         if (moveBackward || moveForward || moveRight) {
                             isHitLeft = false;
                         }
                     }
-
                     if (isHitRight) {
                         if (moveForward || moveLeft || moveBackward) {
                             isHitRight = false;
                         }
                     }
                     // }
-
                     // if collider is hit
-
                     // see what was hit... set that to be true
-
                     // if isHitFront
-
                     // --> the user moves left, and isHit is false, isHitFront is true
                     // --> the user moves right, and isHit is false, isHitFront is true
                     // --> the user moves back, and isHit is false, isHitFront is true
-
                     // if()
-
                     controls.getObject().translateX(velocity.x);
                     controls.getObject().translateY(velocity.y);
                     controls.getObject().translateZ(velocity.z);
                     //console.log(MovingCube.position);
-
-
                     if (controls.getObject().position.y < 10) {
-
                         velocity.y = 0;
                         controls.getObject().position.y = 10;
-
                         canJump = true;
-
                     }
-
                     prevTime = controlTime;
                 }
-
                 stats.update();
             }
         }
     }
-
     var framesPerSecond = 29;
 
     function render() {
-
         //console.log(isHit);
         if (videoList[0].readyState === videoList[0].HAVE_ENOUGH_DATA) {
             if (whichMobile == "iOS_mobile") {
-
                 time0 = Date.now();
                 var elapsed0 = (time0 - lastTime0) / 1000;
-
                 // render
                 // for (var i = 0; i < videoList.length; i++) {
                 if (elapsed0 >= ((1000 / framesPerSecond) / 1000)) {
                     videoList[0].currentTime0 = videoList[0].currentTime0 + elapsed0;
                     videoImageContext[0].drawImage(videoList[0], 0, 0);
                     videoImageContext[0].drawImage(videoList[0], 0, 0);
-
                     if (videoTexture[0])
                         videoTexture[0].needsUpdate = true;
-
                     lastTime0 = time0;
-
                     // if we are at the end of the video stop
                     var currentTime0 = (Math.round(parseFloat(videoList[0].currentTime0) * 10000) / 10000);
                     var duration0 = (Math.round(parseFloat(videoList[0].duration0) * 10000) / 10000);
@@ -1056,19 +849,15 @@
                 }
                 time1 = Date.now();
                 var elapsed1 = (time1 - lastTime1) / 1000;
-
                 // render
                 // for (var i = 0; i < videoList.length; i++) {
                 if (elapsed1 >= ((1000 / framesPerSecond) / 1000)) {
                     videoList[1].currentTime1 = videoList[1].currentTime1 + elapsed1;
                     videoImageContext[1].drawImage(videoList[1], 0, 0);
                     videoImageContext[1].drawImage(videoList[1], 0, 0);
-
                     if (videoTexture[1])
                         videoTexture[1].needsUpdate = true;
-
                     lastTime1 = time1;
-
                     // if we are at the end of the video stop
                     var currentTime1 = (Math.round(parseFloat(videoList[1].currentTime1) * 10000) / 10000);
                     var duration1 = (Math.round(parseFloat(videoList[1].duration1) * 10000) / 10000);
@@ -1081,19 +870,15 @@
                 }
                 time2 = Date.now();
                 var elapsed2 = (time2 - lastTime2) / 1000;
-
                 // render
                 // for (var i = 0; i < videoList.length; i++) {
                 if (elapsed2 >= ((1000 / framesPerSecond) / 1000)) {
                     videoList[2].currentTime2 = videoList[2].currentTime2 + elapsed2;
                     videoImageContext[2].drawImage(videoList[2], 0, 0);
                     videoImageContext[2].drawImage(videoList[2], 0, 0);
-
                     if (videoTexture[2])
                         videoTexture[2].needsUpdate = true;
-
                     lastTime2 = time2;
-
                     // if we are at the end of the video stop
                     var currentTime2 = (Math.round(parseFloat(videoList[2].currentTime2) * 10000) / 10000);
                     var duration2 = (Math.round(parseFloat(videoList[2].duration2) * 10000) / 10000);
@@ -1104,7 +889,6 @@
                         // return;
                     }
                 }
-
                 // }
             } else {
                 for (var i = 0; i < videoList.length; i++) {
@@ -1114,11 +898,8 @@
                         videoTexture[i].needsUpdate = true;
                 }
             }
-
         }
-
         renderer.render(scene, camera);
-
     }
     </script>
 </body>
