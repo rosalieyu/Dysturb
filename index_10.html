@@ -457,7 +457,6 @@
             loadingComplete = true;
             //collidableMeshList.push(object);
         });
-        //<< << << < HEAD
         for (var i = 0; i < 2; i++) {
             var videoImage = document.createElement('canvas');
             videoImage.width = 350;
@@ -504,6 +503,10 @@
         new THREE.JSONLoader().load('hiRes/curvedPlaneVideoTexture.js', function(geometry) {
             movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial1);
             scene.add(movieScreenArray[2]);
+
+            // add audio to this mesh
+            audioList.push( addAudioToMesh(audioPaths[2]) );
+
         });
 
         //push this screen to the collidibale list
@@ -574,7 +577,10 @@
         // container.appendChild( stats.domElement );
         //
         window.addEventListener('resize', onWindowResize, false);
+
+        // time to load audio for the meshes we have so far
         audioList = makeAudio(audioPaths, camera, movieScreenArray);
+
         render();
     }
     // play audio + video, and pause the rest
@@ -585,13 +591,9 @@
                 if (!audioList[i].isPlaying) {
                     try {
                         audioList[i].play();
-<<<<<<< HEAD
-                    } catch(e){}
-=======
                     } catch (e) {
                         console.log(e)
                     }
->>>>>>> 8a518e09a8cdc3a948bfb4af6048e5a6f3b15bbe
                     videoList[i].play();
                 }
             } else {
