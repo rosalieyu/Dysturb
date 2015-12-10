@@ -100,18 +100,19 @@
     var rays;
     var rayForMovies;
     var sky, sunSphere;
+
     //audio
     var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/sturco-aud.mp3", "./audio/ou-aud.mp3"];
     var audioList; // initialized later
-    // test raycasting
-    var mouse = new THREE.Vector2(),
-        INTERSECTED;
-    document.addEventListener('mousemove', onDocumentMouseMove, false);
 
+    // test raycasting
+    var mouse = new THREE.Vector2(), INTERSECTED;
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     function onDocumentMouseMove(event) {
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     }
+
     //mobile
     var mouse_x;
     var mouse_y;
@@ -626,7 +627,7 @@
             movieScreenArray[2].scale.set(2, 2, 2);
             scene.add(movieScreenArray[2]);
             // add audio to this mesh
-            audioList.push(Audio3d.addAudioToMesh(audioPaths[2], movieScreenArray[2]));
+            audioList.push( Audio3d.addAudioToMesh(audioPaths[2], movieScreenArray[2]) );
         });
         movieScreenArray[0].position.set(1530, 130, -5050.82);
         movieScreenArray[0].rotation.y = -0.94;
@@ -692,6 +693,7 @@
         initSky();
 
         window.addEventListener('resize', onWindowResize, false);
+
         // time to load audio for the meshes we have so far
         audioList = Audio3d.initAudio(audioPaths, camera, movieScreenArray);
         render();
@@ -725,6 +727,7 @@
             var localVertex = CameraCube.geometry.vertices[vertexIndex].clone();
             var globalVertex = localVertex.applyMatrix4(CameraCube.matrix);
             var directionVector = globalVertex.sub(CameraCube.position);
+
             //Raycaster( origin, direction, near, far )
             // origin — The origin vector where the ray casts from.
             // direction — The direction vector that gives direction to the ray. Should be normalized.
@@ -775,6 +778,7 @@
                     var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
                     var globalVertex = localVertex.applyMatrix4(MovingCube.matrix);
                     var directionVector = globalVertex.sub(MovingCube.position);
+
                     //Raycaster( origin, direction, near, far )
                     // origin — The origin vector where the ray casts from.
                     // direction — The direction vector that gives direction to the ray. Should be normalized.
@@ -784,11 +788,15 @@
                     // var cubeWorldPos = new THREE.Vector3();
                     // cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
                     // rayForMovies.set(cubeWorldPos, ray[i]);
+
                     // set based on mouse and camera
                     rayForMovies.setFromCamera(mouse, camera);
+
                     var maxDist = directionVector.length();
+
                     // get an array of all the movies intersecting the rayForMovies
                     var intersectingMovies = rayForMovies.intersectObjects(movieScreenArray);
+
                     if (intersectingMovies.length > 0) {
                         // for each...
                         intersectingMovies.forEach(function(item) {
@@ -796,19 +804,16 @@
                             if (item.distance < maxDist) {
                                 // find index of the item.object (mesh) in movieScreenArray
                                 var movieIndex = movieScreenArray.indexOf(item.object);
-                                switch (movieIndex) {
+                                switch(movieIndex) {
                                     case 0:
-                                        console.log("hit0");
                                         hit0 = true;
                                         mediaPlay(0);
                                         break;
                                     case 1:
-                                        console.log("hit1");
                                         hit1 = true;
                                         mediaPlay(1);
                                         break;
                                     case 2:
-                                        console.log("hit2");
                                         hit2 = true;
                                         mediaPlay(2);
                                         break;
@@ -924,6 +929,7 @@
     var framesPerSecond = 29;
 
     function render() {
+
         //console.log(isHit);
         if (videoList[0].readyState === videoList[0].HAVE_ENOUGH_DATA) {
             if (whichMobile == "iOS_mobile") {
