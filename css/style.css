@@ -1,50 +1,77 @@
 /*Custom CSS*/
 
+
 /*Fonts*/
 
 @font-face {
-	font-family: HelveticaLTStd-BlkCond;
-	src: url(fonts/HelveticaLTStd-BlkCond.otf);
+    font-family: HelveticaLTStd-BlkCond;
+    src: url(fonts/HelveticaLTStd-BlkCond.otf);
 }
 
 @font-face {
-	font-family: HelveticaLTStd-LightCond;
-	src: url(fonts/HelveticaLTStd-LightCond.otf);
+    font-family: HelveticaLTStd-LightCond;
+    src: url(fonts/HelveticaLTStd-LightCond.otf);
 }
 
+#blocker {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#instructions {
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    box-pack: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    box-align: center;
+    color: #ffffff;
+    text-align: center;
+    cursor: pointer;
+}
 
 
 /*Landing screen*/
 
 #dual-logo {
-	margin: 0 auto;
-	max-width: 150px;
-	display: block;
-	padding-top: 25px;
-	padding-bottom: 45px;
+    margin: 0 auto;
+    max-width: 150px;
+    display: block;
+    padding-top: 25px;
+    padding-bottom: 45px;
 }
 
 .centered-text {
-	margin: 0 auto;
-	color: #fff;
-	text-align: center;
+    margin: 0 auto;
+    color: #fff;
+    text-align: center;
 }
 
 .centered-text h1 {
-	font-family: 'HelveticaLTStd-BlkCond';
-	text-transform: uppercase;
-	font-size: 2.3em;
-	letter-spacing: 0.1rem;
+    font-family: 'HelveticaLTStd-BlkCond';
+    text-transform: uppercase;
+    font-size: 2.3em;
+    letter-spacing: 0.1rem;
 }
 
 .centered-text p {
-	font-family: 'HelveticaLTStd-LightCond';
+    font-family: 'HelveticaLTStd-LightCond';
 }
 
 #loading {
-	width: 126px;
-	margin: 0 auto;
-	display: block;
+    width: 126px;
+    margin: 0 auto;
+    display: block;
     padding-top: 5px;
     color: #222;
     font-family: 'HelveticaLTStd-BlkCond';
@@ -58,78 +85,74 @@
 }
 
 #landing {
-	display: none;
+    display: none;
 }
 
 
 /* media queries for landing screen -- Larger than tablet */
 
 @media (min-width: 750px) {
-	#dual-logo {
-		max-width: 215px;
-	}
-
-	.centered-text h1 {
-		font-size: 5em;
-	}
-
-	.centered-text p {
-		font-size: 1.5em; 
-	    width: 500px;
-	    margin: 0 auto;
-	    padding-bottom: 50px;
-	    line-height: 1.5em;
-	}
-
-	.button {
-	    font-size: 34px;
-	    padding: 12px 85px 0px 85px;
-	    line-height: 4.2rem;
-	}
+    #dual-logo {
+        max-width: 215px;
+    }
+    .centered-text h1 {
+        font-size: 5em;
+    }
+    .centered-text p {
+        font-size: 1.5em;
+        width: 500px;
+        margin: 0 auto;
+        padding-bottom: 50px;
+        line-height: 1.5em;
+    }
+    .button {
+        font-size: 34px;
+        padding: 12px 85px 0px 85px;
+        line-height: 4.2rem;
+    }
 }
 
+
 /*Internal screen*/
+
 
 /*#internal {
 	display: none;
 }*/
 
 #overlay {
-	display: none;
-	width: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	color: #fff;
+    display: none;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #fff;
 }
 
 #inner {
-	max-width: 1280px;
-	margin: 0 auto;
-	padding: 0 12px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 12px;
 }
 
 .logo {
-	max-height: 40px;
-	margin-top: 10px;
-	margin-right: 5px;
+    max-height: 40px;
+    margin-top: 10px;
+    margin-right: 5px;
 }
 
-
-
-p#instructions {
-	margin-top: 100px;
-
-}
+/*p#instructions {
+    margin-top: 100px;
+}*/
 
 div#nav-right {
-	float: right;
-	width: 150px;
-	padding-top: 10px;
+    float: right;
+    width: 150px;
+    padding-top: 10px;
 }
 
-.nav-element  {
-	float: left;
+.nav-element {
+    float: left;
 }
 
 #embed {
@@ -148,9 +171,8 @@ div#nav-right {
     background: url(images/menu.png) no-repeat;
 }
 
-
 .social {
-	float: left;
+    float: left;
     height: 30px;
     width: 30px;
     display: block;
@@ -162,41 +184,38 @@ div#nav-right {
 }
 
 #facebook {
-	background-image: url(images/facebook.png);
+    background-image: url(images/facebook.png);
 }
 
 #instagram {
-	background-image: url(images/instagram.png);
+    background-image: url(images/instagram.png);
 }
 
 #twitter {
-	background-image: url(images/twitter.png);
+    background-image: url(images/twitter.png);
 }
 
 
 /* Media queries for landing screen -- Larger than tablet */
+
 @media (min-width: 750px) {
-	.logo {
-		max-height: 70px;
-	}
-
-	#embed {
-	    font-size: 20px;
-	    padding: 7px 20px 0px 20px;
-	    line-height: 3rem;
-	}
-
-	div#nav-right {
-	    width: 213px;
-	    margin-top: 10px;
-	}
-
-	.social {
-		margin-right: 5px;
-		margin-top: 6px;
-	}
-
-	#instructions {
-		width: 40%;
-	}
+    .logo {
+        max-height: 70px;
+    }
+    #embed {
+        font-size: 20px;
+        padding: 7px 20px 0px 20px;
+        line-height: 3rem;
+    }
+    div#nav-right {
+        width: 213px;
+        margin-top: 10px;
+    }
+    .social {
+        margin-right: 5px;
+        margin-top: 6px;
+    }
+    /*#instructions {
+        width: 40%;
+    }*/
 }
