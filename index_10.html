@@ -67,14 +67,16 @@
     </div>
     <script src="js/Three.js"></script>
     <script src="js/three.min.js"></script>
-    <script src="js/Octree.js"></script>
     <script src="js/PointerLockControls.js"></script>
+    <script src="js/SkyShader.js"></script>
+    <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/audioModule.js"></script>
     <!-- <script src="js/TrackballControls.js"></script> -->
     <script src="js/OBJLoader.js"></script>
     <script src="js/Detector.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
+    <script src="js/BinaryLoader.js"></script>
     <!-- <script src="js/DeviceOrientationControls.js"></script> -->
     <script>
     if (!Detector.webgl) Detector.addGetWebGLMessage();
@@ -96,9 +98,20 @@
     var isHitLeft = false;
     var isHitRight = false;
     var rays;
+    var rayForMovies;
+    var sky, sunSphere;
     //audio
-    var audioPaths = ["./audio/ou-aud.mp3", "./audio/sturco-aud.mp3", "./audio/bendiksen1-aud.mp3"];
+    var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/sturco-aud.mp3", "./audio/ou-aud.mp3"];
     var audioList; // initialized later
+    // test raycasting
+    var mouse = new THREE.Vector2(),
+        INTERSECTED;
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
+
+    function onDocumentMouseMove(event) {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    }
     //mobile
     var mouse_x;
     var mouse_y;
@@ -151,7 +164,6 @@
     var hit0 = false;
     var hit1 = false;
     var hit2 = false;
-
     var mp4Source0 = document.createElement('source');
     mp4Source0.src = "videos/jonas_Bendiksen1-vid.mp4";
     var webmSource0 = document.createElement('source');
@@ -161,7 +173,6 @@
     videoList[0].appendChild(mp4Source0);
     //videoList[0].autoplay = true;
     videoList[0].load();
-
     var mp4Source1 = document.createElement('source');
     mp4Source1.src = "videos/Paolo_Pellegrin-vid.mp4";
     var webmSource1 = document.createElement('source');
@@ -171,7 +182,6 @@
     videoList[1].appendChild(mp4Source1);
     //videoList[2].autoplay = true;
     videoList[1].load();
-
     var mp4Source2 = document.createElement('source');
     mp4Source2.src = "videos/Ed_Ou-vid.mp4";
     var webmSource2 = document.createElement('source');
@@ -181,7 +191,6 @@
     videoList[2].appendChild(mp4Source2);
     //videoList[1].autoplay = true;
     videoList[2].load();
-
     //collidar
     var collidableMeshList = [];
     if (whichMobile == "") {
@@ -308,8 +317,10 @@
     function isTouchDevice() {
         return 'handleStart' in window || !!(navigator.msMaxTouchPoints);
     }
+
     init();
     animate();
+
     //clipboard
     var btn = document.getElementById('btn');
     var clipboard = new Clipboard(btn);
@@ -324,31 +335,137 @@
         window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
     }
 
+    function initSky() {
+
+        // Add Sky Mesh
+        sky = new THREE.Sky();
+        scene.add(sky.mesh);
+
+        // Add Sun Helper
+        sunSphere = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(20000, 16, 8),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff
+            })
+        );
+        sunSphere.position.y = -700000;
+        sunSphere.visible = false;
+        scene.add(sunSphere);
+
+        /// GUI
+
+        var effectController = {
+            turbidity: 10,
+            reileigh: 2,
+            mieCoefficient: 0.005,
+            mieDirectionalG: 0.8,
+            luminance: 1,
+            inclination: 0.49, // elevation / inclination
+            azimuth: 0.25, // Facing front,
+            sun: !true
+        };
+
+        var distance1 = 400;
+
+        function guiChanged() {
+
+            var uniforms = sky.uniforms;
+            uniforms.turbidity.value = effectController.turbidity;
+            uniforms.reileigh.value = effectController.reileigh;
+            uniforms.luminance.value = effectController.luminance;
+            uniforms.mieCoefficient.value = effectController.mieCoefficient;
+            uniforms.mieDirectionalG.value = effectController.mieDirectionalG;
+
+            var theta = Math.PI * (effectController.inclination - 0.5);
+            var phi = 2 * Math.PI * (effectController.azimuth - 0.5);
+
+            sunSphere.position.x = distance1 * Math.cos(phi);
+            sunSphere.position.y = distance1 * Math.sin(phi) * Math.sin(theta);
+            sunSphere.position.z = distance1 * Math.sin(phi) * Math.cos(theta);
+
+            sunSphere.visible = effectController.sun;
+
+            sky.uniforms.sunPosition.value.copy(sunSphere.position);
+
+            renderer.render(scene, camera);
+            //container = document.getElementById('internal');
+
+        }
+
+        var gui = new dat.GUI();
+
+        gui.add(effectController, "turbidity", 1.0, 20.0, 0.1).onChange(guiChanged);
+        gui.add(effectController, "reileigh", 0.0, 4, 0.001).onChange(guiChanged);
+        gui.add(effectController, "mieCoefficient", 0.0, 0.1, 0.001).onChange(guiChanged);
+        gui.add(effectController, "mieDirectionalG", 0.0, 1, 0.001).onChange(guiChanged);
+        gui.add(effectController, "luminance", 0.0, 2).onChange(guiChanged);
+        gui.add(effectController, "inclination", 0, 1, 0.0001).onChange(guiChanged);
+        gui.add(effectController, "azimuth", 0, 1, 0.0001).onChange(guiChanged);
+        gui.add(effectController, "sun").onChange(guiChanged);
+
+        guiChanged();
+
+    }
+
+    var distance = 400000;
+
+    // play audio + video, and pause the rest
+    function mediaPlay(num) {
+        var mediaLength = audioList.length;
+        for (var i = 0; i < mediaLength; i++) {
+            if (i == num) {
+                if (!audioList[i].isPlaying) {
+                    try {
+                        audioList[i].play();
+                    } catch (e) {
+                        console.log(e)
+                    }
+                    videoList[i].play();
+                }
+            } else {
+                try {
+                    audioList[i].pause();
+                } catch (e) {}
+                videoList[i].pause();
+            }
+        }
+    }
+
+
     function init() {
+
         //CUBE
         var cubeGeometry = new THREE.CubeGeometry(600, 500, 350);
         var wireMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
             wireframe: true,
-            //transparent: true,
-            //opacity: 0
+            transparent: true,
+            opacity: 0
         });
         MovingCube = new THREE.Mesh(cubeGeometry, wireMaterial);
-        MovingCube.position.set(0, -50, -300);
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-        cubeGeometry = new THREE.CubeGeometry(30, 30, 30);
+        MovingCube.position.set(0, -50, -600);
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
+        cubeGeometry = new THREE.CubeGeometry(10, 10, 50);
         wireMaterial = new THREE.MeshBasicMaterial({
             wireframe: true,
-            //transparent: true,
-            //opacity: 0
+            transparent: true,
+            opacity: 0
         });
         CameraCube = new THREE.Mesh(cubeGeometry, wireMaterial);
+        CameraCube.position.y = 7;
         // CameraCube.position.set(0, 200, 0);
         camera.add(MovingCube);
         camera.add(CameraCube);
         //camera.position.z = 500;
         //scene
         scene = new THREE.Scene();
+
+        //sky helper
+        var helper = new THREE.GridHelper(5000, 5000);
+        helper.color1.setHex(0xffffff);
+        helper.color2.setHex(0xffffff);
+        scene.add(helper);
+
         //scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
         var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.55);
         light.position.set(0.5, 1, 0.75);
@@ -360,6 +477,7 @@
         scene.add(directionalLight);
         controls = new THREE.PointerLockControls(camera);
         scene.add(controls.getObject());
+
         var onKeyDown = function(event) {
             //console.log(event);
             //console.log('keydown! --> ' + event.keyCode);
@@ -441,6 +559,7 @@
         document.addEventListener('keydown', onKeyDown, false);
         document.addEventListener('keyup', onKeyUp, false);
         raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+        rayForMovies = new THREE.Raycaster();
         //model Jason collider
         // new THREE.JSONLoader().load('./hiRes/cubeColliders.js', function(geometry) {
         //     var objectCollider = new THREE.Mesh(geometry);
@@ -454,12 +573,13 @@
             var material = new THREE.MeshFaceMaterial(materials);
             for (var i = 0; i < materials.length; i++)
                 materials[i].side = THREE.DoubleSide;
+
             var object = new THREE.Mesh(geometry, material);
             object.position.set(0, 0, 0);
             object.scale.set(2, 2, 2);
             scene.add(object);
             loadingComplete = true;
-            //collidableMeshList.push(object);
+            collidableMeshList.push(object);
         });
 
         for (var i = 0; i < 2; i++) {
@@ -505,26 +625,18 @@
             movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial1);
             movieScreenArray[2].scale.set(2, 2, 2);
             scene.add(movieScreenArray[2]);
-
             // add audio to this mesh
             audioList.push(Audio3d.addAudioToMesh(audioPaths[2], movieScreenArray[2]));
         });
-
-
-        movieScreenArray[0].position.set(1530, 150, -5050.82);
+        movieScreenArray[0].position.set(1530, 130, -5050.82);
         movieScreenArray[0].rotation.y = -0.94;
-
         movieScreenArray[1].position.set(-653, 50, -2212);
         movieScreenArray[1].rotation.y = 1.7;
-
         scene.add(movieScreenArray[0]);
         scene.add(movieScreenArray[1]);
-
-
         //push this screen to the collidibale list
         //collidableMeshList.push(movieScreenArray[i]);
         //position the screens and add them to the scene
-
         //camera.position.set(0,80,300);
         //camera.lookAt(movieScreenArray[0].position);
         //SKYBOX/FOG
@@ -535,14 +647,14 @@
         // });
         // var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
         // scene.add(skyBox);
-        scene.fog = new THREE.FogExp2(0x330000, 0.00025);
+        //scene.fog = new THREE.FogExp2(0x330000, 0.00025);
         // lights
-        light = new THREE.DirectionalLight(0xffffff);
-        light.position.set(1, 1, 1);
-        scene.add(light);
-        light = new THREE.DirectionalLight(0x002288);
-        light.position.set(-1, -1, -1);
-        scene.add(light);
+        // light = new THREE.DirectionalLight(0xffffff);
+        // light.position.set(1, 1, 1);
+        // scene.add(light);
+        // light = new THREE.DirectionalLight(0x002288);
+        // light.position.set(-1, -1, -1);
+        // scene.add(light);
         //spot light1              (hex, intensity, distance, angle, exponent, decay)
         light = new THREE.SpotLight(0xFFCC66, 1, 0, 0.1, 9, 0.1);
         light.position.set(-42.34, 17, 227);
@@ -576,32 +688,16 @@
         stats.domElement.style.zIndex = 100;
         // container.appendChild( stats.domElement );
         //
+
+        initSky();
+
         window.addEventListener('resize', onWindowResize, false);
         // time to load audio for the meshes we have so far
         audioList = Audio3d.initAudio(audioPaths, camera, movieScreenArray);
         render();
+
     }
-    // play audio + video, and pause the rest
-    function mediaPlay(num) {
-        var mediaLength = audioList.length;
-        for (var i = 0; i < mediaLength; i++) {
-            if (i == num) {
-                if (!audioList[i].isPlaying) {
-                    try {
-                        audioList[i].play();
-                    } catch (e) {
-                        console.log(e)
-                    }
-                    videoList[i].play();
-                }
-            } else {
-                try {
-                    audioList[i].pause();
-                } catch (e) {}
-                videoList[i].pause();
-            }
-        }
-    }
+
 
     function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -633,43 +729,42 @@
             // origin — The origin vector where the ray casts from.
             // direction — The direction vector that gives direction to the ray. Should be normalized.
             // And the "RayCaster", able to test for intersections    
-            ray = new THREE.Raycaster();
             // For each ray
             for (i = 0; i < rays.length; i += 1) {
                 // We reset the raycaster to this direction
                 var cubeWorldPos = new THREE.Vector3();
                 cubeWorldPos.setFromMatrixPosition(CameraCube.matrixWorld);
-                ray.set(cubeWorldPos, rays[i]);
+                rayForMovies.set(cubeWorldPos, rays[i]);
                 // Test if we intersect with any obstacle mesh
-                var collisionResults = ray.intersectObjects(collidableMeshList);
+                var collisionResults = rayForMovies.intersectObjects(collidableMeshList);
                 // And disable that direction if we do
-                if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
+                if (collisionResults.length > 0 && collisionResults[0].distance < 200) {
                     //console.log('we have hit!');
                     //isHit = true;
-                    if (i == 0 || i == 1 || i == 6) {
+                    if (i == 0 ) {
                         isHitBack = true;
                         isHitFront = false;
                         isHitRight = false;
                         isHitLeft = false;
-                        //console.log("isHitBack " + isHitBack);
-                    } else if (i == 3 || i == 4 || i == 5) {
+                        console.log("isHitBack " + isHitBack);
+                    } else if (i == 4 ) {
                         isHitBack = false;
                         isHitFront = true;
                         isHitRight = false;
                         isHitLeft = false;
-                        //console.log("isHitFront " + isHitFront);
-                    } else if (i == 5 || i == 6 || i == 7) {
+                        console.log("isHitFront " + isHitFront);
+                    } else if ( i == 6 ) {
                         isHitBack = false;
                         isHitFront = false;
                         isHitRight = false;
                         isHitLeft = true;
-                        //console.log("isHitLeft " + isHitLeft);
-                    } else if (i == 1 || i == 2 || i == 3) {
+                        console.log("isHitLeft " + isHitLeft);
+                    } else if (i == 2 ) {
                         isHitBack = false;
                         isHitFront = false;
                         isHitRight = true;
                         isHitLeft = false;
-                        //console.log("isHitRight " + isHitRight);
+                        console.log("isHitRight " + isHitRight);
                     }
                 } else {
                     //isHit = false;
@@ -683,41 +778,45 @@
                     //Raycaster( origin, direction, near, far )
                     // origin — The origin vector where the ray casts from.
                     // direction — The direction vector that gives direction to the ray. Should be normalized.
-                    // And the "RayCaster", able to test for intersections    
-                    ray = new THREE.Raycaster();
+                    // And the "RayCaster", able to test for intersections   
                     // For each ray
                     // We reset the raycaster to this direction
-                    var cubeWorldPos = new THREE.Vector3();
-                    cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
-                    ray.set(cubeWorldPos, rays[i]);
-                    var collisionResults0 = ray.intersectObject(movieScreenArray[0]);
-                    if (collisionResults0.length > 0 && collisionResults0[0].distance < directionVector.length()) {
-                        console.log('hit0');
-                        hit0 = true;
-                        //stop walking
-                        mediaPlay(0);
-                        // videoList[0].play();
-                        // videoList[1].pause();
-                        // videoList[2].pause();
-                    }
-                    var collisionResults1 = ray.intersectObject(movieScreenArray[1]);
-                    if (collisionResults1.length > 0 && collisionResults1[0].distance < directionVector.length()) {
-                        console.log('hit1');
-                        hit1 = true;
-                        mediaPlay(1);
-                        // videoList[1].play();
-                        // videoList[0].pause();
-                        // videoList[2].pause();
-                    }
-                    var collisionResults2 = ray.intersectObject(movieScreenArray[2]);
-                    if (collisionResults2.length > 0 && collisionResults2[0].distance < directionVector.length()) {
-                        console.log('hit2');
-                        hit2 = true;
-                        //stop walking
-                        mediaPlay(2);
-                        // videoList[2].play();
-                        // videoList[0].pause();
-                        // videoList[1].pause();
+                    // var cubeWorldPos = new THREE.Vector3();
+                    // cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
+                    // rayForMovies.set(cubeWorldPos, ray[i]);
+                    // set based on mouse and camera
+                    rayForMovies.setFromCamera(mouse, camera);
+                    var maxDist = directionVector.length();
+                    // get an array of all the movies intersecting the rayForMovies
+                    var intersectingMovies = rayForMovies.intersectObjects(movieScreenArray);
+                    if (intersectingMovies.length > 0) {
+                        // for each...
+                        intersectingMovies.forEach(function(item) {
+                            // make sure distance < maxDistance (directionVector.length)
+                            if (item.distance < maxDist) {
+                                // find index of the item.object (mesh) in movieScreenArray
+                                var movieIndex = movieScreenArray.indexOf(item.object);
+                                switch (movieIndex) {
+                                    case 0:
+                                        console.log("hit0");
+                                        hit0 = true;
+                                        mediaPlay(0);
+                                        break;
+                                    case 1:
+                                        console.log("hit1");
+                                        hit1 = true;
+                                        mediaPlay(1);
+                                        break;
+                                    case 2:
+                                        console.log("hit2");
+                                        hit2 = true;
+                                        mediaPlay(2);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        });
                     }
                 }
                 if (whichMobile == "android_mobile" && noTouch == false) {
@@ -748,8 +847,10 @@
                     var isOnObject = intersections.length > 0;
                     var controlTime = performance.now();
                     var delta = (controlTime - prevTime) / 300;
-                    velocity.x -= velocity.x;
-                    velocity.z -= velocity.z;
+
+                    velocity.x -= velocity.x * 10.0 * delta;
+                    velocity.z -= velocity.z * 10.0 * delta;
+
                     //velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
                     //if moveforad == true, collision check == false
                     // if ( moveForward && isHitFront == false ) 
@@ -762,19 +863,19 @@
                     //  velocity.x += 400.0 * delta;
                     // if (!isHitFront && !isHitBack && !isHitRight && !isHitLeft) {
                     if (moveForward && !isHitFront) {
-                        velocity.z -= 1;
+                        velocity.z -= 10.0 * delta;
                         isHitBack = false;
                     }
                     if (moveBackward && !isHitBack) {
-                        velocity.z += 1;
+                        velocity.z += 10.0 * delta;
                         isHitFront = false;
                     }
                     if (moveLeft && !isHitLeft) {
-                        velocity.x -= 1;
+                        velocity.x -= 10.0 * delta;
                         isHitRight = false;
                     }
                     if (moveRight && !isHitRight) {
-                        velocity.x += 1;
+                        velocity.x += 10.0 * delta;
                         isHitLeft = false;
                     }
                     if (isHitFront) {

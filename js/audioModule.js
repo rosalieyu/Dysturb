@@ -2,31 +2,66 @@
  *  create audio elements
  */
 
-// return an array of audio elements
-var makeAudio = function(pathArray, cam, movieScreenArrayMeshes) {
-	var arr = [];
 
-	var webAudioEnabled = typeof( (window.AudioContext || window.webkitAudioContext) ) != 'undefined';
+var Audio3d = {
 
-	// if there is no web audio, use html5 audio elements
-	if (!webAudioEnabled) {
-		for (var i = 0; i < pathArray.length; i++) {
-			arr.push(new Audio(pathArray[i]));
+	// set the overall volume boost (1 = normal)
+	volumeLevel : 6,
+	webAudioEnabled : typeof( (window.AudioContext || window.webkitAudioContext) ) != 'undefined',
+	compressor: null,
+
+	// initialize audio listener and return an array of audio elements
+	initAudio : function(pathArray, cam, meshes) {
+		var arr = [];
+
+		// if there is no web audio, use html5 audio elements
+		if (!this.webAudioEnabled) {
+			for (var i = 0; i < pathArray.length; i++) {
+				arr.push( new Audio(pathArray[i]) );
+			}
 		}
+
+		// if there is web audio, use 3d panner
+		else {
+			this.listener = new THREE.AudioListener();
+			this.compressor = this.listener.context.createDynamicsCompressor();
+			this.compressor.knee.value = 32;
+			this.compressor.ratio.value = 4;
+			this.compressor.threshold.value = -48;
+			this.compressor.connect(this.listener.context.destination);
+			cam.add( this.listener );
+
+			for (var i = 0; i < meshes.length; i++) {
+				var snd = this._makeThreeAudio(pathArray[i], meshes[i], this.listener);
+				arr.push(snd);
+			}
+		}
+
+		return arr;
+	},
+
+	// return an audio element
+	addAudioToMesh : function(pathToAudio, mesh) {
+
+		if (!this.webAudioEnabled) {
+			return new Audio(pathToAudio);
+		}
+
+		else {
+			return this._makeThreeAudio(pathToAudio, mesh, this.listener);
+		}
+	},
+
+	// make a THREE.JS audio element and associate it with a mesh and listener
+	// and TURN IT UP
+	_makeThreeAudio : function(pathToAudio, mesh, listener) {
+		var snd = new THREE.Audio(listener);
+		snd.gain.gain.value = this.volumeLevel;
+		snd.gain.disconnect();
+		snd.gain.connect(this.compressor);
+		snd.load(pathToAudio);
+		mesh.add(snd);
+		return snd;
 	}
 
-	// if there is web audio, use 3d panner
-	else {
-		var listener = new THREE.AudioListener();
-		cam.add( listener );
-
-		for (var i = 0; i < pathArray.length; i++) {
-			var snd = new THREE.Audio(listener);
-			snd.load(pathArray[i]);
-			movieScreenArrayMeshes[i].add(snd)
-			arr.push(snd);
-		}
-	}
-
-	return arr;
-};
+}
