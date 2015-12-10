@@ -96,9 +96,20 @@
     var isHitLeft = false;
     var isHitRight = false;
     var rays;
+    var rayForMovies;
+
     //audio
-    var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/sturco-aud.mp3", "./audio/ou-aud.mp3"];
+    var audioPaths = ["./audio/ou-aud.mp3", "./audio/sturco-aud.mp3", "./audio/bendiksen1-aud.mp3"];
     var audioList; // initialized later
+
+    // test raycasting
+    var mouse = new THREE.Vector2(), INTERSECTED;
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    function onDocumentMouseMove(event) {
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    }
+
     //mobile
     var mouse_x;
     var mouse_y;
@@ -151,6 +162,7 @@
     var hit0 = false;
     var hit1 = false;
     var hit2 = false;
+
     var mp4Source0 = document.createElement('source');
     mp4Source0.src = "videos/jonas_Bendiksen1-vid.mp4";
     var webmSource0 = document.createElement('source');
@@ -158,17 +170,19 @@
     videoList[0] = document.createElement('video');
     videoList[0].appendChild(webmSource0);
     videoList[0].appendChild(mp4Source0);
-    videoList[0].autoplay = true;
+    //videoList[0].autoplay = true;
     videoList[0].load();
+
     var mp4Source1 = document.createElement('source');
-    mp4Source1.src = "videos/Giulio_Di_Sturco-vid.mp4";
+    mp4Source1.src = "videos/Paolo_Pellegrin-vid.mp4";
     var webmSource1 = document.createElement('source');
-    webmSource1.src = "videos/Giulio_Di_Sturco.webm";
+    webmSource1.src = "videos/Paolo_Pellegrin.webm";
     videoList[1] = document.createElement('video');
     videoList[1].appendChild(webmSource1);
     videoList[1].appendChild(mp4Source1);
-    videoList[1].autoplay = true;
+    //videoList[2].autoplay = true;
     videoList[1].load();
+
     var mp4Source2 = document.createElement('source');
     mp4Source2.src = "videos/Ed_Ou-vid.mp4";
     var webmSource2 = document.createElement('source');
@@ -176,8 +190,9 @@
     videoList[2] = document.createElement('video');
     videoList[2].appendChild(webmSource2);
     videoList[2].appendChild(mp4Source2);
-    videoList[2].autoplay = true;
+    //videoList[1].autoplay = true;
     videoList[2].load();
+
     //collidar
     var collidableMeshList = [];
     if (whichMobile == "") {
@@ -437,16 +452,17 @@
         document.addEventListener('keydown', onKeyDown, false);
         document.addEventListener('keyup', onKeyUp, false);
         raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+        rayForMovies = new THREE.Raycaster();
         //model Jason collider
-        new THREE.JSONLoader().load('./hiRes/cubeColliders.js', function(geometry) {
-            var objectCollider = new THREE.Mesh(geometry);
-            objectCollider.position.set(0, 0, 0);
-            objectCollider.scale.set(2, 2, 2);
-            //scene.add(objectCollider);
-            collidableMeshList.push(objectCollider);
-        });
-        //model Jason
-        new THREE.JSONLoader().load('hiRes/mainScene02.js', function(geometry, materials) {
+        // new THREE.JSONLoader().load('./hiRes/cubeColliders.js', function(geometry) {
+        //     var objectCollider = new THREE.Mesh(geometry);
+        //     objectCollider.position.set(0, 0, 0);
+        //     objectCollider.scale.set(2, 2, 2);
+        //     //scene.add(objectCollider);
+        //     collidableMeshList.push(objectCollider);
+        // });
+        // //model Jason
+        new THREE.JSONLoader().load('hiRes/120915_15.js', function(geometry, materials) {
             var material = new THREE.MeshFaceMaterial(materials);
             for (var i = 0; i < materials.length; i++)
                 materials[i].side = THREE.DoubleSide;
@@ -457,6 +473,7 @@
             loadingComplete = true;
             //collidableMeshList.push(object);
         });
+
         for (var i = 0; i < 2; i++) {
             var videoImage = document.createElement('canvas');
             videoImage.width = 350;
@@ -475,8 +492,6 @@
                 overdraw: true,
                 side: THREE.DoubleSide
             });
-
-
             // the geometry on which the movie will be displayed;
             //      movie image will be scaled to fit these dimensions.
             var movieGeometry = new THREE.PlaneGeometry(550, 265, 3, 3);
@@ -486,12 +501,11 @@
         var videoImage1 = document.createElement('canvas');
         videoImage1.width = 350;
         videoImage1.height = 169;
-
         videoImageContext[2] = videoImage1.getContext('2d');
         // background color if no video present
         videoImageContext[2].fillStyle = '#000000';
-        videoImageContext[2].fillRect(0, 0, videoImage.width, videoImage.height);
-        videoTexture[2] = new THREE.Texture(videoImage);
+        videoImageContext[2].fillRect(0, 0, videoImage1.width, videoImage1.height);
+        videoTexture[2] = new THREE.Texture(videoImage1);
         videoTexture[2].minFilter = THREE.LinearFilter;
         videoTexture[2].magFilter = THREE.LinearFilter;
         var movieMaterial1 = new THREE.MeshBasicMaterial({
@@ -499,31 +513,29 @@
             overdraw: true,
             side: THREE.DoubleSide
         });
-
-        new THREE.JSONLoader().load('hiRes/curvedPlaneVideoTexture.js', function(geometry) {
+        new THREE.JSONLoader().load('hiRes/curvedPlaneVideoTexture_04.js', function(geometry) {
             movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial1);
+            movieScreenArray[2].scale.set(2, 2, 2);
             scene.add(movieScreenArray[2]);
 
             // add audio to this mesh
             audioList.push( Audio3d.addAudioToMesh(audioPaths[2], movieScreenArray[2]) );
-
         });
+
+
+        movieScreenArray[0].position.set(1530, 150, -5050.82);
+        movieScreenArray[0].rotation.y = -0.94;
+
+        movieScreenArray[1].position.set(-653, 50, -2212);
+        movieScreenArray[1].rotation.y = 1.7;
+
+        scene.add(movieScreenArray[0]);
+        scene.add(movieScreenArray[1]);
+
 
         //push this screen to the collidibale list
         //collidableMeshList.push(movieScreenArray[i]);
         //position the screens and add them to the scene
-        //1
-        movieScreenArray[0].position.set(950, 70, -3400);
-        movieScreenArray[0].rotation.y = 0.2;
-        //2
-        movieScreenArray[1].position.set(-430, 70, -890);
-        movieScreenArray[1].rotation.y = 2.16;
-        // //3
-        // movieScreenArray[2].position.set(-260, 70, -400);
-        // movieScreenArray[2].rotation.y = 1.52;
-        //add screens into the scene
-        scene.add(movieScreenArray[0]);
-        scene.add(movieScreenArray[1]);
 
         //camera.position.set(0,80,300);
         //camera.lookAt(movieScreenArray[0].position);
@@ -553,11 +565,11 @@
         scene.add(light);
         light.target = MovingCube;
         //point light
-        light = new THREE.PointLight(0xff0000, 1, 100);
-        light.position.set(130, 70, -690);
-        scene.add(light);
-        light = new THREE.AmbientLight(0x404040);
-        scene.add(light);
+        // light = new THREE.PointLight(0xff0000, 1, 100);
+        // light.position.set(130, 70, -690);
+        // scene.add(light);
+        // light = new THREE.AmbientLight(0x404040);
+        // scene.add(light);
         // light = new THREE.PointLight( 0xff0040, 1, 50 );
         // scene.add( light );
         // renderer
@@ -580,7 +592,6 @@
 
         // time to load audio for the meshes we have so far
         audioList = Audio3d.initAudio(audioPaths, camera, movieScreenArray);
-
         render();
     }
     // play audio + video, and pause the rest
@@ -631,19 +642,21 @@
             var localVertex = CameraCube.geometry.vertices[vertexIndex].clone();
             var globalVertex = localVertex.applyMatrix4(CameraCube.matrix);
             var directionVector = globalVertex.sub(CameraCube.position);
+
             //Raycaster( origin, direction, near, far )
             // origin — The origin vector where the ray casts from.
             // direction — The direction vector that gives direction to the ray. Should be normalized.
             // And the "RayCaster", able to test for intersections    
-            ray = new THREE.Raycaster();
+
+
             // For each ray
             for (i = 0; i < rays.length; i += 1) {
                 // We reset the raycaster to this direction
                 var cubeWorldPos = new THREE.Vector3();
                 cubeWorldPos.setFromMatrixPosition(CameraCube.matrixWorld);
-                ray.set(cubeWorldPos, rays[i]);
+                rayForMovies.set(cubeWorldPos, rays[i]);
                 // Test if we intersect with any obstacle mesh
-                var collisionResults = ray.intersectObjects(collidableMeshList);
+                var collisionResults = rayForMovies.intersectObjects(collidableMeshList);
                 // And disable that direction if we do
                 if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
                     //console.log('we have hit!');
@@ -682,44 +695,52 @@
                     var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
                     var globalVertex = localVertex.applyMatrix4(MovingCube.matrix);
                     var directionVector = globalVertex.sub(MovingCube.position);
+
                     //Raycaster( origin, direction, near, far )
                     // origin — The origin vector where the ray casts from.
                     // direction — The direction vector that gives direction to the ray. Should be normalized.
-                    // And the "RayCaster", able to test for intersections    
-                    ray = new THREE.Raycaster();
+                    // And the "RayCaster", able to test for intersections   
+
                     // For each ray
                     // We reset the raycaster to this direction
-                    var cubeWorldPos = new THREE.Vector3();
-                    cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
-                    ray.set(cubeWorldPos, rays[i]);
-                    var collisionResults0 = ray.intersectObject(movieScreenArray[0]);
-                    if (collisionResults0.length > 0 && collisionResults0[0].distance < directionVector.length()) {
-                        //console.log('hit0');
-                        hit0 = true;
-                        //stop walking
-                        mediaPlay(0);
-                        // videoList[0].play();
-                        // videoList[1].pause();
-                        // videoList[2].pause();
-                    }
-                    var collisionResults1 = ray.intersectObject(movieScreenArray[1]);
-                    if (collisionResults1.length > 0 && collisionResults1[0].distance < directionVector.length()) {
-                        //console.log('hit1');
-                        hit1 = true;
-                        mediaPlay(1);
-                        // videoList[1].play();
-                        // videoList[0].pause();
-                        // videoList[2].pause();
-                    }
-                    var collisionResults2 = ray.intersectObject(movieScreenArray[2]);
-                    if (collisionResults2.length > 0 && collisionResults2[0].distance < directionVector.length()) {
-                        //console.log('hit2');
-                        hit2 = true;
-                        //stop walking
-                        mediaPlay(2);
-                        // videoList[2].play();
-                        // videoList[0].pause();
-                        // videoList[1].pause();
+                    // var cubeWorldPos = new THREE.Vector3();
+                    // cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
+                    // rayForMovies.set(cubeWorldPos, ray[i]);
+
+                    // set based on mouse and camera
+                    rayForMovies.setFromCamera(mouse, camera);
+
+                    var maxDist = directionVector.length();
+
+                    // get an array of all the movies intersecting the rayForMovies
+                    var intersectingMovies = rayForMovies.intersectObjects(movieScreenArray);
+
+                    if (intersectingMovies.length > 0) {
+                        // for each...
+                        intersectingMovies.forEach(function(item) {
+                            // make sure distance < maxDistance (directionVector.length)
+                            if (item.distance < maxDist) {
+                                // find index of the item.object (mesh) in movieScreenArray
+                                var movieIndex = movieScreenArray.indexOf(item.object);
+                                switch(movieIndex) {
+                                    case 0:
+                                        hit0 = true;
+                                        mediaPlay(0);
+                                        break;
+                                    case 1:
+                                        hit1 = true;
+                                        mediaPlay(1);
+                                        break;
+                                    case 2:
+                                        hit2 = true;
+                                        mediaPlay(2);
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                            }
+                        });
                     }
                 }
                 if (whichMobile == "android_mobile" && noTouch == false) {
@@ -825,6 +846,7 @@
     var framesPerSecond = 29;
 
     function render() {
+
         //console.log(isHit);
         if (videoList[0].readyState === videoList[0].HAVE_ENOUGH_DATA) {
             if (whichMobile == "iOS_mobile") {
