@@ -81,6 +81,6 @@ var Audio3d = {
 		snd.load(pathToAudio);
 		mesh.add(snd);
 		return snd;
-	},
+	}
 
 }
