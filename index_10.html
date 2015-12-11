@@ -102,15 +102,17 @@
     var sky, sunSphere;
 
     //audio
-    var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/sturco-aud.mp3", "./audio/ou-aud.mp3"];
+    var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/Paolo3.mp3", "./audio/ou-aud.mp3"];
     var audioList; // initialized later
 
     // test raycasting
-    var mouse = new THREE.Vector2(), INTERSECTED;
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    var mouse = new THREE.Vector2(),
+        INTERSECTED;
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
+
     function onDocumentMouseMove(event) {
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }
 
     //mobile
@@ -166,27 +168,27 @@
     var hit1 = false;
     var hit2 = false;
     var mp4Source0 = document.createElement('source');
-    mp4Source0.src = "videos/jonas_Bendiksen1-vid.mp4";
+    mp4Source0.src = "videos/jjonas_rueRoger_frame.mp4";
     var webmSource0 = document.createElement('source');
-    webmSource0.src = "videos/Jonas_Bendiksen1.webm";
+    webmSource0.src = "videos/jonas_rueRoger_frame.webm";
     videoList[0] = document.createElement('video');
     videoList[0].appendChild(webmSource0);
     videoList[0].appendChild(mp4Source0);
     //videoList[0].autoplay = true;
     videoList[0].load();
     var mp4Source1 = document.createElement('source');
-    mp4Source1.src = "videos/Paolo_Pellegrin-vid.mp4";
+    mp4Source1.src = "videos/Paolo_franprix_frame.mp4";
     var webmSource1 = document.createElement('source');
-    webmSource1.src = "videos/Paolo_Pellegrin.webm";
+    webmSource1.src = "videos/Paolo_franprix_frame.webm";
     videoList[1] = document.createElement('video');
     videoList[1].appendChild(webmSource1);
     videoList[1].appendChild(mp4Source1);
     //videoList[2].autoplay = true;
     videoList[1].load();
     var mp4Source2 = document.createElement('source');
-    mp4Source2.src = "videos/Ed_Ou-vid.mp4";
+    mp4Source2.src = "videos/Ed_Docteur_frame.mp4";
     var webmSource2 = document.createElement('source');
-    webmSource2.src = "videos/Ed_Ou.webm";
+    webmSource2.src = "videos/Ed_Docteur_frame.webm";
     videoList[2] = document.createElement('video');
     videoList[2].appendChild(webmSource2);
     videoList[2].appendChild(mp4Source2);
@@ -356,59 +358,59 @@
         /// GUI
 
         var effectController = {
-            turbidity: 10,
+            turbidity: 16,
             reileigh: 2,
-            mieCoefficient: 0.005,
-            mieDirectionalG: 0.8,
+            mieCoefficient: 0.00184,
+            mieDirectionalG: 0.6,
             luminance: 1,
             inclination: 0.49, // elevation / inclination
             azimuth: 0.25, // Facing front,
             sun: !true
         };
 
-        var distance1 = 400;
+        var distance1 = 400000;
 
-        function guiChanged() {
+        // function guiChanged() {
 
-            var uniforms = sky.uniforms;
-            uniforms.turbidity.value = effectController.turbidity;
-            uniforms.reileigh.value = effectController.reileigh;
-            uniforms.luminance.value = effectController.luminance;
-            uniforms.mieCoefficient.value = effectController.mieCoefficient;
-            uniforms.mieDirectionalG.value = effectController.mieDirectionalG;
+        var uniforms = sky.uniforms;
+        uniforms.turbidity.value = effectController.turbidity;
+        uniforms.reileigh.value = effectController.reileigh;
+        uniforms.luminance.value = effectController.luminance;
+        uniforms.mieCoefficient.value = effectController.mieCoefficient;
+        uniforms.mieDirectionalG.value = effectController.mieDirectionalG;
 
-            var theta = Math.PI * (effectController.inclination - 0.5);
-            var phi = 2 * Math.PI * (effectController.azimuth - 0.5);
+        var theta = Math.PI * (effectController.inclination - 0.5);
+        var phi = 2 * Math.PI * (effectController.azimuth - 0.5);
 
-            sunSphere.position.x = distance1 * Math.cos(phi);
-            sunSphere.position.y = distance1 * Math.sin(phi) * Math.sin(theta);
-            sunSphere.position.z = distance1 * Math.sin(phi) * Math.cos(theta);
+        sunSphere.position.x = distance1 * Math.cos(phi);
+        sunSphere.position.y = distance1 * Math.sin(phi) * Math.sin(theta);
+        sunSphere.position.z = distance1 * Math.sin(phi) * Math.cos(theta);
 
-            sunSphere.visible = effectController.sun;
+        sunSphere.visible = effectController.sun;
 
-            sky.uniforms.sunPosition.value.copy(sunSphere.position);
+        sky.uniforms.sunPosition.value.copy(sunSphere.position);
 
-            renderer.render(scene, camera);
-            //container = document.getElementById('internal');
+        renderer.render(scene, camera);
+        //container = document.getElementById('internal');
 
-        }
+        // }
 
-        var gui = new dat.GUI();
+        // var gui = new dat.GUI();
 
-        gui.add(effectController, "turbidity", 1.0, 20.0, 0.1).onChange(guiChanged);
-        gui.add(effectController, "reileigh", 0.0, 4, 0.001).onChange(guiChanged);
-        gui.add(effectController, "mieCoefficient", 0.0, 0.1, 0.001).onChange(guiChanged);
-        gui.add(effectController, "mieDirectionalG", 0.0, 1, 0.001).onChange(guiChanged);
-        gui.add(effectController, "luminance", 0.0, 2).onChange(guiChanged);
-        gui.add(effectController, "inclination", 0, 1, 0.0001).onChange(guiChanged);
-        gui.add(effectController, "azimuth", 0, 1, 0.0001).onChange(guiChanged);
-        gui.add(effectController, "sun").onChange(guiChanged);
+        // gui.add(effectController, "turbidity", 1.0, 20.0, 0.1).onChange(guiChanged);
+        // gui.add(effectController, "reileigh", 0.0, 4, 0.001).onChange(guiChanged);
+        // gui.add(effectController, "mieCoefficient", 0.0, 0.1, 0.001).onChange(guiChanged);
+        // gui.add(effectController, "mieDirectionalG", 0.0, 1, 0.001).onChange(guiChanged);
+        // gui.add(effectController, "luminance", 0.0, 2).onChange(guiChanged);
+        // gui.add(effectController, "inclination", 0, 1, 0.0001).onChange(guiChanged);
+        // gui.add(effectController, "azimuth", 0, 1, 0.0001).onChange(guiChanged);
+        // gui.add(effectController, "sun").onChange(guiChanged);
 
-        guiChanged();
+        // guiChanged();
 
     }
 
-    var distance = 400000;
+    //var distance = 400000;
 
     // play audio + video, and pause the rest
     function mediaPlay(num) {
@@ -440,17 +442,17 @@
         var wireMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
             wireframe: true
-            // transparent: true,
-            // opacity: 0
+                // transparent: true,
+                // opacity: 0
         });
         MovingCube = new THREE.Mesh(cubeGeometry, wireMaterial);
         MovingCube.position.set(0, -50, -500);
-        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000000);
+        camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000000);
         cubeGeometry = new THREE.CubeGeometry(10, 10, 50);
         wireMaterial = new THREE.MeshBasicMaterial({
             wireframe: true
-            // transparent: true,
-            // opacity: 0
+                // transparent: true,
+                // opacity: 0
         });
         CameraCube = new THREE.Mesh(cubeGeometry, wireMaterial);
         CameraCube.position.y = 7;
@@ -471,8 +473,8 @@
         var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.55);
         light.position.set(0.5, 1, 0.75);
         scene.add(light);
-        var ambient = new THREE.AmbientLight(0x101030);
-        scene.add(ambient);
+        // var ambient = new THREE.AmbientLight(0x101030);
+        // scene.add(ambient);
         var directionalLight = new THREE.DirectionalLight(0xffeedd);
         directionalLight.position.set(0, 0, 1);
         scene.add(directionalLight);
@@ -583,10 +585,20 @@
             collidableMeshList.push(object);
         });
 
+        var floorGeometry = new THREE.PlaneGeometry(11000, 11000, 3);
+        var floorMaterial = new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            side: THREE.DoubleSide
+        });
+        var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.position.set(0, -160, -1500);
+        floor.rotation.x = 1.6;
+        scene.add(floor);
+
         for (var i = 0; i < 2; i++) {
             var videoImage = document.createElement('canvas');
-            videoImage.width = 350;
-            videoImage.height = 169;
+            videoImage.width = 1020;
+            videoImage.height = 574;
             container = document.getElementById('internal');
             //container.appendChild(renderer.domElement); //>>> >>> > 60 de8d03b968281e676bb8bab13eb1c9709f2217
             videoImageContext[i] = videoImage.getContext('2d');
@@ -608,8 +620,8 @@
         }
         //screen [2]
         var videoImage1 = document.createElement('canvas');
-        videoImage1.width = 350;
-        videoImage1.height = 169;
+        videoImage1.width = 1020;
+        videoImage1.height = 500;
         videoImageContext[2] = videoImage1.getContext('2d');
         // background color if no video present
         videoImageContext[2].fillStyle = '#000000';
@@ -627,7 +639,7 @@
             movieScreenArray[2].scale.set(2, 2, 2);
             scene.add(movieScreenArray[2]);
             // add audio to this mesh
-            audioList.push( Audio3d.addAudioToMesh(audioPaths[2], movieScreenArray[2]) );
+            audioList.push(Audio3d.addAudioToMesh(audioPaths[2], movieScreenArray[2]));
         });
         movieScreenArray[0].position.set(1530, 130, -5050.82);
         movieScreenArray[0].rotation.y = -0.94;
@@ -650,14 +662,14 @@
         // scene.add(skyBox);
         //scene.fog = new THREE.FogExp2(0x330000, 0.00025);
         // lights
-        // light = new THREE.DirectionalLight(0xffffff);
-        // light.position.set(1, 1, 1);
-        // scene.add(light);
-        // light = new THREE.DirectionalLight(0x002288);
-        // light.position.set(-1, -1, -1);
-        // scene.add(light);
+        light = new THREE.DirectionalLight(0xffffff);
+        light.position.set(1, 1, 1);
+        scene.add(light);
+        light = new THREE.DirectionalLight(0x002288);
+        light.position.set(-1, -1, -1);
+        scene.add(light);
         //spot light1              (hex, intensity, distance, angle, exponent, decay)
-        light = new THREE.SpotLight(0xFFCC66, 1, 0, 0.1, 9, 0.1);
+        light = new THREE.SpotLight(0xFFCC66, 2, 0, 0.1, 9, 0.1);
         light.position.set(-42.34, 17, 227);
         light.shadowCameraVisible = true;
         light.shadowDarkness = 0.95;
@@ -744,25 +756,25 @@
                 if (collisionResults.length > 0 && collisionResults[0].distance < 200) {
                     //console.log('we have hit!');
                     //isHit = true;
-                    if (i == 0 ) {
+                    if (i == 0) {
                         isHitBack = true;
                         isHitFront = false;
                         isHitRight = false;
                         isHitLeft = false;
                         console.log("isHitBack " + isHitBack);
-                    } else if (i == 4 ) {
+                    } else if (i == 4) {
                         isHitBack = false;
                         isHitFront = true;
                         isHitRight = false;
                         isHitLeft = false;
                         console.log("isHitFront " + isHitFront);
-                    } else if ( i == 6 ) {
+                    } else if (i == 6) {
                         isHitBack = false;
                         isHitFront = false;
                         isHitRight = false;
                         isHitLeft = true;
                         console.log("isHitLeft " + isHitLeft);
-                    } else if (i == 2 ) {
+                    } else if (i == 2) {
                         isHitBack = false;
                         isHitFront = false;
                         isHitRight = true;
@@ -804,7 +816,7 @@
                             if (item.distance < maxDist) {
                                 // find index of the item.object (mesh) in movieScreenArray
                                 var movieIndex = movieScreenArray.indexOf(item.object);
-                                switch(movieIndex) {
+                                switch (movieIndex) {
                                     case 0:
                                         hit0 = true;
                                         mediaPlay(0);
