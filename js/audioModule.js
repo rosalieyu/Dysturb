@@ -23,7 +23,10 @@ var Audio3d = {
 
 		// if there is web audio, use 3d panner
 		else {
-			this.listener = new THREE.AudioListener();
+			if (!this.listener) {
+				this.listener = new THREE.AudioListener();
+			}
+
 			this.compressor = this.listener.context.createDynamicsCompressor();
 			this.compressor.knee.value = 32;
 			this.compressor.ratio.value = 4;
@@ -89,6 +92,31 @@ var Audio3d = {
 		snd.load(pathToAudio);
 		mesh.add(snd);
 		return snd;
+	},
+
+	_startIOS : function() {
+		this.listener = new THREE.AudioListener();
+		var context = i.context;
+		var iosStarted = false;
+
+		var startIOS = function() {
+			if (iosStarted) return;
+
+			// create empty buffer
+			var buffer = audiocontext.createBuffer(1, 1, 22050);
+			var source = audiocontext.createBufferSource();
+			source.buffer = buffer;
+
+			source.connect(context.destination);
+			source.start(0);
+
+			if (context.state === 'running') {
+				iosStarted = true;
+			}
+		};
+		document.addEventListener('touchend', startIOS, false);
+		document.addEventListener('touchstart', startIOS, false);
+
 	}
 
 }

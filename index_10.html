@@ -125,6 +125,9 @@
     if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
         console.log("I'm iOS!");
         whichMobile = "iOS_mobile";
+
+        // initialize iOS audio
+        Audio3d._startIOS();
     }
     if (/Android/i.test(navigator.userAgent)) {
         console.log("I'm Android!");
@@ -259,25 +262,17 @@
     //touch
     // window.history.replaceState(null, null, "http://www.rosalieyu.com/dysturb/test_3/index_5.html");
     //if (thisIsTouchDevice) 
-    document.body.addEventListener("touchstart", handleStart, false);
-    document.body.addEventListener("touchstart", get_mouse_coords, false);
-    document.body.addEventListener("touchmove", handleMove, false);
-    document.body.addEventListener("touchend", handleEnd, false);
-    var videoNum = 1;
+    document.addEventListener("touchstart", handleStart, false);
+    document.addEventListener("touchstart", get_mouse_coords, false);
+    document.addEventListener("touchmove", handleMove, false);
+    document.addEventListener("touchend", handleEnd, false);
 
     function handleStart(evt) {
         evt.preventDefault();
         moveForward = true;
-        // if (!videoIsLoaded) {
-        //     videoList[1].load();
-        //     videoIsLoaded = true;
-        // }
         if (whichMobile == "android_mobile") {
-            for (var i = 0; i < videoList.length; i++) {
-                videoList[i].load();
-                videoList[i].play();
-                // videoList[i].pause();
-            }
+            videoList[i].play();
+            videoList[i].stop();
             noTouch = false;
             console.log("touch!");
         }
