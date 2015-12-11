@@ -52,6 +52,25 @@ var Audio3d = {
 		}
 	},
 
+
+	detectDistances : function(movieMeshes, myPos) {
+		// play with this number to calibrate max distance to trigger sound
+		var distanceThreshold = 1200;
+
+		var maxDist = 100000;
+		var closestItem = -1;
+
+		for (var i = 0; i < audioList.length; i++) {
+			var dist = myPos.distanceTo(movieMeshes[i].position);
+			if (dist < distanceThreshold && dist < maxDist) {
+				maxDist = dist;
+				closestItem = i;
+			}
+		}
+
+		return closestItem;
+	},
+
 	// make a THREE.JS audio element and associate it with a mesh and listener
 	// and TURN IT UP
 	_makeThreeAudio : function(pathToAudio, mesh, listener) {
@@ -62,6 +81,6 @@ var Audio3d = {
 		snd.load(pathToAudio);
 		mesh.add(snd);
 		return snd;
-	}
+	},
 
 }

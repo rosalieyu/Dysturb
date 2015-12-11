@@ -411,8 +411,20 @@
     var distance = 400000;
 
     // play audio + video, and pause the rest
-    function mediaPlay(num) {
+    function videoPlay(num) {
+        var mediaLength = videoList.length;
+        for (var i = 0; i < mediaLength; i++) {
+            if (i == num) {
+                    videoList[i].play();
+            } else {
+                videoList[i].pause();
+            }
+        }
+    }
+
+    function audioPlay(num) {
         var mediaLength = audioList.length;
+
         for (var i = 0; i < mediaLength; i++) {
             if (i == num) {
                 if (!audioList[i].isPlaying) {
@@ -421,13 +433,11 @@
                     } catch (e) {
                         console.log(e)
                     }
-                    videoList[i].play();
                 }
             } else {
                 try {
                     audioList[i].pause();
                 } catch (e) {}
-                videoList[i].pause();
             }
         }
     }
@@ -723,6 +733,13 @@
         //!
         MovingCube.updateMatrixWorld();
         CameraCube.updateMatrixWorld();
+
+        // figure out user's position
+        var cubeWorldPos = new THREE.Vector3();
+        cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
+        var closestIndex = Audio3d.detectDistances(movieScreenArray, cubeWorldPos);
+        audioPlay(closestIndex);
+
         for (var vertexIndex = 0; vertexIndex < CameraCube.geometry.vertices.length; vertexIndex++) {
             var localVertex = CameraCube.geometry.vertices[vertexIndex].clone();
             var globalVertex = localVertex.applyMatrix4(CameraCube.matrix);
@@ -807,15 +824,15 @@
                                 switch(movieIndex) {
                                     case 0:
                                         hit0 = true;
-                                        mediaPlay(0);
+                                        videoPlay(0);
                                         break;
                                     case 1:
                                         hit1 = true;
-                                        mediaPlay(1);
+                                        videoPlay(1);
                                         break;
                                     case 2:
                                         hit2 = true;
-                                        mediaPlay(2);
+                                        videoPlay(2);
                                         break;
                                     default:
                                         break;
@@ -824,21 +841,22 @@
                         });
                     }
                 }
+
                 if (whichMobile == "android_mobile" && noTouch == false) {
                     if (hit0 == true) {
-                        mediaPlay(0);
+                        videoPlay(0);
                         // videoList[0].play();
                         // videoList[1].pause();
                         // videoList[2].pause();
                     }
                     if (hit1 == true) {
-                        mediaPlay(1);
+                        videoPlay(1);
                         // videoList[1].play();
                         // videoList[0].pause();
                         // videoList[2].pause();
                     }
                     if (hit2 == true) {
-                        mediaPlay(2);
+                        videoPlay(2);
                         // videoList[2].play();
                         // videoList[0].pause();
                         // videoList[1].pause();
