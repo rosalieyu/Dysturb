@@ -85,6 +85,7 @@ var Audio3d = {
 		snd.gain.gain.value = this.volumeLevel;
 		snd.gain.disconnect();
 		snd.gain.connect(this.compressor);
+		snd.setLoop(true);
 		snd.load(pathToAudio);
 		mesh.add(snd);
 		return snd;

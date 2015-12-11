@@ -408,14 +408,12 @@
 
     }
 
-    var distance = 400000;
-
     // play audio + video, and pause the rest
     function videoPlay(num) {
         var mediaLength = videoList.length;
         for (var i = 0; i < mediaLength; i++) {
             if (i == num) {
-                    videoList[i].play();
+                videoList[i].play();
             } else {
                 videoList[i].pause();
             }
@@ -426,16 +424,13 @@
         var mediaLength = audioList.length;
 
         for (var i = 0; i < mediaLength; i++) {
-            if (i == num) {
-                if (!audioList[i].isPlaying) {
-                    try {
-                        audioList[i].play();
-                    } catch (e) {
-                        console.log(e)
-                    }
-                }
-            } else {
+            if (i == num && audioList[i].isPlaying === false) {
                 try {
+                    audioList[i].play();
+                } catch (e) { }
+            } else if (i !== num && audioList[i].isPlaying === true){
+                try {
+                    audioList[i].isPlaying = false;
                     audioList[i].pause();
                 } catch (e) {}
             }
