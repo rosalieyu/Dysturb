@@ -52,8 +52,15 @@ var Audio3d = {
 		}
 	},
 
-
-	detectDistances : function(movieMeshes, myPos) {
+	/**
+	 *  Returns -1 if no indexes are detected. Otherwise returns index
+	 *  of the closest item to your position.
+	 *  
+	 *  @param  {Array} meshArray Array of Meshes
+	 *  @param  {Vec3} myPos       vec3 x y z position
+	 *  @return {Number}             -1 or the index of the closest item in array
+	 */
+	detectDistances : function(meshArray, myPos) {
 		// play with this number to calibrate max distance to trigger sound
 		var distanceThreshold = 1200;
 
@@ -61,7 +68,7 @@ var Audio3d = {
 		var closestItem = -1;
 
 		for (var i = 0; i < audioList.length; i++) {
-			var dist = myPos.distanceTo(movieMeshes[i].position);
+			var dist = myPos.distanceTo(meshArray[i].position);
 			if (dist < distanceThreshold && dist < maxDist) {
 				maxDist = dist;
 				closestItem = i;
