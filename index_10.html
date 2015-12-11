@@ -446,21 +446,21 @@
     function init() {
 
         //CUBE
-        var cubeGeometry = new THREE.CubeGeometry(600, 500, 350);
+        var cubeGeometry = new THREE.CubeGeometry(600, 500, 800);
         var wireMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
-            wireframe: true,
-            transparent: true,
-            opacity: 0
+            wireframe: true
+            // transparent: true,
+            // opacity: 0
         });
         MovingCube = new THREE.Mesh(cubeGeometry, wireMaterial);
-        MovingCube.position.set(0, -50, -600);
-        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
+        MovingCube.position.set(0, -50, -500);
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000000);
         cubeGeometry = new THREE.CubeGeometry(10, 10, 50);
         wireMaterial = new THREE.MeshBasicMaterial({
-            wireframe: true,
-            transparent: true,
-            opacity: 0
+            wireframe: true
+            // transparent: true,
+            // opacity: 0
         });
         CameraCube = new THREE.Mesh(cubeGeometry, wireMaterial);
         CameraCube.position.y = 7;
@@ -802,14 +802,14 @@
                     // And the "RayCaster", able to test for intersections   
                     // For each ray
                     // We reset the raycaster to this direction
-                    // var cubeWorldPos = new THREE.Vector3();
-                    // cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
-                    // rayForMovies.set(cubeWorldPos, ray[i]);
+                    var cubeWorldPos = new THREE.Vector3();
+                    cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
+                    rayForMovies.set(cubeWorldPos, rays[i]);
 
                     // set based on mouse and camera
-                    rayForMovies.setFromCamera(mouse, camera);
+                    //rayForMovies.setFromCamera(mouse, camera);
 
-                    var maxDist = directionVector.length();
+                    var maxDist = 2000;
 
                     // get an array of all the movies intersecting the rayForMovies
                     var intersectingMovies = rayForMovies.intersectObjects(movieScreenArray);
