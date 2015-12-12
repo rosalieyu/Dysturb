@@ -24,10 +24,6 @@
 
 <body>
     <div id="blocker">
-        <div id="instructions">
-            <span style="font-size:40px">Click to play</span>
-            <br /> ( ∧ ∨ = Move, MOUSE = Look around)
-        </div>
     </div>
     <!-- landing section -->
     <div class="container">
@@ -36,8 +32,8 @@
             <div class="centered-text">
                 <h1>#ReframeClimate</h1>
                 <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
-                <!-- <span id="loading">Loading...</span> -->
-                <a class="button" href="#">Step Into The Frame</a>
+                <span id="loading">Loading...</span>
+                <a class="button" id="enter" href="#">Step Into The Frame</a>
             </div>
         </section>
     </div>
@@ -45,22 +41,24 @@
     <section id="internal">
         <div id="overlay">
             <div id="inner">
-                <img class="logo" id="magnum-logo" src="css/images/magnumlogo.gif">
-                <!-- make link and add real logo -->
-                <img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png">
-                <!-- make link and add real logo -->
-                <div id="nav-right">
-                    <ul class="nav-element">
-                        <li class="social" id="facebook"></li>
-                        <li class="social" id="instagram"></li>
-                        <li class="social" id="twitter"></li>
-                    </ul>
-                    <button id="embed" class="button nav-element" data-clipboard-text="<object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'/></object>">Embed</button>
-                    <!-- <div class="menu-btn nav-element"></div> -->
+                <div id="nav-full">
+                    <a href="http://magnumfoundation.org/" target="_blank"><img class="logo" id="magnum-logo" src="css/images/magnumlogo.png"></a>
+                    <!-- make link and add real logo -->
+                    <a href="http://dysturb.com" target="_blank"><img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png"></a>
+                    <!-- make link and add real logo -->
+                    <div id="nav-right">
+                        <ul class="nav-element">
+                            <a id="facebook-link" href="https://www.facebook.com/sharer/sharer.php?u=http://reframeclimate.magnumfoundation.org/" target="_blank"><li class="social" id="facebook"></li></a>
+                            <!-- <li class="social" id="instagram"></li> -->
+                            <a id="twitter-link" href="https://twitter.com/home?status=This+is+cool.+%23ReframeClimate" target="_blank"><li class="social" id="twitter"></li></a>
+                        </ul>
+                        <button id="embed" class="button nav-element" data-clipboard-text="<object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'/></object>">Embed</button>
+                        <!-- <div class="menu-btn nav-element"></div> -->
+                    </div>
                 </div>
-                <div class="centered-text">
-                    <div id="instructions">Use your mouse or arrow keys to explore. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</div>
-                    <a class="button" href="#">Begin</a>
+                <div id="instructions"class="centered-text">
+                    <p id="instructions-text">Use your mouse or arrow keys to explore. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</p>
+                    <a class="button" id="begin" href="#">Begin</a>
                 </div>
             </div>
     </section>
@@ -77,6 +75,8 @@
     <script src="js/libs/stats.min.js"></script>
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
     <script src="js/BinaryLoader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+    <script type="text/javascript" src="js/app.js"></script>
     <!-- <script src="js/DeviceOrientationControls.js"></script> -->
     <script>
     if (!Detector.webgl) Detector.addGetWebGLMessage();
@@ -582,6 +582,7 @@
             object.scale.set(2, 2, 2);
             scene.add(object);
             loadingComplete = true;
+            LOADING.complete(); // switches loading to enter button 
             collidableMeshList.push(object);
         });
 
