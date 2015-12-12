@@ -125,6 +125,8 @@
     if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
         console.log("I'm iOS!");
         whichMobile = "iOS_mobile";
+        // initialize iOS audio
+        Audio3d._startIOS();
     }
     if (/Android/i.test(navigator.userAgent)) {
         console.log("I'm Android!");
@@ -168,7 +170,7 @@
     var hit1 = false;
     var hit2 = false;
     var mp4Source0 = document.createElement('source');
-    mp4Source0.src = "videos/jonas_rueRoger_frame_.mp4";
+    mp4Source0.src = "videos/jonas_rueRoger_frame.mp4";
     // var webmSource0 = document.createElement('source');
     // webmSource0.src = "videos/jonas_rueRoger_frame.webm";
     videoList[0] = document.createElement('video');
@@ -259,11 +261,10 @@
     //touch
     // window.history.replaceState(null, null, "http://www.rosalieyu.com/dysturb/test_3/index_5.html");
     //if (thisIsTouchDevice) 
-    document.body.addEventListener("touchstart", handleStart, false);
-    document.body.addEventListener("touchstart", get_mouse_coords, false);
-    document.body.addEventListener("touchmove", handleMove, false);
-    document.body.addEventListener("touchend", handleEnd, false);
-    var videoNum = 1;
+    document.addEventListener("touchstart", handleStart, false);
+    document.addEventListener("touchstart", get_mouse_coords, false);
+    document.addEventListener("touchmove", handleMove, false);
+    document.addEventListener("touchend", handleEnd, false);
 
     function handleStart(evt) {
         evt.preventDefault();
@@ -276,6 +277,7 @@
             for (var i = 0; i < videoList.length; i++) {
                 videoList[i].load();
                 videoList[i].play();
+                videoList[i].stop();
                 // videoList[i].pause();
             }
             noTouch = false;
@@ -606,58 +608,100 @@
         floor.rotation.x = 1.6;
         scene.add(floor);
 
-        for (var i = 0; i < 2; i++) {
-            var videoImage = document.createElement('canvas');
-            videoImage.width = 1020;
-            videoImage.height = 574;
-            container = document.getElementById('internal');
-            //container.appendChild(renderer.domElement); //>>> >>> > 60 de8d03b968281e676bb8bab13eb1c9709f2217
-            videoImageContext[i] = videoImage.getContext('2d');
-            // background color if no video present
-            videoImageContext[i].fillStyle = '#000000';
-            videoImageContext[i].fillRect(0, 0, videoImage.width, videoImage.height);
-            videoTexture[i] = new THREE.Texture(videoImage);
-            videoTexture[i].minFilter = THREE.LinearFilter;
-            videoTexture[i].magFilter = THREE.LinearFilter;
-            var movieMaterial = new THREE.MeshBasicMaterial({
-                map: videoTexture[i],
-                overdraw: true,
-                side: THREE.DoubleSide
-            });
-            // the geometry on which the movie will be displayed;
-            //      movie image will be scaled to fit these dimensions.
-            var movieGeometry = new THREE.PlaneGeometry(550, 265, 3, 3);
-            movieScreenArray.push(new THREE.Mesh(movieGeometry, movieMaterial));
-        }
-        //screen [2]
+        // for (var i = 0; i < 2; i++) {
+        //     var videoImage = document.createElement('canvas');
+        //     videoImage.width = 1020;
+        //     videoImage.height = 574;
+        //     container = document.getElementById('internal');
+        //     //container.appendChild(renderer.domElement); //>>> >>> > 60 de8d03b968281e676bb8bab13eb1c9709f2217
+        //     videoImageContext[i] = videoImage.getContext('2d');
+        //     // background color if no video present
+        //     videoImageContext[i].fillStyle = '#000000';
+        //     videoImageContext[i].fillRect(0, 0, videoImage.width, videoImage.height);
+        //     videoTexture[i] = new THREE.Texture(videoImage);
+        //     videoTexture[i].minFilter = THREE.LinearFilter;
+        //     videoTexture[i].magFilter = THREE.LinearFilter;
+        //     var movieMaterial = new THREE.MeshBasicMaterial({
+        //         map: videoTexture[i],
+        //         overdraw: true,
+        //         side: THREE.DoubleSide
+        //     });
+        //     // the geometry on which the movie will be displayed;
+        //     //      movie image will be scaled to fit these dimensions.
+        //     var movieGeometry = new THREE.PlaneGeometry(550, 265, 3, 3);
+        //     movieScreenArray.push(new THREE.Mesh(movieGeometry, movieMaterial));
+        // }
+        //screen [0]
+        var videoImage = document.createElement('canvas');
+        videoImage.width = 1020;
+        videoImage.height = 500;
+        videoImageContext[0] = videoImage.getContext('2d');
+        // background color if no video present
+        videoImageContext[0].fillStyle = '#000000';
+        videoImageContext[0].fillRect(0, 0, videoImage.width, videoImage.height);
+        videoTexture[0] = new THREE.Texture(videoImage);
+        videoTexture[0].minFilter = THREE.LinearFilter;
+        videoTexture[0].magFilter = THREE.LinearFilter;
+        var movieMaterial = new THREE.MeshBasicMaterial({
+            map: videoTexture[0],
+            overdraw: true,
+            side: THREE.DoubleSide
+        });
+        new THREE.JSONLoader().load('hiRes/rueDesTournellesMovieScreen.js', function(geometry) {
+            movieScreenArray[0] = new THREE.Mesh(geometry, movieMaterial);
+            movieScreenArray[0].scale.set(2, 2, 2);
+            movieScreenArray[0].position.y = 50;
+            scene.add(movieScreenArray[0]);
+            // add audio to this mesh
+            audioList.push(Audio3d.addAudioToMesh(audioPaths[0], movieScreenArray[0]));
+        });
+        //screen [1]
         var videoImage1 = document.createElement('canvas');
         videoImage1.width = 1020;
         videoImage1.height = 500;
-        videoImageContext[2] = videoImage1.getContext('2d');
+        videoImageContext[1] = videoImage1.getContext('2d');
         // background color if no video present
-        videoImageContext[2].fillStyle = '#000000';
-        videoImageContext[2].fillRect(0, 0, videoImage1.width, videoImage1.height);
-        videoTexture[2] = new THREE.Texture(videoImage1);
-        videoTexture[2].minFilter = THREE.LinearFilter;
-        videoTexture[2].magFilter = THREE.LinearFilter;
+        videoImageContext[1].fillStyle = '#000000';
+        videoImageContext[1].fillRect(0, 0, videoImage1.width, videoImage1.height);
+        videoTexture[1] = new THREE.Texture(videoImage1);
+        videoTexture[1].minFilter = THREE.LinearFilter;
+        videoTexture[1].magFilter = THREE.LinearFilter;
         var movieMaterial1 = new THREE.MeshBasicMaterial({
             map: videoTexture[2],
             overdraw: true,
             side: THREE.DoubleSide
         });
+        new THREE.JSONLoader().load('hiRes/franprixMovieScreen.js', function(geometry) {
+            movieScreenArray[1] = new THREE.Mesh(geometry, movieMaterial1);
+            movieScreenArray[1].scale.set(2, 2, 2);
+            scene.add(movieScreenArray[1]);
+            // add audio to this mesh
+            audioList.push(Audio3d.addAudioToMesh(audioPaths[1], movieScreenArray[1]));
+        });
+
+        //screen [2]
+        var videoImage2 = document.createElement('canvas');
+        videoImage2.width = 1020;
+        videoImage2.height = 500;
+        videoImageContext[2] = videoImage2.getContext('2d');
+        // background color if no video present
+        videoImageContext[2].fillStyle = '#000000';
+        videoImageContext[2].fillRect(0, 0, videoImage2.width, videoImage2.height);
+        videoTexture[2] = new THREE.Texture(videoImage2);
+        videoTexture[2].minFilter = THREE.LinearFilter;
+        videoTexture[2].magFilter = THREE.LinearFilter;
+        var movieMaterial2 = new THREE.MeshBasicMaterial({
+            map: videoTexture[2],
+            overdraw: true,
+            side: THREE.DoubleSide
+        });
         new THREE.JSONLoader().load('hiRes/curvedPlaneVideoTexture_04.js', function(geometry) {
-            movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial1);
+            movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial2);
             movieScreenArray[2].scale.set(2, 2, 2);
             scene.add(movieScreenArray[2]);
             // add audio to this mesh
             audioList.push(Audio3d.addAudioToMesh(audioPaths[2], movieScreenArray[2]));
         });
-        movieScreenArray[0].position.set(1530, 130, -5050.82);
-        movieScreenArray[0].rotation.y = -0.94;
-        movieScreenArray[1].position.set(-653, 50, -2212);
-        movieScreenArray[1].rotation.y = 1.7;
-        scene.add(movieScreenArray[0]);
-        scene.add(movieScreenArray[1]);
         //push this screen to the collidibale list
         //collidableMeshList.push(movieScreenArray[i]);
         //position the screens and add them to the scene
@@ -831,15 +875,18 @@
                                     case 0:
                                         hit0 = true;
                                         mediaPlay(0);
+                                        console.log("hit0");
                                         break;
                                     case 1:
                                         hit1 = true;
                                         mediaPlay(1);
+                                        console.log("hit1");
                                         break;
                                     case 2:
                                         hit2 = true;
                                         mediaPlay(2);
-                                        break;
+                                        console.log("hit2");
+                                        break;                                        
                                     default:
                                         break;
                                 }

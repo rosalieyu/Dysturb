@@ -23,7 +23,10 @@ var Audio3d = {
 
 		// if there is web audio, use 3d panner
 		else {
-			this.listener = new THREE.AudioListener();
+			if (!this.listener) {
+				this.listener = new THREE.AudioListener();
+			}
+
 			this.compressor = this.listener.context.createDynamicsCompressor();
 			this.compressor.knee.value = 32;
 			this.compressor.ratio.value = 4;
@@ -52,6 +55,32 @@ var Audio3d = {
 		}
 	},
 
+	/**
+	 *  Returns -1 if no indexes are detected. Otherwise returns index
+	 *  of the closest item to your position.
+	 *  
+	 *  @param  {Array} meshArray Array of Meshes
+	 *  @param  {Vec3} myPos       vec3 x y z position
+	 *  @return {Number}             -1 or the index of the closest item in array
+	 */
+	detectDistances : function(meshArray, myPos) {
+		// play with this number to calibrate max distance to trigger sound
+		var distanceThreshold = 1200;
+
+		var maxDist = 100000;
+		var closestItem = -1;
+
+		for (var i = 0; i < audioList.length; i++) {
+			var dist = myPos.distanceTo(meshArray[i].position);
+			if (dist < distanceThreshold && dist < maxDist) {
+				maxDist = dist;
+				closestItem = i;
+			}
+		}
+
+		return closestItem;
+	},
+
 	// make a THREE.JS audio element and associate it with a mesh and listener
 	// and TURN IT UP
 	_makeThreeAudio : function(pathToAudio, mesh, listener) {
@@ -59,9 +88,35 @@ var Audio3d = {
 		snd.gain.gain.value = this.volumeLevel;
 		snd.gain.disconnect();
 		snd.gain.connect(this.compressor);
+		snd.setLoop(true);
 		snd.load(pathToAudio);
 		mesh.add(snd);
 		return snd;
+	},
+
+	_startIOS : function() {
+		this.listener = new THREE.AudioListener();
+		var context = i.context;
+		var iosStarted = false;
+
+		var startIOS = function() {
+			if (iosStarted) return;
+
+			// create empty buffer
+			var buffer = audiocontext.createBuffer(1, 1, 22050);
+			var source = audiocontext.createBufferSource();
+			source.buffer = buffer;
+
+			source.connect(context.destination);
+			source.start(0);
+
+			if (context.state === 'running') {
+				iosStarted = true;
+			}
+		};
+		document.addEventListener('touchend', startIOS, false);
+		document.addEventListener('touchstart', startIOS, false);
+
 	}
 
 }
