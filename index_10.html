@@ -76,8 +76,8 @@
     <script src="js/Detector.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
+    <script src="//cdn.timezonedb.com/js/timezonedb.min.js" type="text/javascript"></script>
     <script src="js/BinaryLoader.js"></script>
-    <!-- <script src="js/DeviceOrientationControls.js"></script> -->
     <script>
     if (!Detector.webgl) Detector.addGetWebGLMessage();
     var camera, scene, renderer;
@@ -168,29 +168,29 @@
     var hit1 = false;
     var hit2 = false;
     var mp4Source0 = document.createElement('source');
-    mp4Source0.src = "videos/jjonas_rueRoger_frame.mp4";
-    var webmSource0 = document.createElement('source');
-    webmSource0.src = "videos/jonas_rueRoger_frame.webm";
+    mp4Source0.src = "videos/jonas_rueRoger_frame_.mp4";
+    // var webmSource0 = document.createElement('source');
+    // webmSource0.src = "videos/jonas_rueRoger_frame.webm";
     videoList[0] = document.createElement('video');
-    videoList[0].appendChild(webmSource0);
+    //videoList[0].appendChild(webmSource0);
     videoList[0].appendChild(mp4Source0);
     //videoList[0].autoplay = true;
     videoList[0].load();
     var mp4Source1 = document.createElement('source');
     mp4Source1.src = "videos/Paolo_franprix_frame.mp4";
-    var webmSource1 = document.createElement('source');
-    webmSource1.src = "videos/Paolo_franprix_frame.webm";
+    // var webmSource1 = document.createElement('source');
+    // webmSource1.src = "videos/Paolo_franprix_frame.webm";
     videoList[1] = document.createElement('video');
-    videoList[1].appendChild(webmSource1);
+    //videoList[1].appendChild(webmSource1);
     videoList[1].appendChild(mp4Source1);
     //videoList[2].autoplay = true;
     videoList[1].load();
     var mp4Source2 = document.createElement('source');
     mp4Source2.src = "videos/Ed_Docteur_frame.mp4";
-    var webmSource2 = document.createElement('source');
-    webmSource2.src = "videos/Ed_Docteur_frame.webm";
+    // var webmSource2 = document.createElement('source');
+    // webmSource2.src = "videos/Ed_Docteur_frame.webm";
     videoList[2] = document.createElement('video');
-    videoList[2].appendChild(webmSource2);
+    // videoList[2].appendChild(webmSource2);
     videoList[2].appendChild(mp4Source2);
     //videoList[1].autoplay = true;
     videoList[2].load();
@@ -338,6 +338,17 @@
         window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
     }
 
+    // function displayZone() {
+    //     var tz = new TimeZoneDB;
+    //     tz.getJSON({
+    //         key: "RHP3Y31SKPTS",
+    //         lat: 48.8567,
+    //         lng: 2.3508
+    //     }, function(data) {
+    //         console.log(data.timestamp);
+    //     });
+    // }
+
     function initSky() {
 
         // Add Sky Mesh
@@ -373,11 +384,11 @@
         // function guiChanged() {
 
         var uniforms = sky.uniforms;
-        uniforms.turbidity.value = effectController.turbidity;
-        uniforms.reileigh.value = effectController.reileigh;
+        uniforms.turbidity.value = effectController.turbidity += 0.01;
+        uniforms.reileigh.value = effectController.reileigh += 0.01;
         uniforms.luminance.value = effectController.luminance;
-        uniforms.mieCoefficient.value = effectController.mieCoefficient;
-        uniforms.mieDirectionalG.value = effectController.mieDirectionalG;
+        uniforms.mieCoefficient.value = effectController.mieCoefficient += 0.01;
+        uniforms.mieDirectionalG.value = effectController.mieDirectionalG += 0.01;
 
         var theta = Math.PI * (effectController.inclination - 0.5);
         var phi = 2 * Math.PI * (effectController.azimuth - 0.5);
