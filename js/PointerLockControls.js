@@ -55,13 +55,13 @@ THREE.PointerLockControls = function(camera) {
 
         if ((new_mouse_x - mouse_x) > 60) {
             yawObject.rotation.y -= 0.02;
-            // moveLeft = true;
-            // moveRight = false;
+            moveLeft = true;
+            moveRight = false;
 
         } else if ((new_mouse_x - mouse_x) < -60) {
             yawObject.rotation.y += 0.02;
-            // moveRight = true;
-            // moveLeft = false;
+            moveRight = true;
+            moveLeft = false;
 
         }
 
@@ -86,7 +86,7 @@ THREE.PointerLockControls = function(camera) {
 
         //pitchObject.rotation.x -= movementY * 0.002;
 
-        //pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
+        pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
 
     };
 
