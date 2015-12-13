@@ -71,25 +71,29 @@ var SOCIAL = {
     embed: function(event) {
         $('#embed-box').show();
         $('#instructions').hide();
+        $('#credits').hide();
         $('.close-x').on('click', SOCIAL.embedClose);
     },
 
     embedClose: function(event) {
-        $('#embed-box').hide();
         $('#instructions').show();
+        $('#embed-box').hide();
+        $('#credits').hide();
     },
 
     credits: function(event) {
         console.log('credits');
         $('#credits').show();
         $('#instructions').hide();
+        $('#embed-box').hide();
         $('.close-x').on('click', SOCIAL.creditsClose);
     },
 
     creditsClose: function(event) {
         console.log('creditsclose');
+        $('#instructions').show();
         $('#credits').hide();
-        $('#instructions').show();   
+        $('#embed-box').hide();   
     }
 }
 
