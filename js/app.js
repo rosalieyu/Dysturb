@@ -71,25 +71,37 @@ var SOCIAL = {
     embed: function(event) {
         $('#embed-box').show();
         $('#instructions').hide();
+<<<<<<< HEAD
         $('.close-x').on('touchstart click', SOCIAL.embedClose);
+=======
+        $('#credits').hide();
+        $('.close-x').on('click', SOCIAL.embedClose);
+>>>>>>> e0c71b0780b03b242bf650de245461a6e2e32dad
     },
 
     embedClose: function(event) {
-        $('#embed-box').hide();
         $('#instructions').show();
+        $('#embed-box').hide();
+        $('#credits').hide();
     },
 
     credits: function(event) {
         console.log('credits');
         $('#credits').show();
         $('#instructions').hide();
+<<<<<<< HEAD
         $('.close-x').on('touchstart click', SOCIAL.creditsClose);
+=======
+        $('#embed-box').hide();
+        $('.close-x').on('click', SOCIAL.creditsClose);
+>>>>>>> e0c71b0780b03b242bf650de245461a6e2e32dad
     },
 
     creditsClose: function(event) {
         console.log('creditsclose');
+        $('#instructions').show();
         $('#credits').hide();
-        $('#instructions').show();   
+        $('#embed-box').hide();   
     }
 }
 

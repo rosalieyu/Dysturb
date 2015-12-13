@@ -104,15 +104,32 @@ h2 {
     background-color: #fff;
 }
 
+/* media queries for landing screen -- iPhone 4 and smaller */
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) { 
+    #dual-logo {
+        max-width: 110px;
+    }
+
+    .centered-text h1 {
+        font-size: 1.9em;
+
+    }
+
+}
+
 /* media queries for landing screen -- Larger than tablet */
 
 @media (min-width: 750px) {
     #dual-logo {
-        max-width: 215px;
+        max-width: 180px;
     }
+
     .centered-text h1 {
-        font-size: 5em;
+        font-size: 4.5em;
+        margin-bottom: 0.1em;
     }
+
     .centered-text p {
         font-size: 1.5em;
         width: 500px;
@@ -280,7 +297,7 @@ div#nav-right {
     font-family: 'Helvetica Neue';
     color: #999;
     text-transform: uppercase;
-    font-size: 0.8em;
+    font-size: 0.7em;
     margin-right: 10px;
     cursor: pointer;
 }
