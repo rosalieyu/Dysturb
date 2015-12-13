@@ -1,7 +1,8 @@
 /*Custom CSS*/
 
 
-/*Fonts*/
+
+/*//////////////////////////////////////Custom Fonts////////////////////////////////////*/
 
 @font-face {
     font-family: HelveticaLTStd-BlkCond;
@@ -20,7 +21,7 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-#instructions {
+/*#instructions {
     width: 100%;
     height: 100%;
     display: -webkit-box;
@@ -39,9 +40,26 @@
     text-align: center;
     cursor: pointer;
 }
+*/
+
+h2 {
+    text-transform: uppercase;
+    font-family: 'HelveticaLTStd-BlkCond';
+    font-size: 1.2em;
+    letter-spacing: 0.03rem;
+    margin-bottom: 2.4rem;
+}
+
+.clearfix {
+    clear: both;
+}
 
 
-/*Landing screen*/
+/*//////////////////////////////////////Landing Screen////////////////////////////////////*/
+
+#landing {
+    display: none;
+}
 
 #dual-logo {
     margin: 0 auto;
@@ -55,6 +73,7 @@
     margin: 0 auto;
     color: #fff;
     text-align: center;
+    font-family: 'HelveticaLTStd-LightCond';
 }
 
 .centered-text h1 {
@@ -66,6 +85,7 @@
 
 .centered-text p {
     font-family: 'HelveticaLTStd-LightCond';
+    margin-bottom: 5%;
 }
 
 #loading {
@@ -84,11 +104,6 @@
     background-color: #fff;
 }
 
-#landing {
-    display: none;
-}
-
-
 /* media queries for landing screen -- Larger than tablet */
 
 @media (min-width: 750px) {
@@ -101,38 +116,48 @@
     .centered-text p {
         font-size: 1.5em;
         width: 500px;
-        margin: 0 auto;
-        padding-bottom: 50px;
+        margin: 0 auto 2% auto;
         line-height: 1.5em;
     }
     .button {
-        font-size: 34px;
-        padding: 12px 85px 0px 85px;
+        font-size: 26px;
+        padding: 9px 30px 0px 30px;
         line-height: 4.2rem;
+    }
+
+    #loading {
+        padding: 9px 30px 1px 30px;
+        font-size: 26px;
     }
 }
 
 
-/*Internal screen*/
+/*//////////////////////////////////////Internal Screen////////////////////////////////////*/
 
-
-/*#internal {
-	display: none;
-}*/
+#internal {
+    display: none;
+}
 
 #overlay {
-    display: none;
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
     color: #fff;
+    height: 100%;
+}
+
+#nav-full {
+    margin-bottom: 20%;
 }
 
 #inner {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 12px;
+    min-height: 100%;
+    height: 100%;
+    position: relative;
 }
 
 .logo {
@@ -141,13 +166,13 @@
     margin-right: 5px;
 }
 
-/*p#instructions {
-    margin-top: 100px;
-}*/
+#instructions-text {
+    margin-bottom: 5%;
+}
 
 div#nav-right {
     float: right;
-    width: 150px;
+    width: 119px;
     padding-top: 10px;
 }
 
@@ -176,7 +201,6 @@ div#nav-right {
     height: 30px;
     width: 30px;
     display: block;
-    /*margin-right: 5px;*/
     background-repeat: no-repeat;
     text-indent: 100%;
     white-space: nowrap;
@@ -196,6 +220,80 @@ div#nav-right {
 }
 
 
+.model {
+    text-align: left;
+}
+
+.model h2 {
+    margin-bottom: 0.8rem;
+    float: left;
+}
+
+.close-x {
+    font-family: 'HelveticaLTStd-BlkCond';
+    cursor: pointer;
+    font-size: 1.3em;
+    line-height: 1;
+    float: right;
+}
+
+#embed-box { 
+    background-color: #fff;
+    color: #222;
+    padding: 25px;
+    border-radius: 5px;
+    display:none; 
+}
+
+#embed-box a {
+    color: #222;
+}
+
+#embed-box p, textarea {
+    color: #999;
+    font-family: 'Helvetica Neue';
+    font-size: 0.8em;
+}
+
+#embed-code {
+    width: 100%;
+    height: 102px;
+}
+
+#site-footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+#credits {
+    margin: 0 auto;
+    color: #fff;
+    display: none;
+}
+
+#credits p {
+    font-size: 1em;
+}
+
+#credits-open {
+    font-family: 'Helvetica Neue';
+    color: #999;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#credits a {
+    color: #fff;
+    font-size: 1.6em;
+    line-height: 0.8;
+}
+
+
+
+
 /* Media queries for landing screen -- Larger than tablet */
 
 @media (min-width: 750px) {
@@ -208,14 +306,28 @@ div#nav-right {
         line-height: 3rem;
     }
     div#nav-right {
-        width: 213px;
+        width: 178px;
         margin-top: 10px;
     }
     .social {
         margin-right: 5px;
         margin-top: 6px;
     }
-    /*#instructions {
+
+    #instructions {
         width: 40%;
-    }*/
+        margin: 0 auto;
+    }
+
+    #nav-full {
+        margin-bottom: 10%;
+    }
+
+    #embed-box {
+        width: 500px;
+    }
+
+    #credits {
+        width: 500px;
+    }
 }

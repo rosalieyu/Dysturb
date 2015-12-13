@@ -23,48 +23,67 @@
 </head>
 
 <body>
-    <div id="blocker">
-        <div id="instructions">
-            <span style="font-size:40px">Click to play</span>
-            <br /> ( ∧ ∨ = Move, MOUSE = Look around)
-        </div>
-    </div>
-    <!-- landing section -->
-    <div class="container">
-        <section id="landing">
-            <img id="dual-logo" src="css/images/magnumdysturb.png">
-            <div class="centered-text">
-                <h1>#ReframeClimate</h1>
-                <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
-                <!-- <span id="loading">Loading...</span> -->
-                <a class="button" href="#">Step Into The Frame</a>
-            </div>
-        </section>
-    </div>
-    <!-- internal section -->
-    <section id="internal">
-        <div id="overlay">
-            <div id="inner">
-                <img class="logo" id="magnum-logo" src="css/images/magnumlogo.gif">
-                <!-- make link and add real logo -->
-                <img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png">
-                <!-- make link and add real logo -->
-                <div id="nav-right">
-                    <ul class="nav-element">
-                        <li class="social" id="facebook"></li>
-                        <li class="social" id="instagram"></li>
-                        <li class="social" id="twitter"></li>
-                    </ul>
-                    <button id="embed" class="button nav-element" data-clipboard-text="<object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'/></object>">Embed</button>
-                    <!-- <div class="menu-btn nav-element"></div> -->
-                </div>
+    <div class="wrapper">
+        <div id="blocker"></div>
+        <!-- landing section -->
+        <div class="container">
+            <section id="landing">
+                <img id="dual-logo" src="css/images/magnumdysturb.png">
                 <div class="centered-text">
-                    <div id="instructions">Use your mouse or arrow keys to explore. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</div>
-                    <a class="button" href="#">Begin</a>
+                    <h1>#ReframeClimate</h1>
+                    <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
+                    <span id="loading">Loading...</span>
+                    <a class="button" id="enter" href="#">Step Into The Frame</a>
                 </div>
-            </div>
-    </section>
-    </div>
+            </section>
+        </div>
+        <!-- internal section -->
+        <section id="internal">
+            <div id="overlay">
+                <div id="inner">
+                    <div id="nav-full">
+                        <a href="http://magnumfoundation.org/" target="_blank"><img class="logo" id="magnum-logo" src="css/images/magnumlogo.png"></a>
+                        <a href="http://dysturb.com" target="_blank"><img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png"></a>
+                        <div id="nav-right">
+                            <ul class="nav-element">
+                                <a id="facebook-link" href="https://www.facebook.com/sharer/sharer.php?u=http://reframeclimate.magnumfoundation.org/" target="_blank"><li class="social" id="facebook"></li></a>
+                                <a id="twitter-link" href="https://twitter.com/home?status=This+is+cool.+%23ReframeClimate" target="_blank"><li class="social" id="twitter"></li></a>
+                            </ul>
+                            <button id="embed" class="button nav-element">Embed</button>
+                            <!-- <div class="menu-btn nav-element"></div> -->
+                        </div>
+                    </div>
+                    <div id="instructions"class="centered-text">
+                        <p id="instructions-text">Use your mouse or arrow keys to explore. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</p>
+                        <a class="button" id="begin" href="#">Begin</a>
+                    </div>
+                    <div id="embed-box" class="model centered-text">
+                        <h2>Embed</h2>
+                        <a class="close-x">x</a>
+                        <div class="clearfix"></div>
+                        <p>Copy this code to embed #ReframeClimate</p>
+                        <textarea readonly id="embed-code"><object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'/></textarea>
+                    </div>
+                    <div id="credits" class="model centered-text">
+                        <h2>Credits</h2>
+                        <a class="close-x">x</a>
+                        <div class="clearfix"></div>
+                        <p>We thank the Compton Foundation and Twilio for their generous support, the Yale School of Forestry &amp; Environmental studies for their scientific research, and to students and research students from the Interactive Telecommunications Program at NYU Tisch for developing the audio component and immersive digital presentation.
+                        </p>
+                        <p>Website built by Julia Irwin, Lisa Jamhoury, Supreet Mahanti and Rosalie Yu. </p>
+                        <p>Updated credits needed from Simone. </p>
+                        </p>
+                    </div>
+                    <div class="footer" id="site-footer">
+                        <div id="credits-open">Credits</div>
+                    </div> <!-- footer -->
+                </div> <!-- inner --> 
+            </div> <!-- overlay -->   
+        </section> <!-- internal -->  
+        <div class="push"></div>  
+    </div> <!-- wrapper -->
+    
+
     <script src="js/Three.js"></script>
     <script src="js/three.min.js"></script>
     <script src="js/PointerLockControls.js"></script>
@@ -78,6 +97,9 @@
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
     <script src="//cdn.timezonedb.com/js/timezonedb.min.js" type="text/javascript"></script>
     <script src="js/BinaryLoader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+    <script type="text/javascript" src="js/app.js"></script>
+    <!-- <script src="js/DeviceOrientationControls.js"></script> -->
     <script>
     if (!Detector.webgl) Detector.addGetWebGLMessage();
     var camera, scene, renderer;
@@ -603,6 +625,7 @@
             object.scale.set(2, 2, 2);
             scene.add(object);
             loadingComplete = true;
+            LOADING.complete(); // switches loading to enter button 
             collidableMeshList.push(object);
         });
 
