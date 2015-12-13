@@ -66,7 +66,7 @@
                         <a class="close-x">x</a>
                         <div class="clearfix"></div>
                         <p>Copy this code to embed #ReframeClimate</p>
-                        <textarea readonly id="embed-code"><object data='http://www.rosalieyu.com/dysturb/test_3/index.html' width='800' height='500'><embed src='http://magnumfoundation.org/dysturb/index.html' width='800' height='500'/></textarea>
+                        <textarea readonly id="embed-code"><object data='http://magnumfoundation.org/dysturb/index.html' width='800' height='500'><embed src='http://magnumfoundation.org/dysturb/index.html' width='800' height='500'/></textarea>
                     </div>
                     <div id="credits" class="model centered-text">
                         <h2>Credits</h2>
@@ -704,7 +704,7 @@
             overdraw: true,
             side: THREE.DoubleSide
         });
-        new THREE.JSONLoader().load('hiRes/rueDesTournellesMovieScreen.js', function(geometry) {
+        new THREE.JSONLoader().load('hiRes/rueDesTournelles.js', function(geometry) {
             movieScreenArray[0] = new THREE.Mesh(geometry, movieMaterial);
             movieScreenArray[0].scale.set(2, 2, 2);
             movieScreenArray[0].position.y = 60;
@@ -752,7 +752,7 @@
             overdraw: true,
             side: THREE.DoubleSide
         });
-        new THREE.JSONLoader().load('hiRes/curvedPlaneVideoTexture_04.js', function(geometry) {
+        new THREE.JSONLoader().load('hiRes/Docteur_movieTex_121315.js', function(geometry) {
             movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial2);
             movieScreenArray[2].scale.set(2, 2, 2);
             scene.add(movieScreenArray[2]);
