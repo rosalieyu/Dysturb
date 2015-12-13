@@ -51,6 +51,7 @@ var SOCIAL = {
         $('#facebook-link').on('click', SOCIAL.facebook);
         $('#twitter-link').on('click', SOCIAL.twitter);
         $('#embed').on('click', SOCIAL.embed);
+        $('#credits-open').on('click', SOCIAL.credits);
     },
 
     facebook: function(event) {
@@ -70,12 +71,25 @@ var SOCIAL = {
     embed: function(event) {
         $('#embed-box').show();
         $('#instructions').hide();
-        $('#close-x').on('click', SOCIAL.embedClose);
+        $('.close-x').on('click', SOCIAL.embedClose);
     },
 
     embedClose: function(event) {
         $('#embed-box').hide();
         $('#instructions').show();
+    },
+
+    credits: function(event) {
+        console.log('credits');
+        $('#credits').show();
+        $('#instructions').hide();
+        $('.close-x').on('click', SOCIAL.creditsClose);
+    },
+
+    creditsClose: function(event) {
+        console.log('creditsclose');
+        $('#credits').hide();
+        $('#instructions').show();   
     }
 }
 
