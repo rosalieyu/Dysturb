@@ -11,18 +11,11 @@ var Audio3d = {
 	compressor: null,
 
 	// initialize audio listener and return an array of audio elements
-	initAudio : function(pathArray, cam, meshes) {
+	initAudio : function(pathArray, cam) {
 		var arr = [];
 
-		// if there is no web audio, use html5 audio elements
-		if (!this.webAudioEnabled) {
-			for (var i = 0; i < pathArray.length; i++) {
-				arr.push( new Audio(pathArray[i]) );
-			}
-		}
-
 		// if there is web audio, use 3d panner
-		else {
+		// else {
 			if (!this.listener) {
 				this.listener = new THREE.AudioListener();
 			}
@@ -34,24 +27,22 @@ var Audio3d = {
 			this.compressor.connect(this.listener.context.destination);
 			cam.add( this.listener );
 
-			for (var i = 0; i < meshes.length; i++) {
-				var snd = this._makeThreeAudio(pathArray[i], meshes[i], this.listener);
-				arr.push(snd);
-			}
-		}
+		// }
 
 		return arr;
 	},
 
 	// return an audio element
-	addAudioToMesh : function(pathToAudio, mesh) {
+	addAudioToPosition : function(pathToAudio, pos) {
 
 		if (!this.webAudioEnabled) {
-			return new Audio(pathToAudio);
+			var a = new Audio(pathToAudio);
+			// detect distances if web audio is not enabled
+			a.position = pos;
 		}
 
 		else {
-			return this._makeThreeAudio(pathToAudio, mesh, this.listener);
+			return this._makeThreeAudio(pathToAudio, pos, this.listener);
 		}
 	},
 
@@ -70,27 +61,32 @@ var Audio3d = {
 		var maxDist = 100000;
 		var closestItem = -1;
 
+		var str = '';
+		// console.log(myPos);
 		for (var i = 0; i < audioList.length; i++) {
 			var dist = myPos.distanceTo(meshArray[i].position);
 			if (dist < distanceThreshold && dist < maxDist) {
 				maxDist = dist;
 				closestItem = i;
 			}
+			// str += i + ' Dist: ' +dist;
 		}
-
+		// console.log(str);
 		return closestItem;
 	},
 
 	// make a THREE.JS audio element and associate it with a mesh and listener
 	// and TURN IT UP
-	_makeThreeAudio : function(pathToAudio, mesh, listener) {
+	_makeThreeAudio : function(pathToAudio, pos, listener) {
 		var snd = new THREE.Audio(listener);
 		snd.gain.gain.value = this.volumeLevel;
 		snd.gain.disconnect();
 		snd.gain.connect(this.compressor);
 		snd.setLoop(true);
 		snd.load(pathToAudio);
-		mesh.add(snd);
+		snd.position.set(pos.x, pos.y, pos.z);
+		// mesh.add(snd);
+		scene.add(snd);
 		return snd;
 	},
 
