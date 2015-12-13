@@ -55,7 +55,7 @@
                     </div>
                     <div id="instructions"class="centered-text">
                         <p id="instructions-text">Use your mouse or arrow keys to explore. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</p>
-                        <a class="button" id="begin" href="#">Begin</a>
+                        <a class="button" id="begin" onclick="beginButtonPressed()" href="#">Begin</a>
                     </div>
                     <div id="embed-box" class="model centered-text">
                         <h2>Embed</h2>
@@ -350,7 +350,6 @@
     }
 
     init();
-    animate();
 
     //clipboard
     var btn = document.getElementById('btn');
@@ -478,6 +477,10 @@
         }
     }
 
+
+    function beginButtonPressed() {
+        animate();
+    }
 
     function init() {
 
