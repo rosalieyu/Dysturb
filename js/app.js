@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    console.log('ready');
     LOADING.load();
     SPLASH.load();
 });
@@ -26,7 +25,7 @@ var SPLASH = {
 
     hideInstructions: function(event) {
         event.preventDefault();
-        $('#instructions-box').hide();
+        $('#instructions').hide();
 
     }
 }
@@ -51,6 +50,7 @@ var SOCIAL = {
     initialize: function() {
         $('#facebook-link').on('click', SOCIAL.facebook);
         $('#twitter-link').on('click', SOCIAL.twitter);
+        $('#embed').on('click', SOCIAL.embed);
     },
 
     facebook: function(event) {
@@ -65,6 +65,17 @@ var SOCIAL = {
         return !window.open(targetUrl, 
             'Share on Twitter', 
             'width=500,height=500');
+    },
+
+    embed: function(event) {
+        $('#embed-box').show();
+        $('#instructions').hide();
+        $('#close-x').on('click', SOCIAL.embedClose);
+    },
+
+    embedClose: function(event) {
+        $('#embed-box').hide();
+        $('#instructions').show();
     }
 }
 
