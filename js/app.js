@@ -7,7 +7,7 @@ $(document).ready(function() {
 //shows and hides splash page while models load
 var SPLASH = {
     initialize: function() {
-        $('#enter').on('click', SPLASH.dissolve);
+        $('#enter').on('touchstart click', SPLASH.dissolve);
     },
 
     load: function(event) {
@@ -19,7 +19,7 @@ var SPLASH = {
         event.preventDefault();
         $('#landing').fadeOut();
         $('#internal').fadeIn();
-        $('#begin').on('click', SPLASH.hideInstructions);
+        $('#begin').on('touchstart click', SPLASH.hideInstructions);
         SOCIAL.initialize();
     },
 
@@ -48,10 +48,10 @@ var LOADING = {
 //social media share functionality
 var SOCIAL = {
     initialize: function() {
-        $('#facebook-link').on('click', SOCIAL.facebook);
-        $('#twitter-link').on('click', SOCIAL.twitter);
-        $('#embed').on('click', SOCIAL.embed);
-        $('#credits-open').on('click', SOCIAL.credits);
+        $('#facebook-link').on('touchstart click', SOCIAL.facebook);
+        $('#twitter-link').on('touchstart click', SOCIAL.twitter);
+        $('#embed').on('touchstart click', SOCIAL.embed);
+        $('#credits-open').on('touchstart click', SOCIAL.credits);
     },
 
     facebook: function(event) {
@@ -71,7 +71,7 @@ var SOCIAL = {
     embed: function(event) {
         $('#embed-box').show();
         $('#instructions').hide();
-        $('.close-x').on('click', SOCIAL.embedClose);
+        $('.close-x').on('touchstart click', SOCIAL.embedClose);
     },
 
     embedClose: function(event) {
@@ -83,7 +83,7 @@ var SOCIAL = {
         console.log('credits');
         $('#credits').show();
         $('#instructions').hide();
-        $('.close-x').on('click', SOCIAL.creditsClose);
+        $('.close-x').on('touchstart click', SOCIAL.creditsClose);
     },
 
     creditsClose: function(event) {

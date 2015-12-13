@@ -17,6 +17,10 @@
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" type="text/css" href="css/models.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <script src="js/three.min.js"></script>
+    <!--  <script src="js/Detector.js"></script> -->
+
     <!-- Favicon STILL NEEDED
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <link rel="icon" type="image/png" href="images/favicon.png">
@@ -33,7 +37,7 @@
                     <h1>#ReframeClimate</h1>
                     <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
                     <span id="loading">Loading...</span>
-                    <a class="button" id="enter" href="#">Step Into The Frame</a>
+                    <a class="button" id="enter" ontouchstart="beginButtonPressed()" href="#">Step Into The Frame</a>
                 </div>
             </section>
         </div>
@@ -68,9 +72,9 @@
                         <h2>Credits</h2>
                         <a class="close-x">x</a>
                         <div class="clearfix"></div>
-                        <p>We thank the Compton Foundation and Twilio for their generous support, the Yale School of Forestry &amp; Environmental studies for their scientific research, and to students and research students from the Interactive Telecommunications Program at NYU Tisch for developing the audio component and immersive digital presentation.
+                        <p>We thank the Compton Foundation and Twilio for their generous support, the Yale School of Forestry &amp; Environmental studies for their scientific research, and to students and research residents from the Interactive Telecommunications Program at NYU Tisch for developing the audio component and immersive digital presentation.
                         </p>
-                        <p>Website built by Julia Irwin, Lisa Jamhoury, Supreet Mahanti, Jason Sigal and Rosalie Yu. Special thanks to Laura Juo-Hsin Chen </p>
+                        <p>Website built by Julia Irwin, Lisa Jamhoury, Supreet Mahanti, Jason Sigal and Rosalie Yu. Special thanks to Laura Juo-Hsin Chen. </p>
                         <p>Updated credits needed from Simone. </p>
                         </p>
                     </div>
@@ -83,16 +87,12 @@
         <div class="push"></div>  
     </div> <!-- wrapper -->
     
-
-    <script src="js/Three.js"></script>
-    <script src="js/three.min.js"></script>
     <script src="js/PointerLockControls.js"></script>
     <script src="js/SkyShader.js"></script>
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/audioModule.js"></script>
     <!-- <script src="js/TrackballControls.js"></script> -->
     <script src="js/OBJLoader.js"></script>
-    <script src="js/Detector.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
     <script src="//cdn.timezonedb.com/js/timezonedb.min.js" type="text/javascript"></script>
@@ -102,7 +102,7 @@
     <!-- <script src="js/DeviceOrientationControls.js"></script> -->
     <script>
 
-    if (!Detector.webgl) Detector.addGetWebGLMessage();
+    // if (!Detector.webgl) Detector.addGetWebGLMessage();
     var camera, scene, renderer;
     var geometry, material, mesh;
     var controls;
@@ -123,6 +123,9 @@
     var rays;
     var rayForMovies;
     var sky, sunSphere;
+
+    // has user pressed 'begin' button?
+    var begun = false
 
     //audio
     var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/Paolo3.mp3", "./audio/ou-aud.mp3"];
@@ -149,9 +152,9 @@
         console.log("I'm iOS!");
         whichMobile = "iOS_mobile";
         // initialize iOS audio
-        Audio3d._startIOS();
+       Audio3d._startIOS();
     }
-    if (/Android/i.test(navigator.userAgent)) {
+    else if (/Android/i.test(navigator.userAgent)) {
         console.log("I'm Android!");
         whichMobile = "android_mobile";
     }
@@ -160,20 +163,20 @@
         blocker.style.display = 'none';
         instructions.style.display = 'none';
     }
-    // if (whichMobile=="") {
-    //     var clickDiv = document.createElement('div');
-    //     clickDiv.id = "blocker";
-    //     // ...
-    //     document.getElementsByTagName("body")[0].appendChild(clickDiv);
-    //     var ins = document.createElement('div');
-    //     ins.id = "instructions";
-    //     clickDiv.appendChild(ins);
-    //     var span = document.createElement('span');
-    //     // span.style = "font-size:40px";
-    //     span.innerHTML = "Click to Play!"
-    //     document.getElementById('instructions').appendChild(span);
-    //     console.log("create div");
-    // }
+    else if (whichMobile=="") {
+        var clickDiv = document.createElement('div');
+        clickDiv.id = "blocker";
+        // ...
+        document.getElementsByTagName("body")[0].appendChild(clickDiv);
+        var ins = document.createElement('div');
+        ins.id = "instructions";
+        clickDiv.appendChild(ins);
+        var span = document.createElement('span');
+        // span.style = "font-size:40px";
+        span.innerHTML = "Click to Play!"
+        document.getElementById('instructions').appendChild(span);
+        console.log("create div");
+    }
     function isTouchDevice() {
         return 'ontouchstart' in window || !!(navigator.msMaxTouchPoints);
     }
@@ -202,6 +205,10 @@
     // var webmSource0 = document.createElement('source');
     // webmSource0.src = "videos/jonas_rueRoger_frame.webm";
     videoList[0] = document.createElement('video');
+    videoList[0].setAttribute('webkit-playsinline', '');
+    if (whichMobile !== '') {
+        videoList[0].loop = true;
+    }
     //videoList[0].appendChild(webmSource0);
     videoList[0].appendChild(mp4Source0);
     //videoList[0].autoplay = true;
@@ -213,6 +220,10 @@
     videoList[1] = document.createElement('video');
     //videoList[1].appendChild(webmSource1);
     videoList[1].appendChild(mp4Source1);
+    videoList[1].setAttribute('webkit-playsinline', '');
+    if (whichMobile !== '') {
+        videoList[1].loop = true;
+    }
     //videoList[2].autoplay = true;
     videoList[1].load();
     var mp4Source2 = document.createElement('source');
@@ -223,6 +234,10 @@
     // videoList[2].appendChild(webmSource2);
     videoList[2].appendChild(mp4Source2);
     //videoList[1].autoplay = true;
+    videoList[2].setAttribute('webkit-playsinline', '');
+    if (whichMobile !== '') {
+        videoList[2].loop = true;
+    }
     videoList[2].load();
     //collidar
     var collidableMeshList = [];
@@ -290,63 +305,68 @@
     // window.history.replaceState(null, null, "http://www.rosalieyu.com/dysturb/test_3/index_5.html");
     //if (thisIsTouchDevice) 
     document.addEventListener("touchstart", handleStart, false);
-    document.addEventListener("touchstart", get_mouse_coords, false);
     document.addEventListener("touchmove", handleMove, false);
     document.addEventListener("touchend", handleEnd, false);
 
     function handleStart(evt) {
-        evt.preventDefault();
-        moveForward = true;
-        if (whichMobile == "android_mobile") {
-
-            for (var i = 0; i < videoList.length; i++) {
-                videoList[i].load();
-                videoList[i].play();
-                videoList[i].stop();
-                // videoList[i].pause();
-            }
-
-            noTouch = false;
-            console.log("touch!");
-        }
-    }
-
-    function get_mouse_coords(evt) {
         mouse_x = evt.pageX;
         mouse_y = evt.pageY;
+        console.log(evt);
+
+        if (!begun) {
+            if (whichMobile !== '' && noTouch) {
+
+                for (var i = 0; i < videoList.length; i++) {
+                    videoList[i].load();
+                    videoList[i].play();
+                    // videoList[i].stop();
+                }
+                noTouch = false;
+                console.log("touch!");
+            }
+        }
+
+        else {
+            evt.preventDefault();
+            moveForward = true;            
+        }
+
+
     }
 
+
     function handleMove(evt) {
-        evt.preventDefault();
-        moveForward = false;
-        moveBackward = false;
-        var new_mouse_x = evt.pageX;
-        if ((new_mouse_x - mouse_x) > 60) {
-            moveLeft = true;
-            moveRight = false;
-        } else if ((new_mouse_x - mouse_x) < -60) {
-            moveRight = true;
-            moveLeft = false;
-        }
-        if (evt.scale < 1.0) {
+        if (begun) {
+            evt.preventDefault();
             moveForward = false;
-            moveBackward = true;
-        } else if (evt.scale > 1.0) {
             moveBackward = false;
-            moveForward = true;
+            var new_mouse_x = evt.pageX;
+            if ((new_mouse_x - mouse_x) > 60) {
+                moveLeft = true;
+                moveRight = false;
+            } else if ((new_mouse_x - mouse_x) < -60) {
+                moveRight = true;
+                moveLeft = false;
+            }
+            if (evt.scale < 1.0) {
+                moveForward = false;
+                moveBackward = true;
+            } else if (evt.scale > 1.0) {
+                moveBackward = false;
+                moveForward = true;
+            }   
         }
+
     }
 
     function handleEnd(evt) {
-        evt.preventDefault();
-        moveForward = false;
-        moveBackward = false;
-        moveLeft = false;
-        moveRight = false;
-    }
-
-    function isTouchDevice() {
-        return 'handleStart' in window || !!(navigator.msMaxTouchPoints);
+        if (begun) {
+            evt.preventDefault();
+            moveForward = false;
+            moveBackward = false;
+            moveLeft = false;
+            moveRight = false;            
+        }
     }
 
     init();
@@ -479,8 +499,10 @@
 
 
     function beginButtonPressed() {
+        begun = true;
         animate();
     }
+
 
     function init() {
 
@@ -514,7 +536,7 @@
         var helper = new THREE.GridHelper(5000, 5000);
         helper.color1.setHex(0xffffff);
         helper.color2.setHex(0xffffff);
-        scene.add(helper);
+        //scene.add(helper);
 
         //scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
         var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.55);
@@ -706,7 +728,7 @@
             overdraw: true,
             side: THREE.DoubleSide
         });
-        new THREE.JSONLoader().load('hiRes/franprixMovieScreen.js', function(geometry) {
+        new THREE.JSONLoader().load('hiRes/franprix_movieTex.js', function(geometry) {
             movieScreenArray[1] = new THREE.Mesh(geometry, movieMaterial1);
             movieScreenArray[1].scale.set(2, 2, 2);
             scene.add(movieScreenArray[1]);
@@ -759,7 +781,7 @@
         light.position.set(-1, -1, -1);
         scene.add(light);
         //spot light1              (hex, intensity, distance, angle, exponent, decay)
-        light = new THREE.SpotLight(0xFFCC66, 2, 0, 0.1, 9, 0.1);
+        light = new THREE.SpotLight(0xFFCC66, 3, 0, 0.1, 9, 0.1);
         light.position.set(-42.34, 17, 227);
         light.shadowCameraVisible = true;
         light.shadowDarkness = 0.95;
