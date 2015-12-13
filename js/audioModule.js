@@ -91,27 +91,30 @@ var Audio3d = {
 	},
 
 	_startIOS : function() {
-		this.listener = new THREE.AudioListener();
-		var context = i.context;
-		var iosStarted = false;
 
-		var startIOS = function() {
-			if (iosStarted) return;
+		// if web audio is enabled...
+		if (this.webAudioEnabled) {
+			this.listener = new THREE.AudioListener();
+			var audioContext = this.listener.context;
+			var iosStarted = false;
 
-			// create empty buffer
-			var buffer = audiocontext.createBuffer(1, 1, 22050);
-			var source = audiocontext.createBufferSource();
-			source.buffer = buffer;
+			var startIOS = function() {
+				if (iosStarted) return;
+				// create empty buffer
+				var buffer = audioContext.createBuffer(1, 1, 22050);
+				var source = audioContext.createBufferSource();
+				source.buffer = buffer;
 
-			source.connect(context.destination);
-			source.start(0);
+				source.connect(audioContext.destination);
+				source.start(0);
 
-			if (context.state === 'running') {
-				iosStarted = true;
-			}
-		};
-		document.addEventListener('touchend', startIOS, false);
-		document.addEventListener('touchstart', startIOS, false);
+				if (audioContext.state === 'running') {
+					iosStarted = true;
+				}
+			};
+			document.addEventListener('touchend', startIOS, false);
+			document.addEventListener('touchstart', startIOS, false);
+		}
 
 	}
 
