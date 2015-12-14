@@ -308,7 +308,9 @@ div#nav-right {
     line-height: 0.8;
 }
 
-
+#enter {
+    cursor: pointer;
+}
 
 
 /* Media queries for landing screen -- Larger than tablet */

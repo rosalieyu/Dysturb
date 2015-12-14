@@ -7,7 +7,7 @@ $(document).ready(function() {
 //shows and hides splash page while models load
 var SPLASH = {
     initialize: function() {
-        $('#enter').on('click', SPLASH.dissolve);
+        $('#enter').on('click tap', SPLASH.dissolve);
     },
 
     load: function(event) {
@@ -19,7 +19,8 @@ var SPLASH = {
         event.preventDefault();
         $('#landing').fadeOut();
         $('#internal').fadeIn();
-        $('#begin').on('click', SPLASH.hideInstructions);
+        $('#begin').on('click tap', SPLASH.hideInstructions);
+        $('#begin').on('click tap', SPLASH.hideInstructions);
         SOCIAL.initialize();
     },
 
@@ -48,10 +49,12 @@ var LOADING = {
 //social media share functionality
 var SOCIAL = {
     initialize: function() {
-        $('#facebook-link').on('click', SOCIAL.facebook);
-        $('#twitter-link').on('click', SOCIAL.twitter);
-        $('#embed').on('click', SOCIAL.embed);
-        $('#credits-open').on('click', SOCIAL.credits);
+        $('#facebook-link').on('click tap', SOCIAL.facebook);
+        $('#twitter-link').on('click tap', SOCIAL.twitter);
+        $('#embed').on('click tap', SOCIAL.embed);
+        $('#credits-open').on('click tap', SOCIAL.credits);
+        $('#magnum-fdn').on('click tap', SOCIAL.magnumLogo);
+        $('#dysturb').on('click tap', SOCIAL.dysturbLogo);
     },
 
     facebook: function(event) {
@@ -72,7 +75,7 @@ var SOCIAL = {
         $('#embed-box').show();
         $('#instructions').hide();
         $('#credits').hide();
-        $('.close-x').on('click', SOCIAL.embedClose);
+        $('.close-x').on('click tap', SOCIAL.embedClose);
     },
 
     embedClose: function(event) {
@@ -86,7 +89,7 @@ var SOCIAL = {
         $('#credits').show();
         $('#instructions').hide();
         $('#embed-box').hide();
-        $('.close-x').on('click', SOCIAL.creditsClose);
+        $('.close-x').on('click tap', SOCIAL.creditsClose);
     },
 
     creditsClose: function(event) {
@@ -94,6 +97,21 @@ var SOCIAL = {
         $('#instructions').show();
         $('#credits').hide();
         $('#embed-box').hide();   
+    },
+
+    magnumLogo: function(event) {
+        var targetUrl = $(this).attr('href');
+        
+        return !window.open(targetUrl, 
+            'Magnum Foundation'
+            );
+    },
+
+    dysturbLogo: function(event) {
+        var targetUrl = $(this).attr('href');
+        return !window.open(targetUrl, 
+        'Dysturb'
+        );
     }
 }
 
