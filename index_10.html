@@ -10,7 +10,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris." />
     <meta property="og:url" content="http://reframeclimate.magnumfoundation.org" />
-    <meta property="og:image" content="" /> <!-- OG Image Needed - 1200 x 630 -->
+    <meta property="og:image" content="" />
+    <!-- OG Image Needed - 1200 x 630 -->
     <meta name="description" content="For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris.">
     <meta name="author" content="Magnum Foundation">
     <!-- Mobile Specific Metas
@@ -22,10 +23,8 @@
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" type="text/css" href="css/models.css">
     <link rel="stylesheet" href="css/style.css">
-
     <script src="js/three.min.js"></script>
     <!--  <script src="js/Detector.js"></script> -->
-
     <!-- Favicon STILL NEEDED
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <link rel="icon" type="image/png" href="images/favicon.png">
@@ -55,14 +54,18 @@
                         <a id="dysturb" href="http://dysturb.com" target="_blank"><img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png"></a>
                         <div id="nav-right">
                             <ul class="nav-element">
-                                <a id="facebook-link" href="https://www.facebook.com/sharer/sharer.php?u=http://reframeclimate.magnumfoundation.org/" target="_blank"><li class="social" id="facebook"></li></a>
-                                <a id="twitter-link" href="https://twitter.com/home?status=%23ParisAgreement+calls+for+more+collective+action.+In+the+streets+to+3D+%40magnumfnd+%26+%40dysturbofficial+%23reframeclimate+http%3A%2F%2Fbit.lyXXXX" target="_blank"><li class="social" id="twitter"></li></a>
+                                <a id="facebook-link" href="https://www.facebook.com/sharer/sharer.php?u=http://reframeclimate.magnumfoundation.org/" target="_blank">
+                                    <li class="social" id="facebook"></li>
+                                </a>
+                                <a id="twitter-link" href="https://twitter.com/home?status=%23ParisAgreement+calls+for+more+collective+action.+In+the+streets+to+3D+%40magnumfnd+%26+%40dysturbofficial+%23reframeclimate+http%3A%2F%2Fbit.lyXXXX" target="_blank">
+                                    <li class="social" id="twitter"></li>
+                                </a>
                             </ul>
                             <button id="embed" class="button nav-element">Embed</button>
                             <!-- <div class="menu-btn nav-element"></div> -->
                         </div>
                     </div>
-                    <div id="instructions"class="centered-text">
+                    <div id="instructions" class="centered-text">
                         <p id="instructions-text">Use your mouse and arrow keys to explore. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</p>
                         <a class="button" id="begin" onclick="beginButtonPressed()" href="#">Begin</a>
                     </div>
@@ -71,9 +74,10 @@
                         <a class="close-x">x</a>
                         <div class="clearfix"></div>
                         <p>Copy this code to embed #ReframeClimate</p>
-
-                        <textarea readonly id="embed-code"><object data='http://reframeclimate.magnumfoundation.org' width='800' height='500'><embed src='http://reframeclimate.magnumfoundation.org' width='800' height='500'/></textarea>
-
+                        <textarea readonly id="embed-code">
+                            <object data='http://reframeclimate.magnumfoundation.org' width='800' height='500'>
+                                <embed src='http://reframeclimate.magnumfoundation.org' width='800' height='500' />
+                        </textarea>
                     </div>
                     <div id="credits" class="model centered-text">
                         <h2>Credits</h2>
@@ -87,31 +91,32 @@
                     </div>
                     <div class="footer" id="site-footer">
                         <div id="credits-open">Credits</div>
-                    </div> <!-- footer -->
-                </div> <!-- inner --> 
-            </div> <!-- overlay -->   
-        </section> <!-- internal -->  
-        <div class="push"></div>  
-    </div> <!-- wrapper -->
-    
+                    </div>
+                    <!-- footer -->
+                </div>
+                <!-- inner -->
+            </div>
+            <!-- overlay -->
+        </section>
+        <!-- internal -->
+        <div class="push"></div>
+    </div>
+    <!-- wrapper -->
     <script src="js/PointerLockControls.js"></script>
     <script src="js/SkyShader.js"></script>
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/audioModule.js"></script>
     <script src="js/mobileNav.js"></script>
-
     <!-- <script src="js/TrackballControls.js"></script> -->
     <script src="js/OBJLoader.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
     <script src="//cdn.timezonedb.com/js/timezonedb.min.js" type="text/javascript"></script>
     <script src="js/BinaryLoader.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
     <script src="js/DeviceOrientationControls.js"></script>
     <script>
-
     // if (!Detector.webgl) Detector.addGetWebGLMessage();
     var camera, scene, renderer;
     var geometry, material, mesh;
@@ -162,9 +167,8 @@
         console.log("I'm iOS!");
         whichMobile = "iOS_mobile";
         // initialize iOS audio
-       Audio3d._startIOS();
-    }
-    else if (/Android/i.test(navigator.userAgent)) {
+        Audio3d._startIOS();
+    } else if (/Android/i.test(navigator.userAgent)) {
         console.log("I'm Android!");
         whichMobile = "android_mobile";
     }
@@ -200,11 +204,19 @@
     var time1;
     var time2;
     var movieScreenArray = [];
-    var movieScreenPositions = [
-        {x:1530, y:130, z:-5050.82},
-        {x:-653, y:50, z:-2212},
-        {x:-500, y:0, z:-480}
-    ];
+    var movieScreenPositions = [{
+        x: 1530,
+        y: 130,
+        z: -5050.82
+    }, {
+        x: -653,
+        y: 50,
+        z: -2212
+    }, {
+        x: -500,
+        y: 0,
+        z: -480
+    }];
     // custom global variables
     var videoImageContext = [];
     var videoTexture = [];
@@ -223,7 +235,7 @@
     }
     //videoList[0].appendChild(webmSource0);
     videoList[0].appendChild(mp4Source0);
-    //videoList[0].autoplay = true;
+    videoList[0].autoplay = true;
     videoList[0].load();
     var mp4Source1 = document.createElement('source');
     mp4Source1.src = "videos/Paolo_franprix_frame.mp4";
@@ -245,7 +257,7 @@
     videoList[2] = document.createElement('video');
     // videoList[2].appendChild(webmSource2);
     videoList[2].appendChild(mp4Source2);
-    //videoList[1].autoplay = true;
+    videoList[1].autoplay = true;
     videoList[2].setAttribute('webkit-playsinline', '');
     if (whichMobile !== '') {
         videoList[2].loop = true;
@@ -436,8 +448,8 @@
             if (i == num && audioList[i].isPlaying === false) {
                 try {
                     audioList[i].play();
-                } catch (e) { }
-            } else if (i !== num && audioList[i].isPlaying === true){
+                } catch (e) {}
+            } else if (i !== num && audioList[i].isPlaying === true) {
                 try {
                     audioList[i].isPlaying = false;
                     audioList[i].pause();
@@ -460,16 +472,16 @@
         var wireMaterial = new THREE.MeshBasicMaterial({
             color: 0xff0000,
             wireframe: true,
-                transparent: true,
-                opacity: 0
+            transparent: true,
+            opacity: 0
         });
         MovingCube = new THREE.Mesh(cubeGeometry, wireMaterial);
         MovingCube.position.set(0, -50, -500);
         cubeGeometry = new THREE.CubeGeometry(10, 10, 50);
         wireMaterial = new THREE.MeshBasicMaterial({
             wireframe: true,
-                transparent: true,
-                opacity: 0
+            transparent: true,
+            opacity: 0
         });
         CameraCube = new THREE.Mesh(cubeGeometry, wireMaterial);
         CameraCube.position.y = 7;
@@ -498,7 +510,7 @@
 
         // if desktop
         if (whichMobile == '') {
-            scene.add(controls.getObject());            
+            scene.add(controls.getObject());
         }
 
         var onKeyDown = function(event) {
@@ -601,9 +613,8 @@
             object.position.set(0, 0, 0);
             object.scale.set(2, 2, 2);
             scene.add(object);
-
             LOADING.complete(); // switches loading to enter button 
-            collidableMeshList.push(object);
+            //collidableMeshList.push(object);
         });
 
         var floorGeometry = new THREE.PlaneGeometry(11000, 11000, 3);
@@ -959,11 +970,11 @@
                         isHitFront = false;
                     }
                     if (moveLeft && !isHitLeft) {
-                        velocity.x -= 10.0 * delta;
+                        controls.getObject().rotation.y += 0.3 * delta;
                         isHitRight = false;
                     }
                     if (moveRight && !isHitRight) {
-                        velocity.x += 10.0 * delta;
+                        controls.getObject().rotation.y -= 0.3 * delta;
                         isHitLeft = false;
                     }
                     if (isHitFront) {
@@ -1014,69 +1025,75 @@
     function render() {
 
         //console.log(isHit);
-        if (videoList[0].readyState === videoList[0].HAVE_ENOUGH_DATA) {
+        if (videoList[1].readyState === videoList[1].HAVE_ENOUGH_DATA) {
             if (whichMobile == "iOS_mobile") {
-                time0 = Date.now();
-                var elapsed0 = (time0 - lastTime0) / 1000;
-                // render
-                // for (var i = 0; i < videoList.length; i++) {
-                if (elapsed0 >= ((1000 / framesPerSecond) / 1000)) {
-                    videoList[0].currentTime0 = videoList[0].currentTime0 + elapsed0;
-                    videoImageContext[0].drawImage(videoList[0], 0, 0);
-                    videoImageContext[0].drawImage(videoList[0], 0, 0);
-                    if (videoTexture[0])
-                        videoTexture[0].needsUpdate = true;
-                    lastTime0 = time0;
-                    // if we are at the end of the video stop
-                    var currentTime0 = (Math.round(parseFloat(videoList[0].currentTime0) * 10000) / 10000);
-                    var duration0 = (Math.round(parseFloat(videoList[0].duration0) * 10000) / 10000);
-                    if (currentTime0 >= duration0) {
-                        console.log('currentTime: ' + currentTime0 + ' duration: ' + videoList[0].duration0);
-                        // restart
-                        //  videoList[0].currentTime0 = 0;
-                        // return;
+                if (hit0) {
+                    time0 = Date.now();
+                    var elapsed0 = (time0 - lastTime0) / 1000;
+                    // render
+                    // for (var i = 0; i < videoList.length; i++) {
+                    if (elapsed0 >= ((1000 / framesPerSecond) / 1000)) {
+                        videoList[0].currentTime = videoList[0].currentTime + elapsed0;
+                        videoImageContext[0].drawImage(videoList[0], 0, 0);
+                        videoImageContext[0].drawImage(videoList[0], 0, 0);
+                        if (videoTexture[0])
+                            videoTexture[0].needsUpdate = true;
+                        lastTime0 = time0;
+                        // if we are at the end of the video stop
+                        var currentTime0 = (Math.round(parseFloat(videoList[0].currentTime) * 10000) / 10000);
+                        var duration0 = (Math.round(parseFloat(videoList[0].duration) * 10000) / 10000);
+                        if (currentTime0 >= duration0) {
+                            console.log('currentTime: ' + currentTime0 + ' duration: ' + videoList[0].duration);
+                            // restart
+                            //  videoList[0].currentTime0 = 0;
+                            // return;
+                        }
                     }
                 }
-                time1 = Date.now();
-                var elapsed1 = (time1 - lastTime1) / 1000;
-                // render
-                // for (var i = 0; i < videoList.length; i++) {
-                if (elapsed1 >= ((1000 / framesPerSecond) / 1000)) {
-                    videoList[1].currentTime1 = videoList[1].currentTime1 + elapsed1;
-                    videoImageContext[1].drawImage(videoList[1], 0, 0);
-                    videoImageContext[1].drawImage(videoList[1], 0, 0);
-                    if (videoTexture[1])
-                        videoTexture[1].needsUpdate = true;
-                    lastTime1 = time1;
-                    // if we are at the end of the video stop
-                    var currentTime1 = (Math.round(parseFloat(videoList[1].currentTime1) * 10000) / 10000);
-                    var duration1 = (Math.round(parseFloat(videoList[1].duration1) * 10000) / 10000);
-                    if (currentTime1 >= duration1) {
-                        console.log('currentTime: ' + currentTime1 + ' duration: ' + videoList[1].duration1);
-                        // restart
-                        //  videoList[1].currentTime1 = 0;
-                        // return;
+                if (hit1) {
+                    time1 = Date.now();
+                    var elapsed1 = (time1 - lastTime1) / 1000;
+                    // render
+                    // for (var i = 0; i < videoList.length; i++) {
+                    if (elapsed1 >= ((1000 / framesPerSecond) / 1000)) {
+                        videoList[1].currentTime = videoList[1].currentTime + elapsed1;
+                        videoImageContext[1].drawImage(videoList[1], 0, 0);
+                        videoImageContext[1].drawImage(videoList[1], 0, 0);
+                        if (videoTexture[1])
+                            videoTexture[1].needsUpdate = true;
+                        lastTime1 = time1;
+                        // if we are at the end of the video stop
+                        var currentTime1 = (Math.round(parseFloat(videoList[1].currentTime) * 10000) / 10000);
+                        var duration1 = (Math.round(parseFloat(videoList[1].duration) * 10000) / 10000);
+                        if (currentTime1 >= duration1) {
+                            console.log('currentTime: ' + currentTime1 + ' duration: ' + videoList[1].duration);
+                            // restart
+                            //  videoList[1].currentTime1 = 0;
+                            // return;
+                        }
                     }
                 }
-                time2 = Date.now();
-                var elapsed2 = (time2 - lastTime2) / 1000;
-                // render
-                // for (var i = 0; i < videoList.length; i++) {
-                if (elapsed2 >= ((1000 / framesPerSecond) / 1000)) {
-                    videoList[2].currentTime2 = videoList[2].currentTime2 + elapsed2;
-                    videoImageContext[2].drawImage(videoList[2], 0, 0);
-                    videoImageContext[2].drawImage(videoList[2], 0, 0);
-                    if (videoTexture[2])
-                        videoTexture[2].needsUpdate = true;
-                    lastTime2 = time2;
-                    // if we are at the end of the video stop
-                    var currentTime2 = (Math.round(parseFloat(videoList[2].currentTime2) * 10000) / 10000);
-                    var duration2 = (Math.round(parseFloat(videoList[2].duration2) * 10000) / 10000);
-                    if (currentTime2 >= duration2) {
-                        console.log('currentTime: ' + currentTime2 + ' duration: ' + videoList[2].duration2);
-                        // restart
-                        //  videoList[2].currentTime2 = 0;
-                        // return;
+                if (hit2) {
+                    time2 = Date.now();
+                    var elapsed2 = (time2 - lastTime2) / 1000;
+                    // render
+                    // for (var i = 0; i < videoList.length; i++) {
+                    if (elapsed2 >= ((1000 / framesPerSecond) / 1000)) {
+                        videoList[2].currentTime = videoList[2].currentTime + elapsed2;
+                        videoImageContext[2].drawImage(videoList[2], 0, 0);
+                        videoImageContext[2].drawImage(videoList[2], 0, 0);
+                        if (videoTexture[2])
+                            videoTexture[2].needsUpdate = true;
+                        lastTime2 = time2;
+                        // if we are at the end of the video stop
+                        var currentTime2 = (Math.round(parseFloat(videoList[2].currentTime) * 10000) / 10000);
+                        var duration2 = (Math.round(parseFloat(videoList[2].duration) * 10000) / 10000);
+                        if (currentTime2 >= duration2) {
+                            console.log('currentTime: ' + currentTime2 + ' duration: ' + videoList[2].duration);
+                            // restart
+                            //  videoList[2].currentTime2 = 0;
+                            // return;
+                        }
                     }
                 }
                 // }
