@@ -1,4 +1,4 @@
-¡<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -33,7 +33,7 @@
 
 <body>
     <div class="wrapper">
-        <div id="blocker"></div>
+        <div id="blocker2"></div>
         <!-- landing section -->
         <div class="container">
             <section id="landing">
@@ -105,7 +105,6 @@
     <script src="//cdn.timezonedb.com/js/timezonedb.min.js" type="text/javascript"></script>
     <script src="js/BinaryLoader.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
     <script type="text/javascript" src="js/app.js"></script>
     <!-- <script src="js/DeviceOrientationControls.js"></script> -->
@@ -117,7 +116,7 @@
     var controls;
     var MovingCube;
     var CameraCube;
-    var blocker = document.getElementById('blocker');
+    var blocker2 = document.getElementById('blocker2');
     var instructions = document.getElementById('instructions');
     var objects = [];
     var raycaster;
@@ -169,23 +168,25 @@
     }
     if (isTouchDevice()) thisIsTouchDevice = true;
     if (whichMobile !== "") {
-        blocker.style.display = 'none';
+        blocker2.style.display = 'none';
         instructions.style.display = 'none';
     }
-    else if (whichMobile=="") {
-        var clickDiv = document.createElement('div');
-        clickDiv.id = "blocker";
-        // ...
-        document.getElementsByTagName("body")[0].appendChild(clickDiv);
-        var ins = document.createElement('div');
-        ins.id = "instructions";
-        clickDiv.appendChild(ins);
-        var span = document.createElement('span');
-        // span.style = "font-size:40px";
-        span.innerHTML = "Click to Play!"
-        document.getElementById('instructions').appendChild(span);
-        console.log("create div");
-    }
+
+    //Appears to only be working on desktop, not on mobile. Commented this out because it's breaking CSS on Desktop. Let me know if you need it, but I don't think it's needed for mobile to run. 
+    // else if (whichMobile=="") {
+    //     var clickDiv = document.createElement('div');
+    //     clickDiv.id = "blocker";
+    //     // ...
+    //     document.getElementsByTagName("body")[0].appendChild(clickDiv);
+    //     var ins = document.createElement('div');
+    //     ins.id = "instructions";
+    //     clickDiv.appendChild(ins);
+    //     var span = document.createElement('span');
+    //     // span.style = "font-size:40px";
+    //     // span.innerHTML = "Click to Play!"
+    //     document.getElementById('instructions').appendChild(span);
+    //     console.log("create div");
+    // }
     function isTouchDevice() {
         return 'ontouchstart' in window || !!(navigator.msMaxTouchPoints);
     }
@@ -259,12 +260,12 @@
                 if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
                     controlsEnabled = true;
                     controls.enabled = true;
-                    blocker.style.display = 'none';
+                    blocker2.style.display = 'none';
                 } else {
                     controls.enabled = false;
-                    blocker.style.display = '-webkit-box';
-                    blocker.style.display = '-moz-box';
-                    blocker.style.display = 'box';
+                    blocker2.style.display = '-webkit-box';
+                    blocker2.style.display = '-moz-box';
+                    blocker2.style.display = 'box';
                     instructions.style.display = '';
                 }
             };

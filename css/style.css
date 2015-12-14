@@ -1,7 +1,6 @@
 /*Custom CSS*/
 
 
-
 /*//////////////////////////////////////Custom Fonts////////////////////////////////////*/
 
 @font-face {
@@ -14,7 +13,7 @@
     src: url(fonts/HelveticaLTStd-LightCond.otf);
 }
 
-#blocker {
+#blocker2 {
     position: absolute;
     width: 100%;
     height: 100%;

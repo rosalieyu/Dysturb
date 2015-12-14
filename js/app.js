@@ -7,7 +7,7 @@ $(document).ready(function() {
 //shows and hides splash page while models load
 var SPLASH = {
     initialize: function() {
-        $('#enter').on('click tap', SPLASH.dissolve);
+        $('#enter').on('click touchstart', SPLASH.dissolve);
     },
 
     load: function(event) {
@@ -19,7 +19,7 @@ var SPLASH = {
         event.preventDefault();
         $('#landing').fadeOut();
         $('#internal').fadeIn();
-        $('#begin').on('click tap', SPLASH.hideInstructions);
+        $('#begin').on('click touchstart', SPLASH.hideInstructions);
         SOCIAL.initialize();
     },
 
@@ -48,12 +48,12 @@ var LOADING = {
 //social media share functionality
 var SOCIAL = {
     initialize: function() {
-        $('#facebook-link').on('click tap', SOCIAL.facebook);
-        $('#twitter-link').on('click tap', SOCIAL.twitter);
-        $('#embed').on('click tap', SOCIAL.embed);
-        $('#credits-open').on('click tap', SOCIAL.credits);
-        $('#magnum-fdn').on('click tap', SOCIAL.magnumLogo);
-        $('#dysturb').on('click tap', SOCIAL.dysturbLogo);
+        $('#facebook-link').on('click touchstart', SOCIAL.facebook);
+        $('#twitter-link').on('click touchstart', SOCIAL.twitter);
+        $('#embed').on('click touchstart', SOCIAL.embed);
+        $('#credits-open').on('click touchstart', SOCIAL.credits);
+        $('#magnum-fdn').on('click touchstart', SOCIAL.magnumLogo);
+        $('#dysturb').on('click touchstart', SOCIAL.dysturbLogo);
     },
 
     facebook: function(event) {
@@ -74,7 +74,7 @@ var SOCIAL = {
         $('#embed-box').show();
         $('#instructions').hide();
         $('#credits').hide();
-        $('.close-x').on('click tap', SOCIAL.embedClose);
+        $('.close-x').on('click touchstart', SOCIAL.embedClose);
     },
 
     embedClose: function(event) {
@@ -88,7 +88,7 @@ var SOCIAL = {
         $('#credits').show();
         $('#instructions').hide();
         $('#embed-box').hide();
-        $('.close-x').on('click tap', SOCIAL.creditsClose);
+        $('.close-x').on('click touchstart', SOCIAL.creditsClose);
     },
 
     creditsClose: function(event) {
