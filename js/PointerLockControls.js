@@ -17,63 +17,6 @@ THREE.PointerLockControls = function(camera) {
 
     var PI_2 = Math.PI / 2;
 
-    document.body.addEventListener("touchstart", handleStart, false);
-    document.body.addEventListener("touchstart", get_mouse_coords, false);
-    document.body.addEventListener("touchend", handleEnd, false);
-    document.body.addEventListener("touchmove", handleMove, false);
-
-    var videoNum = 1;
-
-    function handleStart(evt) {
-
-        evt.preventDefault();
-        moveForward = true;
-
-    }
-
-    function get_mouse_coords(evt) {
-        mouse_x = evt.pageX;
-        mouse_y = evt.pageY;
-
-    }
-
-    function handleMove(evt) {
-        evt.preventDefault();
-        moveForward = false;
-        moveBackward = false;
-
-        var new_mouse_x = evt.pageX;
-
-
-        if (evt.scale < 1.0) {
-            moveForward = false;
-            moveBackward = true;
-        } else if (evt.scale > 1.0) {
-            moveBackward = false;
-            moveForward = true;
-        }
-
-        if ((new_mouse_x - mouse_x) > 60) {
-            yawObject.rotation.y -= 0.02;
-            moveLeft = true;
-            moveRight = false;
-
-        } else if ((new_mouse_x - mouse_x) < -60) {
-            yawObject.rotation.y += 0.02;
-            moveRight = true;
-            moveLeft = false;
-
-        }
-
-    }
-
-    function handleEnd(evt) {
-        evt.preventDefault();
-        moveForward = false;
-        moveBackward = false;
-        moveLeft = false;
-        moveRight = false;
-    }
 
     var onMouseMove = function(evt) {
 

@@ -98,6 +98,8 @@
     <script src="js/SkyShader.js"></script>
     <script src="js/libs/dat.gui.min.js"></script>
     <script src="js/audioModule.js"></script>
+    <script src="js/mobileNav.js"></script>
+
     <!-- <script src="js/TrackballControls.js"></script> -->
     <script src="js/OBJLoader.js"></script>
     <script src="js/libs/stats.min.js"></script>
@@ -107,7 +109,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
 
     <script type="text/javascript" src="js/app.js"></script>
-    <!-- <script src="js/DeviceOrientationControls.js"></script> -->
+    <script src="js/DeviceOrientationControls.js"></script>
     <script>
 
     // if (!Detector.webgl) Detector.addGetWebGLMessage();
@@ -251,7 +253,12 @@
     videoList[2].load();
     //collidar
     var collidableMeshList = [];
-    if (whichMobile == "") {
+
+    // init camera
+    camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000000);
+
+    // if desktop, lock mouse with pointerlockcontrols:
+    if (whichMobile == "" && !thisIsTouchDevice) {
         // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
         var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
         if (havePointerLock) {
@@ -302,7 +309,17 @@
         } else {
             instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
         }
+        controls = new THREE.PointerLockControls(camera);
+        init();
     }
+    // else, it's mobile, so start mobile nav
+    else {
+        controls = initMobileControls(camera);
+        init();
+    }
+
+
+
     var controlsEnabled = true;
     var moveForward = false;
     var moveBackward = false;
@@ -314,72 +331,6 @@
     //touch
     // window.history.replaceState(null, null, "http://www.rosalieyu.com/dysturb/test_3/index_5.html");
     //if (thisIsTouchDevice) 
-    document.addEventListener("touchstart", handleStart, false);
-    document.addEventListener("touchmove", handleMove, false);
-    document.addEventListener("touchend", handleEnd, false);
-
-    function handleStart(evt) {
-        mouse_x = evt.pageX;
-        mouse_y = evt.pageY;
-        console.log(evt);
-
-        if (!begun) {
-            if (whichMobile !== '' && noTouch) {
-
-                for (var i = 0; i < videoList.length; i++) {
-                    videoList[i].load();
-                    videoList[i].play();
-                    // videoList[i].stop();
-                }
-                noTouch = false;
-                console.log("touch!");
-            }
-        }
-
-        else {
-            evt.preventDefault();
-            moveForward = true;            
-        }
-
-
-    }
-
-
-    function handleMove(evt) {
-        if (begun) {
-            evt.preventDefault();
-            moveForward = false;
-            moveBackward = false;
-            var new_mouse_x = evt.pageX;
-            if ((new_mouse_x - mouse_x) > 60) {
-                moveLeft = true;
-                moveRight = false;
-            } else if ((new_mouse_x - mouse_x) < -60) {
-                moveRight = true;
-                moveLeft = false;
-            }
-            if (evt.scale < 1.0) {
-                moveForward = false;
-                moveBackward = true;
-            } else if (evt.scale > 1.0) {
-                moveBackward = false;
-                moveForward = true;
-            }   
-        }
-
-    }
-
-    function handleEnd(evt) {
-        if (begun) {
-            evt.preventDefault();
-            moveForward = false;
-            moveBackward = false;
-            moveLeft = false;
-            moveRight = false;            
-        }
-    }
-
-    init();
 
 
 
@@ -514,7 +465,6 @@
         });
         MovingCube = new THREE.Mesh(cubeGeometry, wireMaterial);
         MovingCube.position.set(0, -50, -500);
-        camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000000);
         cubeGeometry = new THREE.CubeGeometry(10, 10, 50);
         wireMaterial = new THREE.MeshBasicMaterial({
             wireframe: true,
@@ -545,8 +495,11 @@
         var directionalLight = new THREE.DirectionalLight(0xffeedd);
         directionalLight.position.set(0, 0, 1);
         scene.add(directionalLight);
-        controls = new THREE.PointerLockControls(camera);
-        scene.add(controls.getObject());
+
+        // if desktop
+        if (whichMobile == '') {
+            scene.add(controls.getObject());            
+        }
 
         var onKeyDown = function(event) {
             //console.log(event);
@@ -648,7 +601,7 @@
             object.position.set(0, 0, 0);
             object.scale.set(2, 2, 2);
             scene.add(object);
-            loadingComplete = true;
+
             LOADING.complete(); // switches loading to enter button 
             collidableMeshList.push(object);
         });
