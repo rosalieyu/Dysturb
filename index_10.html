@@ -51,8 +51,8 @@
             <div id="overlay">
                 <div id="inner">
                     <div id="nav-full">
-                        <a id="magnum-fdn" href="http://magnumfoundation.org/" target="_blank"><img class="logo" id="magnum-logo" src="css/images/magnumlogo.png"></a>
-                        <a id="dysturb" href="http://dysturb.com" target="_blank"><img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png"></a>
+                        <a id="magnum-fdn" href="http://magnumfoundation.org/climate/" target="_blank"><img class="logo" id="magnum-logo" src="css/images/magnumlogo.png"></a>
+                        <a id="dysturb" href="http://dysturb.com/special-event-2/" target="_blank"><img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png"></a>
                         <div id="nav-right">
                             <ul class="nav-element">
                                 <a id="facebook-link" href="https://www.facebook.com/sharer/sharer.php?u=http://reframeclimate.magnumfoundation.org/" target="_blank"><li class="social" id="facebook"></li></a>
@@ -79,11 +79,11 @@
                         <h2>Credits</h2>
                         <a class="close-x">x</a>
                         <div class="clearfix"></div>
-                        <p>We thank the Compton Foundation and Twilio for their generous support, the Yale School of Forestry &amp; Environmental studies for their scientific research, and to students and research residents from the Interactive Telecommunications Program at NYU Tisch for developing the audio component and immersive digital presentation.
+                        <p>We thank the Compton Foundation and Twilio.org for their generous support, the Yale School of Forestry &amp; Environmental studies for their scientific research, and to students and research residents from the Interactive Telecommunications Program (ITP) at NYU Tisch for developing the audio component and immersive digital presentation.
                         </p>
-                        <p>Website built by Julia Irwin, Lisa Jamhoury, Supreet Mahanti, Jason Sigal and Rosalie Yu. Special thanks to Laura Juo-Hsin Chen. </p>
-                        <p>Updated credits needed from Simone. </p>
-                        </p>
+                        <p>Website built by ITP students and research residents, Julia Irwin, Lisa Jamhoury, Supreet Mahanti, Jason Sigal and Rosalie Yu. Special thanks to Laura Juo-Hsin Chen. </p>
+                        <p>Featured in this 3D experience are images by: Jonas Bendiksen/Magnum Photos, Paolo Pellegrin/Magnum Photos, and Ed Ou/Getty.</p>
+                        <p>Other photographers participating in #reframeclimate include: Evgenia Arbugaeva, Matt Black/Magnum Photos, Michael Christopher Brown/Magnum Photos, Guillaume Collanges/Argos Colletive, Souvid Datta, Lu Guang/Contact, David Guttenfelder/National Geographic Creative, Ciril Jazbec, Ed Kashi/VII, Thomas Lekfeldt, Yuyang Liu, Kadir Van Lohuizen/Noor, Gideon Mendel, Nick Moir/Oculi, Katie Orlinsky, Ruben Salgado, George Steinmetz/Cosmos, Giulio Di Sturco, Ian Teh/Agence Vu, and Laurent Weyl/Argos Collective.</p>
                     </div>
                     <div class="footer" id="site-footer">
                         <div id="credits-open">Credits</div>
@@ -650,7 +650,7 @@
             scene.add(object);
             loadingComplete = true;
             LOADING.complete(); // switches loading to enter button 
-            collidableMeshList.push(object);
+            //collidableMeshList.push(object);
         });
 
         var floorGeometry = new THREE.PlaneGeometry(11000, 11000, 3);
@@ -1006,11 +1006,11 @@
                         isHitFront = false;
                     }
                     if (moveLeft && !isHitLeft) {
-                        velocity.x -= 10.0 * delta;
+                        controls.getObject().rotation.y += 0.3 * delta;
                         isHitRight = false;
                     }
                     if (moveRight && !isHitRight) {
-                        velocity.x += 10.0 * delta;
+                        controls.getObject().rotation.y -= 0.3 * delta;
                         isHitLeft = false;
                     }
                     if (isHitFront) {

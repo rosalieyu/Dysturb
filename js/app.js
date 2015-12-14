@@ -30,6 +30,10 @@ var SPLASH = {
     }
 }
 
+// var EMBED = {
+    
+// }
+
 //shows and hides loading bar
 var LOADING = {
     load: function(event) {
