@@ -20,7 +20,6 @@ var SPLASH = {
         $('#landing').fadeOut();
         $('#internal').fadeIn();
         $('#begin').on('click tap', SPLASH.hideInstructions);
-        $('#begin').on('click tap', SPLASH.hideInstructions);
         SOCIAL.initialize();
     },
 
