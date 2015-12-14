@@ -141,10 +141,11 @@ h2 {
 
     .centered-text p {
         font-size: 1.5em;
-        width: 500px;
+        width: 50%;
         margin: 0 auto 2% auto;
         line-height: 1.5em;
     }
+
     .button {
         font-size: 26px;
         padding: 9px 30px 0px 30px;
@@ -279,6 +280,7 @@ div#nav-right {
     color: #999;
     font-family: 'Helvetica Neue';
     font-size: 0.8em;
+    width: 100%;
 }
 
 #embed-code {
@@ -300,6 +302,7 @@ div#nav-right {
 
 #credits p {
     font-size: 1em;
+    width: 100%;
 }
 
 #credits-open {
@@ -343,9 +346,12 @@ div#nav-right {
     }
 
     #instructions {
-        width: 40%;
         margin: 0 auto;
     }
+
+    #instructions-text {
+    margin-bottom: 2%;
+}
 
     #nav-full {
         margin-bottom: 10%;
