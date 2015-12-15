@@ -1,7 +1,7 @@
 $(document).ready(function() {
     LOADING.load();
     SPLASH.load();
-    EMBED.initialize();
+    EMBED.load();
 });
 
 
@@ -17,7 +17,6 @@ var SPLASH = {
     },
 
     dissolve: function(event) {
-        console.log('dissolving');
         event.preventDefault();
         $('#landing').fadeOut();
         $('#internal').fadeIn();
@@ -28,14 +27,18 @@ var SPLASH = {
     hideInstructions: function(event) {
         event.preventDefault();
         $('#instructions').hide();
+        $('#instructions-reminder').show();
+    },
 
-    }
+    // Replaced with index_10 line 301. could not get function to work here.
+    // hideReminder: function(event) {
+    //     $('#instructions-reminder').hide();        
+    // }
 }
 
 var EMBED = {
-    initialize: function() {
+    load: function() {
         if (window!=window.top) {
-            console.log('embedded');
             event.preventDefault();
             $('#landing').hide();
             $('#internal').show();

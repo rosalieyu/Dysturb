@@ -239,13 +239,13 @@
     // webmSource0.src = "videos/jonas_rueRoger_frame.webm";
     videoList[0] = document.createElement('video');
     //videoList[0].appendChild(webmSource0);
+    videoList[0].appendChild(mp4Source0);
     videoList[0].setAttribute('webkit-playsinline', '');
     if (whichMobile !== '') {
         videoList[0].autoplay = true;
         videoList[0].loop = true;
         videoList[0].preload = "auto";
     }
-    videoList[0].appendChild(mp4Source0);
     videoList[0].load();
 
     var mp4Source1 = document.createElement('source');
@@ -676,9 +676,9 @@
         videoTexture[0] = new THREE.Texture(videoImage);
         videoTexture[0].minFilter = THREE.LinearFilter;
         videoTexture[0].magFilter = THREE.LinearFilter;
-        videoTexture[0].format = THREE.RGBFormat;
-        videoTexture[0].generateMipmaps = false;
-        videoTexture[0].needsUpdate = true;
+        // videoTexture[0].format = THREE.RGBFormat;
+        // videoTexture[0].generateMipmaps = false;
+        // videoTexture[0].needsUpdate = true;
 
         var movieMaterial = new THREE.MeshBasicMaterial({
             map: videoTexture[0],
@@ -704,9 +704,9 @@
         videoTexture[1] = new THREE.Texture(videoImage1);
         videoTexture[1].minFilter = THREE.LinearFilter;
         videoTexture[1].magFilter = THREE.LinearFilter;
-        videoTexture[1].format = THREE.RGBFormat;
-        videoTexture[1].generateMipmaps = false;
-        videoTexture[1].needsUpdate = true;
+        // videoTexture[1].format = THREE.RGBFormat;
+        // videoTexture[1].generateMipmaps = false;
+        // videoTexture[1].needsUpdate = true;
         var movieMaterial1 = new THREE.MeshBasicMaterial({
             map: videoTexture[1],
             overdraw: true,
@@ -731,9 +731,9 @@
         videoTexture[2] = new THREE.Texture(videoImage2);
         videoTexture[2].minFilter = THREE.LinearFilter;
         videoTexture[2].magFilter = THREE.LinearFilter;
-        videoTexture[2].format = THREE.RGBFormat;
-        videoTexture[2].generateMipmaps = false;
-        videoTexture[2].needsUpdate = true;
+        // videoTexture[2].format = THREE.RGBFormat;
+        // videoTexture[2].generateMipmaps = false;
+        // videoTexture[2].needsUpdate = true;
         var movieMaterial2 = new THREE.MeshBasicMaterial({
             map: videoTexture[2],
             overdraw: true,
