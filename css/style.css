@@ -30,6 +30,9 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.one-third-test {
+    width: 30%;
+}
 /*#instructions {
     width: 100%;
     height: 100%;
@@ -113,52 +116,6 @@ h2 {
     background-color: #fff;
 }
 
-/* media queries for landing screen -- iPhone 4 and smaller */
-
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) { 
-    #dual-logo {
-        max-width: 110px;
-    }
-
-    .centered-text h1 {
-        font-size: 1.9em;
-
-    }
-
-}
-
-/* media queries for landing screen -- Larger than tablet */
-
-@media (min-width: 750px) {
-    #dual-logo {
-        max-width: 180px;
-    }
-
-    .centered-text h1 {
-        font-size: 4.5em;
-        margin-bottom: 0.1em;
-    }
-
-    .centered-text p {
-        font-size: 1.5em;
-        width: 50%;
-        margin: 0 auto 2% auto;
-        line-height: 1.5em;
-    }
-
-    .button {
-        font-size: 26px;
-        padding: 9px 30px 0px 30px;
-        line-height: 4.2rem;
-    }
-
-    #loading {
-        padding: 9px 30px 1px 30px;
-        font-size: 26px;
-    }
-
-
-}
 
 
 /*//////////////////////////////////////Internal Screen////////////////////////////////////*/
@@ -261,8 +218,8 @@ div#nav-right {
 .close-x {
     font-family: 'HelveticaLTStd-BlkCond';
     cursor: pointer;
-    font-size: 1.3em;
-    line-height: 1;
+    font-size: 1.6em;
+    line-height: 0.8;
     float: right;
 }
 
@@ -320,10 +277,10 @@ div#nav-right {
     float: right;
 }
 
-#credits a {
+/*#credits a {
     font-size: 1.6em;
     line-height: 0.8;
-}
+}*/
 
 #enter {
     cursor: pointer;
@@ -335,14 +292,86 @@ div#nav-right {
 
 #footer-center {
     text-align: center;
+    font-size: 0.8em;
 }
 
-/*#instructions-reminder {
-    color: #999;
-    text-transform: uppercase;
-    font-size: 0.7em;
-    font-family: 'helvetica neue';
-}*/
+.one-third-footer {
+    width: 30%;
+    float: left;
+}
+
+#instructions-reminder {
+    display: none;
+    font-size: 0.8em;
+    margin-left: 10px;
+}
+
+#nav-right {
+    visibility: hidden;
+}
+
+
+
+/* media queries for landing screen -- iPhone 4 and smaller */
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) { 
+    #dual-logo {
+        max-width: 110px;
+    }
+
+    .centered-text h1 {
+        font-size: 1.9em;
+
+    }
+
+    #nav-full {
+       margin-bottom: 10%;
+    }
+
+    .credits-text p {
+        font-size: 0.8em;
+    }
+
+}
+
+/* media queries for landing screen -- Larger than tablet */
+
+@media (min-width: 750px) {
+    #dual-logo {
+        max-width: 180px;
+    }
+
+    .centered-text h1 {
+        font-size: 4.5em;
+        margin-bottom: 0.1em;
+    }
+
+    .centered-text p {
+        font-size: 1.5em;
+        width: 50%;
+        margin: 0 auto 2% auto;
+        line-height: 1.5em;
+    }
+
+    .credits-text p {
+        font-size: 1em;
+        width: 100%;
+    }
+
+    .button {
+        font-size: 26px;
+        padding: 9px 30px 0px 30px;
+        line-height: 4.2rem;
+    }
+
+    #loading {
+        padding: 9px 30px 1px 30px;
+        font-size: 26px;
+    }
+
+
+}
+
 
 /* Media queries for landing screen -- Larger than tablet */
 
@@ -355,6 +384,11 @@ div#nav-right {
         padding: 7px 20px 0px 20px;
         line-height: 3rem;
     }
+
+    #nav-right {
+        visibility: visible;
+    }
+
     div#nav-right {
         width: 178px;
         margin-top: 10px;
