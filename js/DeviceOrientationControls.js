@@ -14,30 +14,30 @@ THREE.DeviceOrientationControls = function(object) {
 
     this.enabled = true;
 
-    //add getobject()
-    var pitchObject = new THREE.Object3D();
-    pitchObject.add(camera);
+ //    //add getobject()
+    // var pitchObject = new THREE.Object3D();
+    // pitchObject.add(object);
 
-    var yawObject = new THREE.Object3D();
-    yawObject.position.y = 50;
-    yawObject.add(pitchObject);
+    // var yawObject = new THREE.Object3D();
+    // yawObject.position.y = 50;
+    // yawObject.add(pitchObject);
 
 
-    this.getObject = function() {
+    // this.getObject = function() {
 
-        return yawObject;
+    //     return yawObject;
 
-    };
+    // };
 
-    this.position = function() {
+    // this.position = function() {
 
-        return yawObject.position;
+    //     return yawObject.position;
 
-    };
+    // };
+	// //
 
     this.deviceOrientation = {};
     this.screenOrientation = 0;
-
 
 
     var onDeviceOrientationChangeEvent = function(event) {

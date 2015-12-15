@@ -1,4 +1,6 @@
 function initMobileControls(cam) {
+
+    var velocity = new THREE.Vector3(0, 0, 0);
     controls = new THREE.DeviceOrientationControls(cam);
     controls.connect();
     controlsEnabled = true;
@@ -11,13 +13,12 @@ function initMobileControls(cam) {
     function handleStart(evt) {
         evt.preventDefault();
         moveForward = true;
+        console.log("touched");
 
-        // velocity.x -= velocity.x * 10.0 * delta;
-        // velocity.z -= velocity.z * 10.0 * delta;
-        // if (moveForward && !isHitFront) {
-        //     velocity.z -= 10.0 * delta;
-        //     isHitBack = false;
-        // }
+        if (moveForward) {
+            velocity.z -= 10.0;
+        }
+        camera.translateZ(velocity.z);
         // moveForward = true;
     }
 
@@ -28,6 +29,7 @@ function initMobileControls(cam) {
         moveLeft = false;
         moveRight = false;
     }
+
     return controls;
 
 }

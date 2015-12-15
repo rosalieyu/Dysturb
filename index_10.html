@@ -799,10 +799,14 @@
         requestAnimationFrame(animate);
         update();
         render();
+
         //controls.update();                
     }
 
     function update() {
+        if (whichMobile !== "") {
+            controls.update();
+        }
         //collision
         // MovingCube.position.set(controls.position().x, controls.position().y - 50, controls.position().z - 300);
         //var originPoint = MovingCube.position.clone();
@@ -938,7 +942,7 @@
                         // videoList[1].pause();
                     }
                 }
-                if (controlsEnabled) {
+                if (controlsEnabled && whichMobile == "") {
                     raycaster.ray.origin.copy(controls.getObject().position);
                     // raycaster.ray.origin.copy( MovingCube.position );
                     raycaster.ray.origin.y -= 10;
@@ -1006,14 +1010,14 @@
                     // --> the user moves back, and isHit is false, isHitFront is true
                     // if()
                     controls.getObject().translateX(velocity.x);
-                    controls.getObject().translateY(velocity.y);
+                    //controls.getObject().translateY(velocity.y);
                     controls.getObject().translateZ(velocity.z);
                     //console.log(MovingCube.position);
-                    if (controls.getObject().position.y < 10) {
-                        velocity.y = 0;
-                        controls.getObject().position.y = 10;
-                        canJump = true;
-                    }
+                    // if (controls.getObject().position.y < 10) {
+                    //     velocity.y = 0;
+                    //     controls.getObject().position.y = 10;
+                    //     canJump = true;
+                    // }
                     prevTime = controlTime;
                 }
                 stats.update();
@@ -1043,7 +1047,7 @@
                         var currentTime0 = (Math.round(parseFloat(videoList[0].currentTime) * 10000) / 10000);
                         var duration0 = (Math.round(parseFloat(videoList[0].duration) * 10000) / 10000);
                         if (currentTime0 >= duration0) {
-                            console.log('currentTime: ' + currentTime0 + ' duration: ' + videoList[0].duration);
+                            //console.log('currentTime: ' + currentTime0 + ' duration: ' + videoList[0].duration);
                             // restart
                             //  videoList[0].currentTime0 = 0;
                             // return;
@@ -1066,7 +1070,7 @@
                         var currentTime1 = (Math.round(parseFloat(videoList[1].currentTime) * 10000) / 10000);
                         var duration1 = (Math.round(parseFloat(videoList[1].duration) * 10000) / 10000);
                         if (currentTime1 >= duration1) {
-                            console.log('currentTime: ' + currentTime1 + ' duration: ' + videoList[1].duration);
+                            //console.log('currentTime: ' + currentTime1 + ' duration: ' + videoList[1].duration);
                             // restart
                             //  videoList[1].currentTime1 = 0;
                             // return;
@@ -1089,7 +1093,7 @@
                         var currentTime2 = (Math.round(parseFloat(videoList[2].currentTime) * 10000) / 10000);
                         var duration2 = (Math.round(parseFloat(videoList[2].duration) * 10000) / 10000);
                         if (currentTime2 >= duration2) {
-                            console.log('currentTime: ' + currentTime2 + ' duration: ' + videoList[2].duration);
+                            //console.log('currentTime: ' + currentTime2 + ' duration: ' + videoList[2].duration);
                             // restart
                             //  videoList[2].currentTime2 = 0;
                             // return;
