@@ -20,7 +20,29 @@ function initMobileControls(cam) {
         }
         camera.translateZ(velocity.z);
         // moveForward = true;
+        if (whichMobile == "android_mobile") {
+            if (!videoIsLoaded) {
+                for (var i = 0; i < videoList.length; i++) {
+                    videoList[i].load();
+                    videoIsLoaded = true;
+                    console.log("videoIsLoaded");
+                }
+            }
+            if (hit0) {
+                videoList[0].play();
+            }
+            if (hit1) {
+                videoList[1].play();
+            }
+            if (hit2) {
+                videoList[2].play();
+            }
+
+            // console.log("play video!");
+        }
     }
+
+
 
     function handleEnd(evt) {
         evt.preventDefault();
