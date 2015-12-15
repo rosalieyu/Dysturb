@@ -232,10 +232,11 @@
     videoList[0].setAttribute('webkit-playsinline', '');
     if (whichMobile !== '') {
         videoList[0].loop = true;
+        videoList[0].autoplay = true;
+        videoList[0].preload = "auto";
     }
     //videoList[0].appendChild(webmSource0);
     videoList[0].appendChild(mp4Source0);
-    videoList[0].autoplay = true;
     videoList[0].load();
     var mp4Source1 = document.createElement('source');
     mp4Source1.src = "videos/Paolo_franprix_frame.mp4";
@@ -247,6 +248,8 @@
     videoList[1].setAttribute('webkit-playsinline', '');
     if (whichMobile !== '') {
         videoList[1].loop = true;
+        videoList[1].autoplay = true;
+        videoList[1].preload = "auto";
     }
     //videoList[2].autoplay = true;
     videoList[1].load();
@@ -257,10 +260,12 @@
     videoList[2] = document.createElement('video');
     // videoList[2].appendChild(webmSource2);
     videoList[2].appendChild(mp4Source2);
-    videoList[1].autoplay = true;
     videoList[2].setAttribute('webkit-playsinline', '');
+
     if (whichMobile !== '') {
         videoList[2].loop = true;
+        videoList[2].autoplay = true;
+        videoList[2].preload = "auto";
     }
     videoList[2].load();
     //collidar
