@@ -161,9 +161,3 @@ var SOCIAL = {
         'Reframe Climate');
     }
 }
-
-
-
-
-
-    

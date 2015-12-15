@@ -27,7 +27,7 @@
     <!--  <script src="js/Detector.js"></script> -->
     <!-- Favicon STILL NEEDED
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="icon" type="image/png" href="css/images/favicon.png">
 </head>
 
 <body>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div id="instructions" class="centered-text">
-                        <p id="instructions-text">Use your mouse and arrow keys to explore. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation.</p>
+                        <p id="instructions-text">Use your mouse and arrow keys to explore. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation. We recommend using headphones for this experience.</p>
                         <a class="button" id="begin" onclick="beginButtonPressed()" href="#">Begin</a>
                     </div>
                     <div id="embed-box" class="model centered-text">
@@ -87,7 +87,7 @@
                         </p>
                         <p>Website built by ITP students and research residents, Julia Irwin, Lisa Jamhoury, Supreet Mahanti, Jason Sigal and Rosalie Yu. Special thanks to Laura Juo-Hsin Chen. </p>
                         <p>Featured in this 3D experience are images by: Jonas Bendiksen/Magnum Photos, Paolo Pellegrin/Magnum Photos, and Ed Ou/Getty.</p>
-                        <p id="additional-credits">Other photographers participating in #reframeclimate include: Evgenia Arbugaeva, Matt Black/Magnum Photos, Michael Christopher Brown/Magnum Photos, Guillaume Collanges/Argos Colletive, Souvid Datta, Lu Guang/Contact, David Guttenfelder/National Geographic Creative, Ciril Jazbec, Ed Kashi/VII, Thomas Lekfeldt, Yuyang Liu, Kadir Van Lohuizen/Noor, Gideon Mendel, Nick Moir/Oculi, Katie Orlinsky, Ruben Salgado, George Steinmetz/Cosmos, Giulio Di Sturco, Ian Teh/Agence Vu, and Laurent Weyl/Argos Collective.</p>
+                        <!--    <p id="additional-credits" >Other photographers participating in #reframeclimate include: Evgenia Arbugaeva, Matt Black/Magnum Photos, Michael Christopher Brown/Magnum Photos, Guillaume Collanges/Argos Colletive, Souvid Datta, Lu Guang/Contact, David Guttenfelder/National Geographic Creative, Ciril Jazbec, Ed Kashi/VII, Thomas Lekfeldt, Yuyang Liu, Kadir Van Lohuizen/Noor, Gideon Mendel, Nick Moir/Oculi, Katie Orlinsky, Ruben Salgado, George Steinmetz/Cosmos, Giulio Di Sturco, Ian Teh/Agence Vu, and Laurent Weyl/Argos Collective.</p> -->
                     </div>
                     <div id="about" class="model credits-text centered-text">
                         <h2>About</h2>
@@ -96,10 +96,32 @@
                         <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
                         <p id="additional-about">Learn more at <a id="about-link-out" href="http://reframeclimate.magnumfoundation.org">http://reframeclimate.magnumfoundation.org</a></p>
                     </div>
-                    <div class="footer" id="site-footer">
-                        <div class="footer-button" id="credits-open">Credits</div>
-                        <div class="footer-button" id="about-open">About</div>
+                    <div id="site-footer">
+                        <span class="footer" id="instructions-reminder">Use arrows to navigate. Press Esc to exit.</span>
+                        <div class="footer footer-button" id="credits-open">Credits</div>
+                        <div class="footer footer-button" id="about-open">About</div>
                     </div>
+                    <!-- footer -->
+                    <!-- <div id="site-footer">
+                        <div class="one-third-test">hello</div>
+                        <div class="one-third-test">
+                            <span>Use arrows to navigate. Press Esc to exit.</span>
+                        </div>
+                        <div class="one-third-test">
+                            <div>About</div>
+                            <div>Credits</div>
+                        </div>
+                    </div> -->
+                    <!-- footer -->
+                    <!--                        <div id="site-footer">
+                        <div class="center-test">
+                            <span>Use arrows to navigate. Press Esc to exit.</span>
+                        </div>
+                        <div class="right-test">
+                            <div>About</div>
+                            <div>Credits</div>
+                        </div>
+                    </div>  -->
                     <!-- footer -->
                 </div>
                 <!-- inner -->
@@ -107,7 +129,6 @@
             <!-- overlay -->
         </section>
         <!-- internal -->
-        <div class="push"></div>
     </div>
     <!-- wrapper -->
     <script src="js/PointerLockControls.js"></script>
@@ -133,6 +154,7 @@
     var CameraCube;
     var blocker2 = document.getElementById('blocker2');
     var instructions = document.getElementById('instructions');
+    var instructionsReminder = document.getElementById('instructions-reminder');
     var objects = [];
     var raycaster;
     var container, stats;
@@ -295,12 +317,16 @@
                     controlsEnabled = true;
                     controls.enabled = true;
                     blocker2.style.display = 'none';
+                    console.log('index');
+                    instructionsReminder.style.display = 'none';
                 } else {
                     controls.enabled = false;
                     blocker2.style.display = '-webkit-box';
                     blocker2.style.display = '-moz-box';
                     blocker2.style.display = 'box';
                     instructions.style.display = '';
+                    console.log('index');
+                    instructionsReminder.style.display = 'none';
                 }
             };
             var pointerlockerror = function(event) {
@@ -344,8 +370,6 @@
         controls = initMobileControls(camera);
         init();
     }
-
-
 
     var controlsEnabled = true;
     var moveForward = false;
@@ -629,7 +653,7 @@
             object.scale.set(2, 2, 2);
             scene.add(object);
             LOADING.complete(); // switches loading to enter button 
-            //collidableMeshList.push(object);
+            collidableMeshList.push(object);
         });
 
         var floorGeometry = new THREE.PlaneGeometry(11000, 11000, 3);
@@ -747,7 +771,7 @@
             audioList.push(Audio3d.addAudioToPosition(audioPaths[2], movieScreenPositions[2]));
         });
         //push this screen to the collidibale list
-        //collidableMeshList.push(movieScreenArray[i]);
+        collidableMeshList.push(movieScreenArray[i]);
         //position the screens and add them to the scene
         //camera.position.set(0,80,300);
         //camera.lookAt(movieScreenArray[0].position);
@@ -1137,6 +1161,24 @@
         }
         renderer.render(scene, camera);
     }
+    </script>
+
+    <!-- Google Analytics Script -->
+    <script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-71428119-1', 'auto');
+    ga('send', 'pageview');
     </script>
 </body>
 
