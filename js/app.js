@@ -1,7 +1,7 @@
 $(document).ready(function() {
     LOADING.load();
     SPLASH.load();
-    EMBED.initialize();
+    EMBED.load();
 });
 
 
@@ -33,9 +33,8 @@ var SPLASH = {
 }
 
 var EMBED = {
-    initialize: function() {
+    load: function() {
         if (window!=window.top) {
-            console.log('embedded');
             event.preventDefault();
             $('#landing').hide();
             $('#internal').show();

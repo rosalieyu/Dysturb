@@ -156,6 +156,8 @@ h2 {
         padding: 9px 30px 1px 30px;
         font-size: 26px;
     }
+
+
 }
 
 
@@ -291,6 +293,7 @@ div#nav-right {
 #site-footer {
     position: absolute;
     bottom: 0;
+    width: 100%;
     right: 0;
 }
 
@@ -305,11 +308,13 @@ div#nav-right {
     width: 100%;
 }
 
-.footer-button {
+.footer { 
     font-family: 'Helvetica Neue';
     color: #999;
-    text-transform: uppercase;
     font-size: 0.7em;
+}
+.footer-button {
+    text-transform: uppercase;
     margin-right: 10px;
     cursor: pointer;
     float: right;
@@ -327,6 +332,17 @@ div#nav-right {
 #additional-about {
     display: none;
 }
+
+#footer-center {
+    text-align: center;
+}
+
+/*#instructions-reminder {
+    color: #999;
+    text-transform: uppercase;
+    font-size: 0.7em;
+    font-family: 'helvetica neue';
+}*/
 
 /* Media queries for landing screen -- Larger than tablet */
 
@@ -354,7 +370,7 @@ div#nav-right {
 
     #instructions-text {
     margin-bottom: 2%;
-}
+    }
 
     #nav-full {
         margin-bottom: 10%;
