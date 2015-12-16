@@ -27,7 +27,10 @@ var SPLASH = {
     hideInstructions: function(event) {
         event.preventDefault();
         $('#instructions').hide();
-        $('#instructions-reminder').show();
+
+        if($(window).width() > 768) {        
+            $('#instructions-reminder').show();
+        }
     },
 
     // Replaced with index_10 line 301. could not get function to work here.
@@ -73,7 +76,7 @@ var LOADING = {
 
 }
 
-//social media share functionality
+//social media share functionality, also includes navigation elements
 var SOCIAL = {
     initialize: function() {
         $('#facebook-link').on('click touchstart', SOCIAL.facebook);
@@ -109,12 +112,16 @@ var SOCIAL = {
     },
 
     embedClose: function(event) {
-        $('#instructions').show();
         $('#embed-box').hide();
         $('#credits').hide();
         $('#about').hide();
+
+        if($(window).width() > 768) {
+            $('#instructions').show();
+        }
     },
 
+    // used for both credits and about 
     credits: function(event) {
         console.log('credits');
         $('#credits').show();
@@ -124,12 +131,16 @@ var SOCIAL = {
         $('.close-x').on('click touchstart', SOCIAL.creditsClose);
     },
 
+    // used for both credits and about 
     creditsClose: function(event) {
         console.log('creditsclose');
-        $('#instructions').show();
         $('#credits').hide();
         $('#embed-box').hide();   
         $('#about').hide();
+
+        if($(window).width() > 768) {
+            $('#instructions').show();
+        }
     },
 
     about: function(event) {
