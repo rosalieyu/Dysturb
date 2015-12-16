@@ -640,7 +640,7 @@
         //     //scene.add(objectCollider);
         //     collidableMeshList.push(objectCollider);
         // });
-        // //model Jason
+        // //city model Jason
         new THREE.JSONLoader().load('hiRes/120915_15.js', function(geometry, materials) {
             var material = new THREE.MeshFaceMaterial(materials);
             for (var i = 0; i < materials.length; i++)
@@ -654,13 +654,15 @@
             collidableMeshList.push(object);
         });
 
+
+
         var floorGeometry = new THREE.PlaneGeometry(11000, 11000, 3);
         var floorMaterial = new THREE.MeshBasicMaterial({
             color: 0x000000,
             side: THREE.DoubleSide
         });
         var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.position.set(0, -160, -1500);
+        floor.position.set(0, -130, -1500);
         floor.rotation.x = 1.6;
         scene.add(floor);
 
@@ -710,7 +712,7 @@
         new THREE.JSONLoader().load('hiRes/rueDesTournelles.js', function(geometry) {
             movieScreenArray[0] = new THREE.Mesh(geometry, movieMaterial);
             movieScreenArray[0].scale.set(2, 2, 2);
-            movieScreenArray[0].position.y = 60;
+            movieScreenArray[0].position.y = 80;
             scene.add(movieScreenArray[0]);
             // add audio to this mesh
             audioList.push(Audio3d.addAudioToPosition(audioPaths[0], movieScreenPositions[0]));
@@ -893,25 +895,25 @@
                         isHitFront = false;
                         isHitRight = false;
                         isHitLeft = false;
-                        console.log("isHitBack " + isHitBack);
+                        //console.log("isHitBack " + isHitBack);
                     } else if (i == 4) {
                         isHitBack = false;
                         isHitFront = true;
                         isHitRight = false;
                         isHitLeft = false;
-                        console.log("isHitFront " + isHitFront);
+                        //console.log("isHitFront " + isHitFront);
                     } else if (i == 6) {
                         isHitBack = false;
                         isHitFront = false;
                         isHitRight = false;
                         isHitLeft = true;
-                        console.log("isHitLeft " + isHitLeft);
+                        //console.log("isHitLeft " + isHitLeft);
                     } else if (i == 2) {
                         isHitBack = false;
                         isHitFront = false;
                         isHitRight = true;
                         isHitLeft = false;
-                        console.log("isHitRight " + isHitRight);
+                        //console.log("isHitRight " + isHitRight);
                     }
                 } else {
                     //isHit = false;

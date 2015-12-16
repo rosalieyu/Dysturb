@@ -1,6 +1,5 @@
 function initMobileControls(cam) {
 
-    var velocity = new THREE.Vector3(0, 0, 0);
     controls = new THREE.DeviceOrientationControls(cam);
     controls.connect();
     controlsEnabled = true;
@@ -15,8 +14,12 @@ function initMobileControls(cam) {
         moveForward = true;
         console.log("touched");
 
+        var controlTime = performance.now();
+        var delta = (controlTime - prevTime) / 600;
+
+
         if (moveForward) {
-            velocity.z -= 10.0;
+            velocity.z -= 0.1 * delta;
         }
         camera.translateZ(velocity.z);
         // moveForward = true;
