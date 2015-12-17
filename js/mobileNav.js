@@ -1,5 +1,6 @@
 function initMobileControls(cam) {
 
+
     controls = new THREE.DeviceOrientationControls(cam);
     controls.connect();
     controlsEnabled = true;
@@ -7,22 +8,16 @@ function initMobileControls(cam) {
     document.body.addEventListener("touchstart", handleStart, false);
     // document.body.addEventListener("touchstart", get_mouse_coords, false);
     document.body.addEventListener("touchend", handleEnd, false);
+    document.body.addEventListener("touchcancel", handleEnd, false);
+
     // document.body.addEventListener("touchmove", handleMove, false);
 
     function handleStart(evt) {
+        fingerDown = true;
         evt.preventDefault();
         moveForward = true;
         console.log("touched");
 
-        var controlTime = performance.now();
-        var delta = (controlTime - prevTime) / 600;
-
-
-        if (moveForward) {
-            velocity.z -= 0.1 * delta;
-        }
-        camera.translateZ(velocity.z);
-        // moveForward = true;
         if (whichMobile == "android_mobile") {
             if (!videoIsLoaded) {
                 for (var i = 0; i < videoList.length; i++) {
@@ -49,6 +44,8 @@ function initMobileControls(cam) {
 
     function handleEnd(evt) {
         evt.preventDefault();
+        fingerDown = false;
+
         moveForward = false;
         moveBackward = false;
         moveLeft = false;
