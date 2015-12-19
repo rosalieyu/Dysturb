@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>#ReframeClimate</title>
+    <meta property="og:title" content="#ReframeClimate" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris." />
+    <meta property="og:url" content="http://reframeclimate.magnumfoundation.org" />
+    <meta property="og:image" content="" />
+    <!-- OG Image Needed - 1200 x 630 -->
+    <meta name="description" content="For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris.">
+    <meta name="author" content="Magnum Foundation">
+    <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" type="text/css" href="css/models.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/three.min.js"></script>
+    <!--  <script src="js/Detector.js"></script> -->
+    <!-- Favicon STILL NEEDED
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="css/images/favicon.png">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div id="blocker2"></div>
+        <!-- landing section -->
+        <div class="container">
+            <section id="landing">
+                <img id="dual-logo" src="css/images/magnumdysturb.png">
+                <div class="centered-text">
+                    <h1>#ReframeClimate</h1>
+                    <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
+                    <span id="loading">Loading...</span>
+                    <a class="button" id="enter" ontouchstart="beginButtonPressed()" href="#">Step Into The Frame</a>
+                </div>
+            </section>
+        </div>
+        <!-- internal section -->
+        <section id="internal">
+            <div id="overlay">
+                <div id="inner">
+                    <div id="nav-full">
+                        <a id="magnum-fdn" href="http://magnumfoundation.org/climate/" target="_blank"><img class="logo" id="magnum-logo" src="css/images/magnumlogo.png"></a>
+                        <a id="dysturb" href="http://dysturb.com/special-event-2/" target="_blank"><img class="logo" id="dysturb-logo" src="css/images/dysturblogo.png"></a>
+                        <div id="nav-right">
+                            <ul class="nav-element">
+                                <a id="facebook-link" href="https://www.facebook.com/sharer/sharer.php?u=http://reframeclimate.magnumfoundation.org/" target="_blank">
+                                    <li class="social" id="facebook"></li>
+                                </a>
+                                <a id="twitter-link" href="https://twitter.com/home?status=%23ParisAgreement+calls+for+more+collective+action.+In+the+streets+to+3D+%40magnumfnd+%26+%40dysturbofficial+%23reframeclimate+http%3A%2F%2Fbit.ly/rfclimate" target="_blank">
+                                    <li class="social" id="twitter"></li>
+                                </a>
+                            </ul>
+                            <button id="embed" class="button nav-element">Embed</button>
+                            <!-- <div class="menu-btn nav-element"></div> -->
+                        </div>
+                    </div>
+                    <div id="instructions" class="centered-text">
+                        <p id="instructions-text">Use your arrow keys to explore. Approach a pasted photo to hear the photographer tell the story behind their image and to watch the installation. We recommend using headphones for this experience.</p>
+                        <a class="button" id="begin" onclick="beginButtonPressed()" href="#">Begin</a>
+                    </div>
+                    <div id="embed-box" class="model centered-text">
+                        <h2>Embed</h2>
+                        <a class="close-x">x</a>
+                        <div class="clearfix"></div>
+                        <p>Copy this code to embed #ReframeClimate</p>
+                        <textarea readonly id="embed-code">
+                            <object data='http://reframeclimate.magnumfoundation.org' width='800' height='500'>
+                                <embed src='http://reframeclimate.magnumfoundation.org' width='800' height='500' />
+                        </textarea>
+                    </div>
+                    <div id="credits" class="model credits-text centered-text">
+                        <h2>Credits</h2>
+                        <a class="close-x">x</a>
+                        <div class="clearfix"></div>
+                        <p>We thank the Compton Foundation and Twilio.org for their generous support, the Yale School of Forestry &amp; Environmental studies for their scientific research, and to students and research residents from the Interactive Telecommunications Program (ITP) at NYU Tisch for developing the audio component and immersive digital presentation.
+                        </p>
+                        <p>Website built by ITP students and research residents, Julia Irwin, Lisa Jamhoury, Supreet Mahanti, Jason Sigal and Rosalie Yu. Special thanks to Laura Juo-Hsin Chen. </p>
+                        <p>Featured in this 3D experience are images by: Jonas Bendiksen/Magnum Photos, Paolo Pellegrin/Magnum Photos, and Ed Ou/Getty.</p>
+                        <!--    <p id="additional-credits" >Other photographers participating in #reframeclimate include: Evgenia Arbugaeva, Matt Black/Magnum Photos, Michael Christopher Brown/Magnum Photos, Guillaume Collanges/Argos Colletive, Souvid Datta, Lu Guang/Contact, David Guttenfelder/National Geographic Creative, Ciril Jazbec, Ed Kashi/VII, Thomas Lekfeldt, Yuyang Liu, Kadir Van Lohuizen/Noor, Gideon Mendel, Nick Moir/Oculi, Katie Orlinsky, Ruben Salgado, George Steinmetz/Cosmos, Giulio Di Sturco, Ian Teh/Agence Vu, and Laurent Weyl/Argos Collective.</p> -->
+                    </div>
+                    <div id="about" class="model credits-text centered-text">
+                        <h2>About</h2>
+                        <a class="close-x">x</a>
+                        <div class="clearfix"></div>
+                        <p>For COP21, Magnum Foundation and #Dysturb partnered to curate 25 documentary photographs that #reframeclimate and paste them throughout the streets of Paris. Together, we’re amplifying the voices of those with eyes constantly on our world.</p>
+                        <p id="additional-about">Learn more at <a id="about-link-out" href="http://reframeclimate.magnumfoundation.org">http://reframeclimate.magnumfoundation.org</a></p>
+                    </div>
+                    <div id="site-footer">
+                        <span class="footer" id="instructions-reminder">Use arrows to navigate. Press Esc to exit.</span>
+                        <div class="footer footer-button" id="credits-open">Credits</div>
+                        <div class="footer footer-button" id="about-open">About</div>
+                    </div>
+                    <!-- footer -->
+                    <!-- <div id="site-footer">
+                        <div class="one-third-test">hello</div>
+                        <div class="one-third-test">
+                            <span>Use arrows to navigate. Press Esc to exit.</span>
+                        </div>
+                        <div class="one-third-test">
+                            <div>About</div>
+                            <div>Credits</div>
+                        </div>
+                    </div> -->
+                    <!-- footer -->
+                    <!--                        <div id="site-footer">
+                        <div class="center-test">
+                            <span>Use arrows to navigate. Press Esc to exit.</span>
+                        </div>
+                        <div class="right-test">
+                            <div>About</div>
+                            <div>Credits</div>
+                        </div>
+                    </div>  -->
+                    <!-- footer -->
+                </div>
+                <!-- inner -->
+            </div>
+            <!-- overlay -->
+        </section>
+        <!-- internal -->
+    </div>
+    <!-- wrapper -->
+    <script src="js/PointerLockControls.js"></script>
+    <script src="js/SkyShader.js"></script>
+    <script src="js/libs/dat.gui.min.js"></script>
+    <script src="js/audioModule.js"></script>
+    <script src="js/mobileNav.js"></script>
+    <!-- <script src="js/TrackballControls.js"></script> -->
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/DDSLoader.js"></script>
+    <script src="js/MTLLoader.js"></script>
+    <script src="js/OBJMTLLoader.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="clipboard.js-master/dist/clipboard.min.js"></script>
+    <script src="//cdn.timezonedb.com/js/timezonedb.min.js" type="text/javascript"></script>
+    <script src="js/BinaryLoader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script src="js/DeviceOrientationControls.js"></script>
+    <script src="js/StereoEffect.js"></script>
+    <script>
+    // if (!Detector.webgl) Detector.addGetWebGLMessage();
+    var camera, scene, renderer;
+    var geometry, material, mesh;
+    var controls;
+    var MovingCube;
+    var CameraCube;
+    var blocker2 = document.getElementById('blocker2');
+    var instructions = document.getElementById('instructions');
+    var instructionsReminder = document.getElementById('instructions-reminder');
+    var objects = [];
+    var raycaster;
+    var container, stats;
+    var cross;
+    var loadingComplete = false;
+    var isHit = false;
+    var isHitFront = false;
+    var isHitBack = false;
+    var isHitLeft = false;
+    var isHitRight = false;
+    var rays;
+    var rayForMovies;
+    var sky, sunSphere;
+    var fingerDown = false;
+
+    var texture = [];
+
+    // has user pressed 'begin' button?
+    var begun = false
+
+    //audio
+    var audioPaths = ["./audio/bendiksen1-aud.mp3", "./audio/Paolo3.mp3", "./audio/ou-aud.mp3"];
+    var audioList; // initialized later
+
+    // test raycasting
+    var mouse = new THREE.Vector2(),
+        INTERSECTED;
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
+
+    function onDocumentMouseMove(event) {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    }
+
+    //mobile
+    var mouse_x;
+    var mouse_y;
+    var videoIsLoaded = false;
+    var thisIsTouchDevice = false;
+    var whichMobile = "";
+    var noTouch = true;
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        console.log("I'm iOS!");
+        whichMobile = "iOS_mobile";
+        // initialize iOS audio
+        Audio3d._startIOS();
+    } else if (/Android/i.test(navigator.userAgent)) {
+        console.log("I'm Android!");
+        whichMobile = "android_mobile";
+    }
+    if (isTouchDevice()) thisIsTouchDevice = true;
+    if (whichMobile !== "") {
+        blocker2.style.display = 'none';
+        instructions.style.display = 'none';
+    }
+
+    //Appears to only be working on desktop, not on mobile. Commented this out because it's breaking CSS on Desktop. Let me know if you need it, but I don't think it's needed for mobile to run. 
+    // else if (whichMobile=="") {
+    //     var clickDiv = document.createElement('div');
+    //     clickDiv.id = "blocker";
+    //     // ...
+    //     document.getElementsByTagName("body")[0].appendChild(clickDiv);
+    //     var ins = document.createElement('div');
+    //     ins.id = "instructions";
+    //     clickDiv.appendChild(ins);
+    //     var span = document.createElement('span');
+    //     // span.style = "font-size:40px";
+    //     // span.innerHTML = "Click to Play!"
+    //     document.getElementById('instructions').appendChild(span);
+    //     console.log("create div");
+    // }
+    function isTouchDevice() {
+        return 'ontouchstart' in window || !!(navigator.msMaxTouchPoints);
+    }
+    //
+    var lastTime0 = Date.now();
+    var lastTime1 = Date.now();
+    var lastTime2 = Date.now();
+    var time0;
+    var time1;
+    var time2;
+    var movieScreenArray = [];
+    var movieScreenPositions = [{
+        x: 1530,
+        y: 130,
+        z: -5050.82
+    }, {
+        x: -653,
+        y: 50,
+        z: -2212
+    }, {
+        x: -500,
+        y: 0,
+        z: -480
+    }];
+    // custom global variables
+    var videoImageContext = [];
+    var videoTexture = [];
+    var videoList = new Array();
+    var hit0 = false;
+    var hit1 = false;
+    var hit2 = false;
+
+    var mp4Source0 = document.createElement('source');
+    mp4Source0.src = "videos/jonas_rueRoger_frame.mp4";
+    // var webmSource0 = document.createElement('source');
+    // webmSource0.src = "videos/jonas_rueRoger_frame.webm";
+    videoList[0] = document.createElement('video');
+    //videoList[0].appendChild(webmSource0);
+    videoList[0].appendChild(mp4Source0);
+    videoList[0].setAttribute('webkit-playsinline', '');
+    if (whichMobile !== '') {
+        videoList[0].autoplay = true;
+        videoList[0].loop = true;
+        videoList[0].preload = "auto";
+    }
+    videoList[0].load();
+
+    var mp4Source1 = document.createElement('source');
+    mp4Source1.src = "videos/Paolo_franprix_frame.mp4";
+    // var webmSource1 = document.createElement('source');
+    // webmSource1.src = "videos/Paolo_franprix_frame.webm";
+    videoList[1] = document.createElement('video');
+    //videoList[1].appendChild(webmSource1);
+    videoList[1].appendChild(mp4Source1);
+    videoList[1].setAttribute('webkit-playsinline', '');
+    if (whichMobile !== '') {
+        videoList[1].autoplay = true;
+        videoList[1].loop = true;
+        videoList[1].preload = "auto";
+    }
+    videoList[1].load();
+
+    var mp4Source2 = document.createElement('source');
+    mp4Source2.src = "videos/Ed_Docteur_frame.mp4";
+    // var webmSource2 = document.createElement('source');
+    // webmSource2.src = "videos/Ed_Docteur_frame.webm";
+    videoList[2] = document.createElement('video');
+    // videoList[2].appendChild(webmSource2);
+    videoList[2].appendChild(mp4Source2);
+    videoList[2].setAttribute('webkit-playsinline', '');
+    if (whichMobile !== '') {
+        videoList[2].autoplay = true;
+        videoList[2].loop = true;
+        videoList[2].preload = "auto";
+    }
+    videoList[2].load();
+
+    //collidar
+    var collidableMeshList = [];
+
+    // init camera
+    camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000000);
+
+    // if desktop, lock mouse with pointerlockcontrols:
+    if (whichMobile == "" && !thisIsTouchDevice) {
+        // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+        var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+        if (havePointerLock) {
+            var element = document.body;
+            var pointerlockchange = function(event) {
+                if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
+                    controlsEnabled = true;
+                    controls.enabled = true;
+                    blocker2.style.display = 'none';
+                } else {
+                    controls.enabled = false;
+                    blocker2.style.display = '-webkit-box';
+                    blocker2.style.display = '-moz-box';
+                    blocker2.style.display = 'box';
+                    instructions.style.display = '';
+                    console.log('index');
+                    instructionsReminder.style.display = 'none';
+                }
+            };
+            var pointerlockerror = function(event) {
+                instructions.style.display = '';
+            };
+            // Hook pointer lock state change events
+            document.addEventListener('pointerlockchange', pointerlockchange, false);
+            document.addEventListener('mozpointerlockchange', pointerlockchange, false);
+            document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
+            document.addEventListener('pointerlockerror', pointerlockerror, false);
+            document.addEventListener('mozpointerlockerror', pointerlockerror, false);
+            document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
+            instructions.addEventListener('click', function(event) {
+                instructions.style.display = 'none';
+                // Ask the browser to lock the pointer
+                element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+                if (/Firefox/i.test(navigator.userAgent)) {
+                    var fullscreenchange = function(event) {
+                        if (document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element) {
+                            document.removeEventListener('fullscreenchange', fullscreenchange);
+                            document.removeEventListener('mozfullscreenchange', fullscreenchange);
+                            element.requestPointerLock();
+                        }
+                    };
+                    document.addEventListener('fullscreenchange', fullscreenchange, false);
+                    document.addEventListener('mozfullscreenchange', fullscreenchange, false);
+                    element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+                    element.requestFullscreen();
+                } else {
+                    element.requestPointerLock();
+                }
+            }, false);
+        } else {
+            instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+        }
+        controls = new THREE.PointerLockControls(camera);
+        init();
+    }
+    // else, it's mobile, so start mobile nav
+    else {
+        controls = initMobileControls(camera);
+        init();
+    }
+
+    var controlsEnabled = true;
+    var moveForward = false;
+    var moveBackward = false;
+    var moveLeft = false;
+    var moveRight = false;
+    var canJump = false;
+    var prevTime = performance.now();
+    var velocity = new THREE.Vector3(0, 0, 0);
+    //touch
+    // window.history.replaceState(null, null, "http://www.rosalieyu.com/dysturb/test_3/index_5.html");
+    //if (thisIsTouchDevice) 
+
+
+
+    // function displayZone() {
+    //     var tz = new TimeZoneDB;
+    //     tz.getJSON({
+    //         key: "RHP3Y31SKPTS",
+    //         lat: 48.8567,
+    //         lng: 2.3508
+    //     }, function(data) {
+    //         console.log(data.timestamp);
+    //     });
+    // }
+
+    function initSky() {
+
+        // Add Sky Mesh
+        sky = new THREE.Sky();
+        scene.add(sky.mesh);
+
+        // Add Sun Helper
+        sunSphere = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(20000, 16, 8),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff
+            })
+        );
+        sunSphere.position.y = -700000;
+        sunSphere.visible = false;
+        scene.add(sunSphere);
+
+        /// GUI
+
+        var effectController = {
+            turbidity: 16,
+            reileigh: 2,
+            mieCoefficient: 0.00184,
+            mieDirectionalG: 0.6,
+            luminance: 1,
+            inclination: 0.49, // elevation / inclination
+            azimuth: 0.25, // Facing front,
+            sun: !true
+        };
+
+        var distance1 = 400000;
+
+        // function guiChanged() {
+
+        var uniforms = sky.uniforms;
+        uniforms.turbidity.value = effectController.turbidity += 0.01;
+        uniforms.reileigh.value = effectController.reileigh += 0.01;
+        uniforms.luminance.value = effectController.luminance;
+        uniforms.mieCoefficient.value = effectController.mieCoefficient += 0.01;
+        uniforms.mieDirectionalG.value = effectController.mieDirectionalG += 0.01;
+
+        var theta = Math.PI * (effectController.inclination - 0.5);
+        var phi = 2 * Math.PI * (effectController.azimuth - 0.5);
+
+        sunSphere.position.x = distance1 * Math.cos(phi);
+        sunSphere.position.y = distance1 * Math.sin(phi) * Math.sin(theta);
+        sunSphere.position.z = distance1 * Math.sin(phi) * Math.cos(theta);
+
+        sunSphere.visible = effectController.sun;
+
+        sky.uniforms.sunPosition.value.copy(sunSphere.position);
+
+        renderer.render(scene, camera);
+        //container = document.getElementById('internal');
+
+        // }
+
+        // var gui = new dat.GUI();
+
+        // gui.add(effectController, "turbidity", 1.0, 20.0, 0.1).onChange(guiChanged);
+        // gui.add(effectController, "reileigh", 0.0, 4, 0.001).onChange(guiChanged);
+        // gui.add(effectController, "mieCoefficient", 0.0, 0.1, 0.001).onChange(guiChanged);
+        // gui.add(effectController, "mieDirectionalG", 0.0, 1, 0.001).onChange(guiChanged);
+        // gui.add(effectController, "luminance", 0.0, 2).onChange(guiChanged);
+        // gui.add(effectController, "inclination", 0, 1, 0.0001).onChange(guiChanged);
+        // gui.add(effectController, "azimuth", 0, 1, 0.0001).onChange(guiChanged);
+        // gui.add(effectController, "sun").onChange(guiChanged);
+
+        // guiChanged();
+
+    }
+
+    // play audio + video, and pause the rest
+    function videoPlay(num) {
+        var mediaLength = videoList.length;
+        for (var i = 0; i < mediaLength; i++) {
+            if (i == num) {
+                videoList[i].play();
+            } else {
+                videoList[i].pause();
+            }
+        }
+    }
+
+    function audioPlay(num) {
+        var mediaLength = audioList.length;
+
+        for (var i = 0; i < mediaLength; i++) {
+            if (i == num && audioList[i].isPlaying === false) {
+                try {
+                    audioList[i].play();
+                } catch (e) {}
+            } else if (i !== num && audioList[i].isPlaying === true) {
+                try {
+                    audioList[i].isPlaying = false;
+                    audioList[i].pause();
+                } catch (e) {}
+            }
+        }
+    }
+
+
+    function beginButtonPressed() {
+        begun = true;
+        animate();
+    }
+
+
+    function init() {
+
+        //CUBE
+        var cubeGeometry = new THREE.CubeGeometry(600, 500, 800);
+        var wireMaterial = new THREE.MeshBasicMaterial({
+            color: 0xff0000,
+            wireframe: true,
+            transparent: true,
+            opacity: 0
+        });
+        MovingCube = new THREE.Mesh(cubeGeometry, wireMaterial);
+        MovingCube.position.set(0, -50, -500);
+        cubeGeometry = new THREE.CubeGeometry(10, 10, 50);
+        wireMaterial = new THREE.MeshBasicMaterial({
+            wireframe: true,
+            transparent: true,
+            opacity: 0
+        });
+        CameraCube = new THREE.Mesh(cubeGeometry, wireMaterial);
+        CameraCube.position.y = 7;
+        // CameraCube.position.set(0, 200, 0);
+        camera.add(MovingCube);
+        camera.add(CameraCube);
+        //camera.position.z = 500;
+        //scene
+        scene = new THREE.Scene();
+
+        //sky helper
+        var helper = new THREE.GridHelper(5000, 5000);
+        helper.color1.setHex(0xffffff);
+        helper.color2.setHex(0xffffff);
+        //scene.add(helper);
+
+        //scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+        var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.55);
+        light.position.set(0.5, 1, 0.75);
+        scene.add(light);
+        // var ambient = new THREE.AmbientLight(0x101030);
+        // scene.add(ambient);
+        var directionalLight = new THREE.DirectionalLight(0xffeedd);
+        directionalLight.position.set(0, 0, 1);
+        scene.add(directionalLight);
+
+        // if desktop
+        if (whichMobile == '') {
+            scene.add(controls.getObject());
+        }
+
+        var onKeyDown = function(event) {
+            //console.log(event);
+            //console.log('keydown! --> ' + event.keyCode);
+            switch (event.keyCode) {
+                case 'touchstart':
+                case 38: // up
+                case 87: // w
+                    moveForward = true;
+                    break;
+                case 37: // left
+                case 65: // a
+                    moveLeft = true;
+                    break;
+                case 40: // down
+                case 83: // s
+                    moveBackward = true;
+                    break;
+                case 'touchmove':
+                case 39: // right
+                case 68: // d
+                    moveRight = true;
+                    break;
+                case 32: // space
+                    if (canJump === true) velocity.y += 350;
+                    canJump = false;
+                    break;
+            }
+        };
+        // Set the rays : one vector for every potential direction
+        rays = [
+            new THREE.Vector3(0, 0, 1), // z  // backward
+            new THREE.Vector3(1, 0, 1), // x, z // backward right
+            new THREE.Vector3(1, 0, 0), // x    // right
+            new THREE.Vector3(1, 0, -1), // x, -z // forward right
+            new THREE.Vector3(0, 0, -1), // -z   // forward
+            new THREE.Vector3(-1, 0, -1), // -x, -z // forward left
+            new THREE.Vector3(-1, 0, 0), // -x  // left
+            new THREE.Vector3(-1, 0, 1) // -z  // backward left
+        ];
+        var onKeyUp = function(event) {
+            ///console.log('keyup! --> ' + event.keyCode);
+            var currentKeyCode = event.keyCode;
+            switch (currentKeyCode) {
+                case 38: // up
+                    moveForward = false;
+                    break;
+                case 87: // w
+                    moveForward = false;
+                    break;
+                case 37: // left
+                    moveLeft = false;
+                    break;
+                case 65: // a
+                    moveLeft = false;
+                    break;
+                case 40: // down
+                    moveBackward = false;
+                    break;
+                case 83: // s
+                    moveBackward = false;
+                    break;
+                case 39: // right
+                    moveRight = false;
+                    break;
+                case 68: // d
+                    moveRight = false;
+                    break;
+            }
+            // if(currentKeyCode==38){
+            //  moveForward = false;
+            // }
+            // if else(currentKeyCode==87){
+            //  moveForward = false;
+            // }    
+            // if else(currentKeyCode==37){
+            //  moveLeft = false;
+            // }                                        
+        };
+        document.addEventListener('keydown', onKeyDown, false);
+        document.addEventListener('keyup', onKeyUp, false);
+        raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+        rayForMovies = new THREE.Raycaster();
+
+        //model Jason collider
+        // new THREE.JSONLoader().load('./hiRes/cubeColliders.js', function(geometry) {
+        //     var objectCollider = new THREE.Mesh(geometry);
+        //     objectCollider.position.set(0, 0, 0);
+        //     objectCollider.scale.set(2, 2, 2);
+        //     //scene.add(objectCollider);
+        //     collidableMeshList.push(objectCollider);
+        // });
+
+        // //city model Jason
+        new THREE.JSONLoader().load('hiRes/120915_15.js', function(geometry, materials) {
+            var material = new THREE.MeshFaceMaterial(materials);
+            for (var i = 0; i < materials.length; i++)
+                materials[i].side = THREE.DoubleSide;
+
+            var object = new THREE.Mesh(geometry, material);
+            object.position.set(0, -20, 0);
+            object.scale.set(4, 4, 4);
+            scene.add(object);
+            LOADING.complete(); // switches loading to enter button 
+            collidableMeshList.push(object);
+        });
+
+
+        var floorGeometry = new THREE.PlaneGeometry(110000, 110000, 3);
+        var floorMaterial = new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            side: THREE.DoubleSide
+        });
+        var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.position.set(0, -300, -1500);
+        floor.rotation.x = 1.6;
+        scene.add(floor);
+
+        // for (var i = 0; i < 2; i++) {
+        //     var videoImage = document.createElement('canvas');
+        //     videoImage.width = 1020;
+        //     videoImage.height = 574;
+        //     container = document.getElementById('internal');
+        //     //container.appendChild(renderer.domElement); //>>> >>> > 60 de8d03b968281e676bb8bab13eb1c9709f2217
+        //     videoImageContext[i] = videoImage.getContext('2d');
+        //     // background color if no video present
+        //     videoImageContext[i].fillStyle = '#000000';
+        //     videoImageContext[i].fillRect(0, 0, videoImage.width, videoImage.height);
+        //     videoTexture[i] = new THREE.Texture(videoImage);
+        //     videoTexture[i].minFilter = THREE.LinearFilter;
+        //     videoTexture[i].magFilter = THREE.LinearFilter;
+        //     var movieMaterial = new THREE.MeshBasicMaterial({
+        //         map: videoTexture[i],
+        //         overdraw: true,
+        //         side: THREE.DoubleSide
+        //     });
+        //     // the geometry on which the movie will be displayed;
+        //     //      movie image will be scaled to fit these dimensions.
+        //     var movieGeometry = new THREE.PlaneGeometry(550, 265, 3, 3);
+        //     movieScreenArray.push(new THREE.Mesh(movieGeometry, movieMaterial));
+        // }
+        //screen [0]
+        var videoImage = document.createElement('canvas');
+        videoImage.width = 1020;
+        videoImage.height = 574;
+        videoImageContext[0] = videoImage.getContext('2d');
+        // background color if no video present
+        videoImageContext[0].fillStyle = '#000000';
+        videoImageContext[0].fillRect(0, 0, videoImage.width, videoImage.height);
+        videoTexture[0] = new THREE.Texture(videoImage);
+        videoTexture[0].minFilter = THREE.LinearFilter;
+        videoTexture[0].magFilter = THREE.LinearFilter;
+        // videoTexture[0].format = THREE.RGBFormat;
+        // videoTexture[0].generateMipmaps = false;
+        // videoTexture[0].needsUpdate = true;
+
+        var movieMaterial = new THREE.MeshBasicMaterial({
+            map: videoTexture[0],
+            overdraw: true,
+            side: THREE.DoubleSide
+        });
+        new THREE.JSONLoader().load('hiRes/rueDesTournelles.js', function(geometry) {
+            movieScreenArray[0] = new THREE.Mesh(geometry, movieMaterial);
+            movieScreenArray[0].scale.set(4, 4, 4);
+            movieScreenArray[0].position.y = 150;
+            scene.add(movieScreenArray[0]);
+            // add audio to this mesh
+            audioList.push(Audio3d.addAudioToPosition(audioPaths[0], movieScreenPositions[0]));
+        });
+        //screen [1]
+        var videoImage1 = document.createElement('canvas');
+        videoImage1.width = 1020;
+        videoImage1.height = 574;
+        videoImageContext[1] = videoImage1.getContext('2d');
+        // background color if no video present
+        videoImageContext[1].fillStyle = '#000000';
+        videoImageContext[1].fillRect(0, 0, videoImage1.width, videoImage1.height);
+        videoTexture[1] = new THREE.Texture(videoImage1);
+        videoTexture[1].minFilter = THREE.LinearFilter;
+        videoTexture[1].magFilter = THREE.LinearFilter;
+        // videoTexture[1].format = THREE.RGBFormat;
+        // videoTexture[1].generateMipmaps = false;
+        // videoTexture[1].needsUpdate = true;
+        var movieMaterial1 = new THREE.MeshBasicMaterial({
+            map: videoTexture[1],
+            overdraw: true,
+            side: THREE.DoubleSide
+        });
+        new THREE.JSONLoader().load('hiRes/franprix_movieTex.js', function(geometry) {
+            movieScreenArray[1] = new THREE.Mesh(geometry, movieMaterial1);
+            movieScreenArray[1].scale.set(4, 4, 4);
+            movieScreenArray[1].position.y = -20;
+            scene.add(movieScreenArray[1]);
+            // add audio to this mesh
+            audioList.push(Audio3d.addAudioToPosition(audioPaths[1], movieScreenPositions[1]));
+        });
+
+        //screen [2]
+        var videoImage2 = document.createElement('canvas');
+        videoImage2.width = 1000;
+        videoImage2.height = 564;
+        videoImageContext[2] = videoImage2.getContext('2d');
+        // background color if no video present
+        videoImageContext[2].fillStyle = '#000000';
+        videoImageContext[2].fillRect(0, 0, videoImage2.width, videoImage2.height);
+        videoTexture[2] = new THREE.Texture(videoImage2);
+        videoTexture[2].minFilter = THREE.LinearFilter;
+        videoTexture[2].magFilter = THREE.LinearFilter;
+        // videoTexture[2].format = THREE.RGBFormat;
+        // videoTexture[2].generateMipmaps = false;
+        // videoTexture[2].needsUpdate = true;
+        var movieMaterial2 = new THREE.MeshBasicMaterial({
+            map: videoTexture[2],
+            overdraw: true,
+            side: THREE.DoubleSide
+        });
+        new THREE.JSONLoader().load('hiRes/Docteur_movieTex_121315.js', function(geometry) {
+            movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial2);
+            movieScreenArray[2].scale.set(4, 4, 4);
+            movieScreenArray[2].position.y = -20;
+            scene.add(movieScreenArray[2]);
+            // add audio to this mesh
+            audioList.push(Audio3d.addAudioToPosition(audioPaths[2], movieScreenPositions[2]));
+        });
+        //push this screen to the collidibale list
+        // collidableMeshList.push(movieScreenArray[i]);
+        //position the screens and add them to the scene
+        //camera.position.set(0,80,300);
+        //camera.lookAt(movieScreenArray[0].position);
+        //SKYBOX/FOG
+        // var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
+        // var skyBoxMaterial = new THREE.MeshBasicMaterial({
+        //     color: 0x330000,
+        //     side: THREE.DoubleSide
+        // });
+        // var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
+        // scene.add(skyBox);
+        //scene.fog = new THREE.FogExp2(0x330000, 0.00025);
+        // lights
+        light = new THREE.DirectionalLight(0xffffff);
+        light.position.set(1, 1, 1);
+        scene.add(light);
+        light = new THREE.DirectionalLight(0x002288);
+        light.position.set(-1, -1, -1);
+        scene.add(light);
+        //spot light1              (hex, intensity, distance, angle, exponent, decay)
+        light = new THREE.SpotLight(0xFFCC66, 3, 0, 0.1, 9, 0.1);
+        light.position.set(-42.34, 17, 227);
+        light.shadowCameraVisible = true;
+        light.shadowDarkness = 0.95;
+        // must enable shadow casting ability for the light
+        light.castShadow = true;
+        scene.add(light);
+        light.target = MovingCube;
+        //point light
+        // light = new THREE.PointLight(0xff0000, 1, 100);
+        // light.position.set(130, 70, -690);
+        // scene.add(light);
+        // light = new THREE.AmbientLight(0x404040);
+        // scene.add(light);
+        // light = new THREE.PointLight( 0xff0040, 1, 50 );
+        // scene.add( light );
+        // renderer
+        renderer = new THREE.WebGLRenderer();
+        //set background color
+        renderer.setClearColor(0x00001a);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        container = document.getElementById('internal');
+        container.appendChild(renderer.domElement);
+        //FPS
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.top = '0px';
+        stats.domElement.style.zIndex = 100;
+        // container.appendChild( stats.domElement );
+        //
+
+        initSky();
+        effect = new THREE.StereoEffect(renderer);
+        effect.eyeSeparation = 10;
+        effect.setSize(window.innerWidth, window.innerHeight);
+
+        window.addEventListener('resize', onWindowResize, false);
+
+        // start audio engine
+        audioList = Audio3d.initAudio(audioPaths, camera);
+        render();
+
+    }
+
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        effect.setSize( window.innerWidth, window.innerHeight );
+        //controls.handleResize();
+        render();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        update();
+        render();
+
+
+        //controls.update();                
+    }
+
+    function update() {
+        if (whichMobile !== "") {
+            controls.update();
+
+            if (fingerDown) {
+                velocity.z = -30;
+
+                camera.translateZ(velocity.z);
+            } else {
+                velocity.z = 0;
+
+            }
+        }
+        // moveForward = true;
+
+        //collision
+        // MovingCube.position.set(controls.position().x, controls.position().y - 50, controls.position().z - 300);
+        //var originPoint = MovingCube.position.clone();
+        //!
+        MovingCube.updateMatrixWorld();
+        CameraCube.updateMatrixWorld();
+
+        // figure out user's position
+        var cubeWorldPos = new THREE.Vector3();
+        cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
+        var closestIndex = Audio3d.detectDistances(audioList, cubeWorldPos);
+        audioPlay(closestIndex);
+
+        for (var vertexIndex = 0; vertexIndex < CameraCube.geometry.vertices.length; vertexIndex++) {
+            var localVertex = CameraCube.geometry.vertices[vertexIndex].clone();
+            var globalVertex = localVertex.applyMatrix4(CameraCube.matrix);
+            var directionVector = globalVertex.sub(CameraCube.position);
+
+            //Raycaster( origin, direction, near, far )
+            // origin — The origin vector where the ray casts from.
+            // direction — The direction vector that gives direction to the ray. Should be normalized.
+            // And the "RayCaster", able to test for intersections    
+            // For each ray
+            for (i = 0; i < rays.length; i += 1) {
+                // We reset the raycaster to this direction
+                var cubeWorldPos = new THREE.Vector3();
+                cubeWorldPos.setFromMatrixPosition(CameraCube.matrixWorld);
+                rayForMovies.set(cubeWorldPos, rays[i]);
+                // Test if we intersect with any obstacle mesh
+                var collisionResults = rayForMovies.intersectObjects(collidableMeshList);
+                // And disable that direction if we do
+                if (collisionResults.length > 0 && collisionResults[0].distance < 200) {
+                    //console.log('we have hit!');
+                    //isHit = true;
+                    if (i == 0) {
+                        isHitBack = true;
+                        isHitFront = false;
+                        isHitRight = false;
+                        isHitLeft = false;
+                        //console.log("isHitBack " + isHitBack);
+                    } else if (i == 4) {
+                        isHitBack = false;
+                        isHitFront = true;
+                        isHitRight = false;
+                        isHitLeft = false;
+                        //console.log("isHitFront " + isHitFront);
+                    } else if (i == 6) {
+                        isHitBack = false;
+                        isHitFront = false;
+                        isHitRight = false;
+                        isHitLeft = true;
+                        //console.log("isHitLeft " + isHitLeft);
+                    } else if (i == 2) {
+                        isHitBack = false;
+                        isHitFront = false;
+                        isHitRight = true;
+                        isHitLeft = false;
+                        //console.log("isHitRight " + isHitRight);
+                    }
+                } else {
+                    //isHit = false;
+                    //console.log("isHit = false");
+                }
+                //movie collider
+                for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++) {
+                    var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
+                    var globalVertex = localVertex.applyMatrix4(MovingCube.matrix);
+                    var directionVector = globalVertex.sub(MovingCube.position);
+
+                    //Raycaster( origin, direction, near, far )
+                    // origin — The origin vector where the ray casts from.
+                    // direction — The direction vector that gives direction to the ray. Should be normalized.
+                    // And the "RayCaster", able to test for intersections   
+                    // For each ray
+                    // We reset the raycaster to this direction
+                    var cubeWorldPos = new THREE.Vector3();
+                    cubeWorldPos.setFromMatrixPosition(MovingCube.matrixWorld);
+                    rayForMovies.set(cubeWorldPos, rays[i]);
+
+                    // set based on mouse and camera
+                    //rayForMovies.setFromCamera(mouse, camera);
+
+                    var maxDist = 2000;
+
+                    // get an array of all the movies intersecting the rayForMovies
+                    var intersectingMovies = rayForMovies.intersectObjects(movieScreenArray);
+
+                    if (intersectingMovies.length > 0) {
+                        // for each...
+                        intersectingMovies.forEach(function(item) {
+                            // make sure distance < maxDistance (directionVector.length)
+                            if (item.distance < maxDist) {
+                                // find index of the item.object (mesh) in movieScreenArray
+                                var movieIndex = movieScreenArray.indexOf(item.object);
+                                switch (movieIndex) {
+                                    case 0:
+                                        hit0 = true;
+                                        videoPlay(0);
+                                        break;
+                                    case 1:
+                                        hit1 = true;
+                                        videoPlay(1);
+                                        break;
+                                    case 2:
+                                        hit2 = true;
+                                        videoPlay(2);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        });
+                    }
+                }
+
+                // if (whichMobile == "android_mobile") {
+                //     if (hit0 == true) {
+                //         videoPlay(0);
+                //         // videoList[0].play();
+                //         // videoList[1].pause();
+                //         // videoList[2].pause();
+                //     }
+                //     if (hit1 == true) {
+                //         videoPlay(1);
+                //         // videoList[1].play();
+                //         // videoList[0].pause();
+                //         // videoList[2].pause();
+                //     }
+                //     if (hit2 == true) {
+                //         videoPlay(2);
+                //         // videoList[2].play();
+                //         // videoList[0].pause();
+                //         // videoList[1].pause();
+                //     }
+                // }
+                if (controlsEnabled && whichMobile == "") {
+                    raycaster.ray.origin.copy(controls.getObject().position);
+                    // raycaster.ray.origin.copy( MovingCube.position );
+                    raycaster.ray.origin.y -= 10;
+                    var intersections = raycaster.intersectObjects(objects);
+                    var isOnObject = intersections.length > 0;
+                    var controlTime = performance.now();
+                    var delta = (controlTime - prevTime) / 300;
+
+                    velocity.x -= velocity.x * 10.0 * delta;
+                    velocity.z -= velocity.z * 10.0 * delta;
+
+                    //velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+                    //if moveforad == true, collision check == false
+                    // if ( moveForward && isHitFront == false ) 
+                    //   velocity.z -= 400.0 * delta;
+                    // if ( moveBackward && isHitBack == false) 
+                    //  velocity.z += 400.0 * delta;
+                    // if ( moveLeft && isHitLeft == false) 
+                    //  velocity.x -= 400.0 * delta;
+                    // if ( moveRight && isHitRight == false) 
+                    //  velocity.x += 400.0 * delta;
+                    // if (!isHitFront && !isHitBack && !isHitRight && !isHitLeft) {
+                    if (moveForward && !isHitFront) {
+                        velocity.z -= 10.0 * delta;
+                        isHitBack = false;
+                    }
+                    if (moveBackward && !isHitBack) {
+                        velocity.z += 10.0 * delta;
+                        isHitFront = false;
+                    }
+                    if (moveLeft && !isHitLeft) {
+                        controls.getObject().rotation.y += 0.3 * delta;
+                        isHitRight = false;
+                    }
+                    if (moveRight && !isHitRight) {
+                        controls.getObject().rotation.y -= 0.3 * delta;
+                        isHitLeft = false;
+                    }
+                    if (isHitFront) {
+                        if (moveBackward || moveLeft || moveRight) {
+                            isHitFront = false;
+                        }
+                    }
+                    if (isHitBack) {
+                        if (moveForward || moveLeft || moveRight) {
+                            isHitBack = false;
+                        }
+                    }
+                    if (isHitLeft) {
+                        if (moveBackward || moveForward || moveRight) {
+                            isHitLeft = false;
+                        }
+                    }
+                    if (isHitRight) {
+                        if (moveForward || moveLeft || moveBackward) {
+                            isHitRight = false;
+                        }
+                    }
+                    // }
+                    // if collider is hit
+                    // see what was hit... set that to be true
+                    // if isHitFront
+                    // --> the user moves left, and isHit is false, isHitFront is true
+                    // --> the user moves right, and isHit is false, isHitFront is true
+                    // --> the user moves back, and isHit is false, isHitFront is true
+                    // if()
+                    controls.getObject().translateX(velocity.x);
+                    //controls.getObject().translateY(velocity.y);
+                    controls.getObject().translateZ(velocity.z);
+                    //console.log(MovingCube.position);
+                    // if (controls.getObject().position.y < 10) {
+                    //     velocity.y = 0;
+                    //     controls.getObject().position.y = 10;
+                    //     canJump = true;
+                    // }
+                    prevTime = controlTime;
+                }
+                stats.update();
+            }
+        }
+    }
+    var framesPerSecond = 29;
+
+    function render() {
+
+        //console.log(isHit);
+        if (videoList[1].readyState === videoList[1].HAVE_ENOUGH_DATA) {
+            if (whichMobile == "iOS_mobile") {
+                if (hit0) {
+                    time0 = Date.now();
+                    var elapsed0 = (time0 - lastTime0) / 1000;
+                    // render
+                    // for (var i = 0; i < videoList.length; i++) {
+                    if (elapsed0 >= ((1000 / framesPerSecond) / 1000)) {
+                        videoList[0].currentTime = videoList[0].currentTime + elapsed0;
+                        videoImageContext[0].drawImage(videoList[0], 0, 0);
+                        videoImageContext[0].drawImage(videoList[0], 0, 0);
+                        if (videoTexture[0])
+                            videoTexture[0].needsUpdate = true;
+                        lastTime0 = time0;
+                        // if we are at the end of the video stop
+                        var currentTime0 = (Math.round(parseFloat(videoList[0].currentTime) * 10000) / 10000);
+                        var duration0 = (Math.round(parseFloat(videoList[0].duration) * 10000) / 10000);
+                        if (currentTime0 >= duration0) {
+                            //console.log('currentTime: ' + currentTime0 + ' duration: ' + videoList[0].duration);
+                            // restart
+                            //  videoList[0].currentTime0 = 0;
+                            // return;
+                        }
+                    }
+                }
+                if (hit1) {
+                    time1 = Date.now();
+                    var elapsed1 = (time1 - lastTime1) / 1000;
+                    // render
+                    // for (var i = 0; i < videoList.length; i++) {
+                    if (elapsed1 >= ((1000 / framesPerSecond) / 1000)) {
+                        videoList[1].currentTime = videoList[1].currentTime + elapsed1;
+                        videoImageContext[1].drawImage(videoList[1], 0, 0);
+                        videoImageContext[1].drawImage(videoList[1], 0, 0);
+                        if (videoTexture[1])
+                            videoTexture[1].needsUpdate = true;
+                        lastTime1 = time1;
+                        // if we are at the end of the video stop
+                        var currentTime1 = (Math.round(parseFloat(videoList[1].currentTime) * 10000) / 10000);
+                        var duration1 = (Math.round(parseFloat(videoList[1].duration) * 10000) / 10000);
+                        if (currentTime1 >= duration1) {
+                            //console.log('currentTime: ' + currentTime1 + ' duration: ' + videoList[1].duration);
+                            // restart
+                            //  videoList[1].currentTime1 = 0;
+                            // return;
+                        }
+                    }
+                }
+                if (hit2) {
+                    time2 = Date.now();
+                    var elapsed2 = (time2 - lastTime2) / 1000;
+                    // render
+                    // for (var i = 0; i < videoList.length; i++) {
+                    if (elapsed2 >= ((1000 / framesPerSecond) / 1000)) {
+                        videoList[2].currentTime = videoList[2].currentTime + elapsed2;
+                        videoImageContext[2].drawImage(videoList[2], 0, 0);
+                        videoImageContext[2].drawImage(videoList[2], 0, 0);
+                        if (videoTexture[2])
+                            videoTexture[2].needsUpdate = true;
+                        lastTime2 = time2;
+                        // if we are at the end of the video stop
+                        var currentTime2 = (Math.round(parseFloat(videoList[2].currentTime) * 10000) / 10000);
+                        var duration2 = (Math.round(parseFloat(videoList[2].duration) * 10000) / 10000);
+                        if (currentTime2 >= duration2) {
+                            //console.log('currentTime: ' + currentTime2 + ' duration: ' + videoList[2].duration);
+                            // restart
+                            //  videoList[2].currentTime2 = 0;
+                            // return;
+                        }
+                    }
+                }
+                // }
+            } else {
+                for (var i = 0; i < videoList.length; i++) {
+                    // if (videoList[0].readyState === videoList[0].HAVE_ENOUGH_DATA) {
+                    videoImageContext[i].drawImage(videoList[i], 0, 0);
+                    if (videoTexture[i])
+                        videoTexture[i].needsUpdate = true;
+                }
+            }
+        }
+        effect.render(scene, camera);
+    }
+    </script>
+    <!-- Google Analytics Script -->
+    <script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-71428119-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+</body>
+
+</html>

@@ -74,7 +74,10 @@
                         <a class="close-x">x</a>
                         <div class="clearfix"></div>
                         <p>Copy this code to embed #ReframeClimate</p>
-                        <textarea readonly id="embed-code"><object data='http://reframeclimate.magnumfoundation.org' width='800' height='500'><embed src='http://reframeclimate.magnumfoundation.org' width='800' height='500' /></textarea>
+                        <textarea readonly id="embed-code">
+                            <object data='http://reframeclimate.magnumfoundation.org' width='800' height='500'>
+                                <embed src='http://reframeclimate.magnumfoundation.org' width='800' height='500' />
+                        </textarea>
                     </div>
                     <div id="credits" class="model credits-text centered-text">
                         <h2>Credits</h2>
@@ -140,7 +143,7 @@
     <script src="js/OBJMTLLoader.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="clipboard.js-master/dist/clipboard.min.js"></script>
-    <script src="//cdn.timezonedb.com/js/timezonedb.min.js" type="text/javascript"></script>
+    <!--     // <script src="//cdn.timezonedb.com/js/timezonedb.min.js" type="text/javascript"></script> -->
     <script src="js/BinaryLoader.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
@@ -250,6 +253,17 @@
         y: 0,
         z: -480
     }];
+    // x: -1838.07,
+    // y: 0,
+    // z: -34208
+
+    // x: 1346.67,
+    // y: 0,
+    // z: -13328
+
+    // x: -1484,
+    // y: 0,
+    // z: -1437
     // custom global variables
     var videoImageContext = [];
     var videoTexture = [];
@@ -538,15 +552,15 @@
         helper.color2.setHex(0xffffff);
         //scene.add(helper);
 
-        //scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
-        var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.55);
-        light.position.set(0.5, 1, 0.75);
+       // scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+        var light = new THREE.HemisphereLight(0xffffcc, 0xffffcc, 0.55);
+        //light.position.set(0.5, 1, 0.75);
         scene.add(light);
-        // var ambient = new THREE.AmbientLight(0x101030);
-        // scene.add(ambient);
-        var directionalLight = new THREE.DirectionalLight(0xffeedd);
-        directionalLight.position.set(0, 0, 1);
-        scene.add(directionalLight);
+        var ambient = new THREE.AmbientLight( 0x404040);
+        scene.add(ambient);
+        // var directionalLight = new THREE.DirectionalLight(0xffeedd);
+        // directionalLight.position.set(0, 0, 1);
+        // scene.add(directionalLight);
 
         // if desktop
         if (whichMobile == '') {
@@ -646,29 +660,165 @@
         // });
 
         // //city model Jason
-        new THREE.JSONLoader().load('hiRes/120915_15.js', function(geometry, materials) {
-            var material = new THREE.MeshFaceMaterial(materials);
+        // new THREE.JSONLoader().load('models/rueDesTournelles_corner/rueDesTournelles_corner_121715.js', function(geometry, materials) {
+        //     var material = new THREE.MeshFaceMaterial(materials);
+        //     for (var i = 0; i < materials.length; i++)
+        //         materials[i].side = THREE.DoubleSide;
+
+        //     var object = new THREE.Mesh(geometry, material);
+        //     object.position.set(0, -20, 0);
+        //     object.scale.set(4, 4, 4);
+        //     scene.add(object);
+        //     LOADING.complete(); // switches loading to enter button 
+        //     collidableMeshList.push(object);
+        // });
+
+        var manager = new THREE.LoadingManager();
+        manager.onProgress = function(item, loaded, total) {
+            console.log(item, loaded, total);
+        };
+
+        var texture1 = new THREE.Texture();
+
+        var onProgress = function(xhr) {
+            if (xhr.lengthComputable) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log(Math.round(percentComplete, 2) + '% downloaded');
+            }
+        };
+
+        var onError = function(xhr) {};
+
+        var loader = new THREE.ImageLoader(manager);
+        loader.load('models/1/placedudocteur_uvs_00_2048_SFW.png', function(image) {
+            texture1.image = image;
+            texture1.needsUpdate = true;
+        });
+        var loader = new THREE.OBJLoader(manager);
+        loader.load('models/1/pdd_main_121815.obj', function(object1) {
+            object1.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture1;
+                }
+            });
+            object1.position.set(0, -350, 0);
+            //object.rotation.y=180;
+            object1.scale.set(8, 8, 8);
+            scene.add(object1);
+            collidableMeshList.push(object1);
+        }, onProgress, onError);
+
+        new THREE.JSONLoader().load('models/2/franprix_121815_1.js', function(geometry, materials) {
+            var material2 = new THREE.MeshFaceMaterial(materials);
             for (var i = 0; i < materials.length; i++)
                 materials[i].side = THREE.DoubleSide;
 
-            var object = new THREE.Mesh(geometry, material);
-            object.position.set(0, -20, 0);
-            object.scale.set(4, 4, 4);
-            scene.add(object);
+            var object2 = new THREE.Mesh(geometry, material2);
+            object2.position.set(0, -350, 0);
+            object2.scale.set(8, 8, 8);
+            scene.add(object2);
+            collidableMeshList.push(object2);
+        });
+        new THREE.JSONLoader().load('models/3/pdd_acr_121815_1.js', function(geometry, materials) {
+            var material3 = new THREE.MeshFaceMaterial(materials);
+            for (var i = 0; i < materials.length; i++)
+                materials[i].side = THREE.DoubleSide;
+
+            var object3 = new THREE.Mesh(geometry, material3);
+            object3.position.set(0, -350, 0);
+            object3.scale.set(8, 8, 8);
+            scene.add(object3);
+            collidableMeshList.push(object3);
+        });
+        new THREE.JSONLoader().load('models/4/rdt_acr_121815_1.js', function(geometry, materials) {
+            var material4 = new THREE.MeshFaceMaterial(materials);
+            for (var i = 0; i < materials.length; i++)
+                materials[i].side = THREE.DoubleSide;
+
+            var object4 = new THREE.Mesh(geometry, material4);
+            object4.position.set(0, -350, 0);
+            object4.scale.set(8, 8, 8);
+            scene.add(object4);
+            collidableMeshList.push(object4);
+        });
+        new THREE.JSONLoader().load('models/5/rdt_cafe_121815_1.js', function(geometry, materials) {
+            var material5 = new THREE.MeshFaceMaterial(materials);
+            for (var i = 0; i < materials.length; i++)
+                materials[i].side = THREE.DoubleSide;
+
+            var object5 = new THREE.Mesh(geometry, material5);
+            object5.position.set(0, -350, 0);
+            object5.scale.set(8, 8, 8);
+            scene.add(object5);
+            collidableMeshList.push(object5);
+        });
+
+        var texture6 = new THREE.Texture();
+        var loader = new THREE.ImageLoader(manager);
+        loader.load('models/6/rueDesTournelles_corner_2048_121415_SFW03.png', function(image) {
+            texture6.image = image;
+            texture6.needsUpdate = true;
+        });
+
+        var loader = new THREE.OBJLoader(manager);
+        loader.load('models/6/rdt_corner_121815_11.obj', function(object6) {
+            object6.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture6;
+                }
+            });
+
+            object6.position.set(0, -350, 0);
+            //object.rotation.y=180;
+            object6.scale.set(8, 8, 8);
+            scene.add(object6);
+            collidableMeshList.push(object6);
+        }, onProgress, onError);
+
+        new THREE.JSONLoader().load('models/7/121815_rdt_adjacent.js', function(geometry, materials) {
+            var material5 = new THREE.MeshFaceMaterial(materials);
+            for (var i = 0; i < materials.length; i++)
+                materials[i].side = THREE.DoubleSide;
+
+            var object5 = new THREE.Mesh(geometry, material5);
+            object5.position.set(0, -350, 0);
+            object5.scale.set(8, 8, 8);
+            scene.add(object5);
+            collidableMeshList.push(object5);
+        });
+        // var floorGeometry = new THREE.PlaneGeometry(110000, 110000, 3);
+        // var floorMaterial = new THREE.MeshBasicMaterial({
+        //     color: 0x000000,
+        //     side: THREE.DoubleSide
+        // });
+        // var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        // floor.position.set(0, -1300, -1500);
+        // floor.rotation.x = 1.6;
+        // scene.add(floor);
+        //ground
+        var texture8 = new THREE.Texture();
+        var loader = new THREE.ImageLoader(manager);
+        loader.load('models/ground/ground00_2048_SFW.png', function(image) {
+            texture8.image = image;
+            texture8.needsUpdate = true;
+        });
+
+        var loader = new THREE.OBJLoader(manager);
+        loader.load('models/ground/121815_ground01.obj', function(object8) {
+            object8.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture8;
+                }
+            });
+
+            object8.position.set(0, -350, 0);
+            //object.rotation.y=180;
+            object8.scale.set(8, 8, 8);
+            scene.add(object8);
             LOADING.complete(); // switches loading to enter button 
-            collidableMeshList.push(object);
-        });
+            collidableMeshList.push(object8);
+        }, onProgress, onError);
 
-
-        var floorGeometry = new THREE.PlaneGeometry(110000, 110000, 3);
-        var floorMaterial = new THREE.MeshBasicMaterial({
-            color: 0x000000,
-            side: THREE.DoubleSide
-        });
-        var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.position.set(0, -300, -1500);
-        floor.rotation.x = 1.6;
-        scene.add(floor);
 
         // for (var i = 0; i < 2; i++) {
         //     var videoImage = document.createElement('canvas');
@@ -713,10 +863,10 @@
             overdraw: true,
             side: THREE.DoubleSide
         });
-        new THREE.JSONLoader().load('hiRes/rueDesTournelles.js', function(geometry) {
+        new THREE.JSONLoader().load('models/screens/rueDesTournelles.js', function(geometry) {
             movieScreenArray[0] = new THREE.Mesh(geometry, movieMaterial);
-            movieScreenArray[0].scale.set(4, 4, 4);
-            movieScreenArray[0].position.y = 150;
+            movieScreenArray[0].scale.set(8, 8, 8);
+            movieScreenArray[0].position.y = -350;
             scene.add(movieScreenArray[0]);
             // add audio to this mesh
             audioList.push(Audio3d.addAudioToPosition(audioPaths[0], movieScreenPositions[0]));
@@ -740,10 +890,10 @@
             overdraw: true,
             side: THREE.DoubleSide
         });
-        new THREE.JSONLoader().load('hiRes/franprix_movieTex.js', function(geometry) {
+        new THREE.JSONLoader().load('models/screens/franprix_movieTex.js', function(geometry) {
             movieScreenArray[1] = new THREE.Mesh(geometry, movieMaterial1);
-            movieScreenArray[1].scale.set(4, 4, 4);
-            movieScreenArray[1].position.y = -20;
+            movieScreenArray[1].scale.set(8, 8, 8);
+            movieScreenArray[1].position.y = -350;
             scene.add(movieScreenArray[1]);
             // add audio to this mesh
             audioList.push(Audio3d.addAudioToPosition(audioPaths[1], movieScreenPositions[1]));
@@ -768,10 +918,10 @@
             overdraw: true,
             side: THREE.DoubleSide
         });
-        new THREE.JSONLoader().load('hiRes/Docteur_movieTex_121315.js', function(geometry) {
+        new THREE.JSONLoader().load('models/screens/Docteur_movieTex.js', function(geometry) {
             movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial2);
-            movieScreenArray[2].scale.set(4, 4, 4);
-            movieScreenArray[2].position.y = -20;
+            movieScreenArray[2].scale.set(8, 8, 8);
+            movieScreenArray[2].position.y = -350;
             scene.add(movieScreenArray[2]);
             // add audio to this mesh
             audioList.push(Audio3d.addAudioToPosition(audioPaths[2], movieScreenPositions[2]));
@@ -790,15 +940,15 @@
         // var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
         // scene.add(skyBox);
         //scene.fog = new THREE.FogExp2(0x330000, 0.00025);
-        // lights
-        light = new THREE.DirectionalLight(0xffffff);
-        light.position.set(1, 1, 1);
-        scene.add(light);
-        light = new THREE.DirectionalLight(0x002288);
-        light.position.set(-1, -1, -1);
-        scene.add(light);
+        // // lights
+        // light = new THREE.DirectionalLight(0xffffff);
+        // light.position.set(1, 1, 1);
+        // scene.add(light);
+        // light = new THREE.DirectionalLight(0x002288);
+        // light.position.set(-1, -1, -1);
+        // scene.add(light);
         //spot light1              (hex, intensity, distance, angle, exponent, decay)
-        light = new THREE.SpotLight(0xFFCC66, 3, 0, 0.1, 9, 0.1);
+        light = new THREE.SpotLight(0xFFCC66, 2, 0, 0.1, 9, 0.1);
         light.position.set(-42.34, 17, 227);
         light.shadowCameraVisible = true;
         light.shadowDarkness = 0.95;
@@ -866,9 +1016,8 @@
             if (fingerDown) {
                 velocity.z = -30;
 
-                camera.translateZ(velocity.z);                
-            }
-            else {
+                camera.translateZ(velocity.z);
+            } else {
                 velocity.z = 0;
 
             }
@@ -1034,11 +1183,11 @@
                     //  velocity.x += 400.0 * delta;
                     // if (!isHitFront && !isHitBack && !isHitRight && !isHitLeft) {
                     if (moveForward && !isHitFront) {
-                        velocity.z -= 10.0 * delta;
+                        velocity.z -= 30.0 * delta;
                         isHitBack = false;
                     }
                     if (moveBackward && !isHitBack) {
-                        velocity.z += 10.0 * delta;
+                        velocity.z += 30.0 * delta;
                         isHitFront = false;
                     }
                     if (moveLeft && !isHitLeft) {
