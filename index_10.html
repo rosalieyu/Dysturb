@@ -254,17 +254,17 @@
     //     z: -480
     // }];
     var movieScreenPositions = [{
-        x: -1938.07,
+        x: -2803.17,
         y: 0,
-        z: -41001.81
+        z: -63559
     }, {
-        x: 1346.67,
+        x: 2672.20,
         y: 0,
-        z: -15328
+        z: -24474
     }, {
-        x: -1484,
+        x: -1528.02,
         y: 0,
-        z: -1437
+        z: -1704.82
     }];
     // custom global variables
     var videoImageContext = [];
@@ -555,9 +555,9 @@
         //scene.add(helper);
 
         // scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
-        var light = new THREE.HemisphereLight(0xffffcc, 0xffffcc, 0.55);
-        //light.position.set(0.5, 1, 0.75);
-        scene.add(light);
+        // var light = new THREE.HemisphereLight(0xffffcc, 0xffffcc, 0.55);
+        // //light.position.set(0.5, 1, 0.75);
+        // scene.add(light);
         var ambient = new THREE.AmbientLight(0x404040);
         scene.add(ambient);
         // var directionalLight = new THREE.DirectionalLight(0xffeedd);
@@ -653,27 +653,13 @@
         rayForMovies = new THREE.Raycaster();
 
         //model Jason collider
-        new THREE.JSONLoader().load('models/colliders/1122015_colliders.js', function(geometry) {
+        new THREE.JSONLoader().load('models/colliders/122015_colliders.js', function(geometry) {
             var objectCollider = new THREE.Mesh(geometry);
-            objectCollider.position.set(0, -350, 0);
-            objectCollider.scale.set(10, 10, 10);
-            scene.add(objectCollider);
-            collidableMeshList.push(objectCollider);
+            objectCollider.position.set(0, -1000, 500);
+            objectCollider.scale.set(11, 11, 11);
+            //scene.add(objectCollider);
+            //collidableMeshList.push(objectCollider);
         });
-
-        //city model Jason
-        // new THREE.JSONLoader().load('models/fullScene_json/122015_fullScene.js', function(geometry, materials) {
-        //     var material = new THREE.MeshFaceMaterial(materials);
-        //     for (var i = 0; i < materials.length; i++)
-        //         materials[i].side = THREE.DoubleSide;
-
-        //     var object = new THREE.Mesh(geometry, material);
-        //     object.position.set(0, -20, 0);
-        //     object.scale.set(4, 4, 4);
-        //     scene.add(object);
-        //     LOADING.complete(); // switches loading to enter button 
-        //     collidableMeshList.push(object);
-        // });
 
         var manager = new THREE.LoadingManager();
         manager.onProgress = function(item, loaded, total) {
@@ -688,6 +674,7 @@
         };
 
         var onError = function(xhr) {};
+        //
         var texture1 = new THREE.Texture();
         var loader = new THREE.ImageLoader(manager);
         loader.load('models/1/placedudocteur_uvs_00_2048_SFW.png', function(image) {
@@ -703,58 +690,101 @@
                 }
             });
 
-            object1.position.set(0, -350, 0);
+            object1.position.set(0, -1000, 0);
             //object.rotation.y=180;
-            object1.scale.set(10, 10, 10);
+            object1.scale.set(15, 15, 15);
             scene.add(object1);
             collidableMeshList.push(object1);
         }, onProgress, onError);
 
 
-        new THREE.JSONLoader().load('models/2/franprix_121815_1.js', function(geometry, materials) {
-            var material2 = new THREE.MeshFaceMaterial(materials);
-            for (var i = 0; i < materials.length; i++)
-                materials[i].side = THREE.DoubleSide;
+        var texture2 = new THREE.Texture();
+        var loader = new THREE.ImageLoader(manager);
+        loader.load('models/2/franprix_11_2048_SFW.png', function(image) {
+            texture2.image = image;
+            texture2.needsUpdate = true;
+        });
 
-            var object2 = new THREE.Mesh(geometry, material2);
-            object2.position.set(0, -350, 0);
-            object2.scale.set(10, 10, 10);
+        var loader = new THREE.OBJLoader(manager);
+        loader.load('models/2/franprix_121815_1.obj', function(object2) {
+            object2.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture2;
+                }
+            });
+
+            object2.position.set(0, -1000, 0);
+            //object.rotation.y=180;
+            object2.scale.set(15, 15, 15);
             scene.add(object2);
             collidableMeshList.push(object2);
-        });
-        new THREE.JSONLoader().load('models/3/pdd_acr_121815_1.js', function(geometry, materials) {
-            var material3 = new THREE.MeshFaceMaterial(materials);
-            for (var i = 0; i < materials.length; i++)
-                materials[i].side = THREE.DoubleSide;
+        }, onProgress, onError);
 
-            var object3 = new THREE.Mesh(geometry, material3);
-            object3.position.set(0, -350, 0);
-            object3.scale.set(10, 10, 10);
+        var texture3 = new THREE.Texture();
+        var loader = new THREE.ImageLoader(manager);
+        loader.load('models/3/placeDuDocteur_acr_2048_SFW.png', function(image) {
+            texture3.image = image;
+            texture3.needsUpdate = true;
+        });
+
+        var loader = new THREE.OBJLoader(manager);
+        loader.load('models/3/pdd_acr_121815_1.obj', function(object3) {
+            object3.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture3;
+                }
+            });
+
+            object3.position.set(0, -1000, 0);
+            //object.rotation.y=180;
+            object3.scale.set(15, 15, 15);
             scene.add(object3);
             collidableMeshList.push(object3);
-        });
-        new THREE.JSONLoader().load('models/4/rdt_acr_121815_1.js', function(geometry, materials) {
-            var material4 = new THREE.MeshFaceMaterial(materials);
-            for (var i = 0; i < materials.length; i++)
-                materials[i].side = THREE.DoubleSide;
+        }, onProgress, onError);
 
-            var object4 = new THREE.Mesh(geometry, material4);
-            object4.position.set(0, -350, 0);
-            object4.scale.set(10, 10, 10);
+        var texture4 = new THREE.Texture();
+        var loader = new THREE.ImageLoader(manager);
+        loader.load('models/4/rueDesTournelles_acr02_2048_SFW.png', function(image) {
+            texture4.image = image;
+            texture4.needsUpdate = true;
+        });
+
+        var loader = new THREE.OBJLoader(manager);
+        loader.load('models/4/rdt_acr_121815_1.obj', function(object4) {
+            object4.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture4;
+                }
+            });
+
+            object4.position.set(0, -1000, 0);
+            //object.rotation.y=180;
+            object4.scale.set(15, 15, 15);
             scene.add(object4);
             collidableMeshList.push(object4);
-        });
-        new THREE.JSONLoader().load('models/5/rdt_cafe_121815_1.js', function(geometry, materials) {
-            var material5 = new THREE.MeshFaceMaterial(materials);
-            for (var i = 0; i < materials.length; i++)
-                materials[i].side = THREE.DoubleSide;
+        }, onProgress, onError);
 
-            var object5 = new THREE.Mesh(geometry, material5);
-            object5.position.set(0, -350, 0);
-            object5.scale.set(10, 10, 10);
+        var texture5 = new THREE.Texture();
+        var loader = new THREE.ImageLoader(manager);
+        loader.load('models/5/cafe_tall_2048_SFW.png', function(image) {
+            texture5.image = image;
+            texture5.needsUpdate = true;
+        });
+
+        var loader = new THREE.OBJLoader(manager);
+        loader.load('models/5/rdd_cafe_121815_1.obj', function(object5) {
+            object5.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture5;
+                }
+            });
+
+            object5.position.set(0, -1000, 0);
+            //object.rotation.y=180;
+            object5.scale.set(15, 15, 15);
             scene.add(object5);
             collidableMeshList.push(object5);
-        });
+        }, onProgress, onError);
 
         var texture6 = new THREE.Texture();
         var loader = new THREE.ImageLoader(manager);
@@ -771,24 +801,35 @@
                 }
             });
 
-            object6.position.set(0, -350, 0);
+            object6.position.set(0, -1000, 0);
             //object.rotation.y=180;
-            object6.scale.set(10, 10, 10);
+            object6.scale.set(15, 15, 15);
             scene.add(object6);
             collidableMeshList.push(object6);
         }, onProgress, onError);
 
-        new THREE.JSONLoader().load('models/7/121815_rdt_adjacent.js', function(geometry, materials) {
-            var material7 = new THREE.MeshFaceMaterial(materials);
-            for (var i = 0; i < materials.length; i++)
-                materials[i].side = THREE.DoubleSide;
+        var texture7 = new THREE.Texture();
+        var loader = new THREE.ImageLoader(manager);
+        loader.load('models/7/rueDesTournelles_acr02_2048_SFW.png', function(image) {
+            texture7.image = image;
+            texture7.needsUpdate = true;
+        });
 
-            var object7 = new THREE.Mesh(geometry, material7);
-            object7.position.set(0, -350, 0);
-            object7.scale.set(10, 10, 10);
+        var loader = new THREE.OBJLoader(manager);
+        loader.load('models/7/121815_rdt_adjacent.obj', function(object7) {
+            object7.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture7;
+                }
+            });
+
+            object7.position.set(0, -1000, 0);
+            //object.rotation.y=180;
+            object7.scale.set(15, 15, 15);
             scene.add(object7);
             collidableMeshList.push(object7);
-        });
+        }, onProgress, onError);
+
 
         // var floorGeometry = new THREE.PlaneGeometry(110000, 110000, 3);
         // var floorMaterial = new THREE.MeshBasicMaterial({
@@ -816,25 +857,34 @@
                 }
             });
 
-            object8.position.set(2467.93, -400, 3116.63);
+            object8.position.set(2467.93, -1000, 3116.63);
             //object.rotation.y=180;
-            object8.scale.set(23, 23, 23);
+            object8.scale.set(24, 24, 24);
             scene.add(object8);
             LOADING.complete(); // switches loading to enter button 
-            //collidableMeshList.push(object8);
+            collidableMeshList.push(object8);
         }, onProgress, onError);
 
-        new THREE.JSONLoader().load('models/skyBox/122015_skybox02.js', function(geometry, materials) {
-            var material9 = new THREE.MeshFaceMaterial(materials);
-            for (var i = 0; i < materials.length; i++)
-                materials[i].side = THREE.DoubleSide;
+        var texture9 = new THREE.Texture();
+        var loader = new THREE.ImageLoader(manager);
+        loader.load('models/skyBox/122115_skybox_L.jpg', function(image) {
+            texture9.image = image;
+            texture9.needsUpdate = true;
+        });
 
-            var object9 = new THREE.Mesh(geometry, material9);
-            object9.position.set(0, 0, -5554.80);
-            object9.scale.set(6.2, 6.2, 6.2);
+        var loader = new THREE.OBJLoader(manager);
+        loader.load('models/skyBox/122115_skybox.obj', function(object9) {
+            object9.traverse(function(child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material.map = texture9;
+                }
+            });
+
+            object9.position.set(0, -500, -11923.37);
+            object9.scale.set(7.8, 7.8, 7.8);
             scene.add(object9);
             collidableMeshList.push(object9);
-        });
+        }, onProgress, onError);
 
         // for (var i = 0; i < 2; i++) {
         //     var videoImage = document.createElement('canvas');
@@ -881,8 +931,8 @@
         });
         new THREE.JSONLoader().load('models/screens/122015_rdt_corner_movieScreen02.js', function(geometry) {
             movieScreenArray[0] = new THREE.Mesh(geometry, movieMaterial);
-            movieScreenArray[0].scale.set(10, 10, 10);
-            movieScreenArray[0].position.y = -350;
+            movieScreenArray[0].scale.set(15, 15, 15);
+            movieScreenArray[0].position.y = -1000;
             scene.add(movieScreenArray[0]);
             // add audio to this mesh
             audioList.push(Audio3d.addAudioToPosition(audioPaths[0], movieScreenPositions[0]));
@@ -908,8 +958,8 @@
         });
         new THREE.JSONLoader().load('models/screens/122015_franprix_movieScreen02.js', function(geometry) {
             movieScreenArray[1] = new THREE.Mesh(geometry, movieMaterial1);
-            movieScreenArray[1].scale.set(10, 10, 10);
-            movieScreenArray[1].position.y = -350;
+            movieScreenArray[1].scale.set(15, 15, 15);
+            movieScreenArray[1].position.y = -1000;
             scene.add(movieScreenArray[1]);
             // add audio to this mesh
             audioList.push(Audio3d.addAudioToPosition(audioPaths[1], movieScreenPositions[1]));
@@ -936,35 +986,15 @@
         });
         new THREE.JSONLoader().load('models/screens/122015_pdd_movieScreen02.js', function(geometry) {
             movieScreenArray[2] = new THREE.Mesh(geometry, movieMaterial2);
-            movieScreenArray[2].scale.set(10, 10, 10);
-            movieScreenArray[2].position.y = -350;
+            movieScreenArray[2].scale.set(15, 15, 15);
+            movieScreenArray[2].position.y = -850;
             scene.add(movieScreenArray[2]);
             // add audio to this mesh
             audioList.push(Audio3d.addAudioToPosition(audioPaths[2], movieScreenPositions[2]));
         });
-        //push this screen to the collidibale list
-        // collidableMeshList.push(movieScreenArray[i]);
-        //position the screens and add them to the scene
-        //camera.position.set(0,80,300);
-        //camera.lookAt(movieScreenArray[0].position);
-        //SKYBOX/FOG
-        // var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
-        // var skyBoxMaterial = new THREE.MeshBasicMaterial({
-        //     color: 0x330000,
-        //     side: THREE.DoubleSide
-        // });
-        // var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
-        // scene.add(skyBox);
-        //scene.fog = new THREE.FogExp2(0x330000, 0.00025);
-        // // lights
-        // light = new THREE.DirectionalLight(0xffffff);
-        // light.position.set(1, 1, 1);
-        // scene.add(light);
-        // light = new THREE.DirectionalLight(0x002288);
-        // light.position.set(-1, -1, -1);
-        // scene.add(light);
+    
         //spot light1              (hex, intensity, distance, angle, exponent, decay)
-        light = new THREE.SpotLight(0xFFCC66, 1.5, 0, 0.1, 9, 0.1);
+        light = new THREE.SpotLight(0xFFCC66, 1, 0, 0.1, 9, 0.1);
         light.position.set(-42.34, 17, 227);
         light.shadowCameraVisible = true;
         light.shadowDarkness = 0.95;
@@ -1071,7 +1101,7 @@
                 // Test if we intersect with any obstacle mesh
                 var collisionResults = rayForMovies.intersectObjects(collidableMeshList);
                 // And disable that direction if we do
-                if (collisionResults.length > 0 && collisionResults[0].distance < 500) {
+                if (collisionResults.length > 0 && collisionResults[0].distance < 900) {
                     //console.log('we have hit!');
                     //isHit = true;
                     if (i == 0) {

@@ -56,7 +56,7 @@ var Audio3d = {
 	 */
 	detectDistances : function(meshArray, myPos) {
 		// play with this number to calibrate max distance to trigger sound
-		var distanceThreshold = 4200;
+		var distanceThreshold = 8200;
 
 		var maxDist = 100000;
 		var closestItem = -1;
