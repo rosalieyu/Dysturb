@@ -27,7 +27,6 @@ var SPLASH = {
     hideInstructions: function(event) {
         event.preventDefault();
         $('#instructions').hide();
-
         if($(window).width() > 768) {        
             $('#instructions-reminder').show();
         }
