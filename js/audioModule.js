@@ -3,12 +3,39 @@
  */
 
 
+THREE.Audio.prototype.fadeOut = function() {
+	if (this.on) {
+		this.gain.gain.setValueAtTime(1, this.context.currentTime);
+	}
+
+	this.gain.gain.linearRampToValueAtTime(0, this.context.currentTime + 1);
+	this.fadeTime = this.context.currentTime;
+	this.on = false;
+};
+
+THREE.Audio.prototype.fadeIn = function() {
+	var self = this;
+	this.on = true;
+
+	if (this.fadeTime) {
+		origStart = this.fadeTime;
+		this.pause();
+		self.startTime = origStart;
+		this.gain.gain.setValueAtTime(0, this.context.currentTime);
+		this.gain.gain.exponentialRampToValueAtTime(1.0, this.context.currentTime + 0.2);
+		setTimeout(function() {
+			self.play();
+		}, 50);
+	}
+};
+
 var Audio3d = {
 
 	// set the overall volume boost (1 = normal)
 	volumeLevel : 6,
 	webAudioEnabled : typeof( (window.AudioContext || window.webkitAudioContext) ) != 'undefined',
 	compressor: null,
+	paused : false,
 
 	// initialize audio listener and return an array of audio elements
 	initAudio : function(pathArray, cam) {
@@ -24,7 +51,10 @@ var Audio3d = {
 			this.compressor.knee.value = 32;
 			this.compressor.ratio.value = 4;
 			this.compressor.threshold.value = -48;
-			this.compressor.connect(this.listener.context.destination);
+			this.masterGain = this.listener.context.createGain();
+			this.masterGain.gain.value = this.volumeLevel;
+			this.compressor.connect(this.masterGain);
+			this.masterGain.connect(this.listener.context.destination);
 			cam.add( this.listener );
 
 		// }
@@ -36,9 +66,27 @@ var Audio3d = {
 	addAudioToPosition : function(pathToAudio, pos) {
 
 		if (!this.webAudioEnabled) {
-			var a = new Audio(pathToAudio);
+			var a = new Audio();
+			a.fadeIn = function() {
+				$(a).animate({volume: 1}, 1000);
+				a.on = true;
+			};
+			a.fadeOut = function() {
+				$(a).animate({volume: 0}, 1000);
+				a.on = false;
+			};
+			a.src = pathToAudio;
+			a.isPlaying = false;
+			a.on = false;
+			a.setAttribute('loop', true);
+			document.body.appendChild(a);
+			a.hidden = true;
 			// detect distances if web audio is not enabled
-			a.position = pos;
+			a.position = new THREE.Vector3();
+			a.position.x = pos.x;
+			a.position.y = pos.y;
+			a.position.z = pos.z;
+			return a;
 		}
 
 		else {
@@ -69,7 +117,7 @@ var Audio3d = {
 				maxDist = dist;
 				closestItem = i;
 			}
-			// str += i + ' Dist: ' +dist;
+			str += i + ' Dist: ' +dist;
 		}
 		// console.log(str);
 		return closestItem;
@@ -79,10 +127,11 @@ var Audio3d = {
 	// and TURN IT UP
 	_makeThreeAudio : function(pathToAudio, pos, listener) {
 		var snd = new THREE.Audio(listener);
-		snd.gain.gain.value = this.volumeLevel;
+		snd.gain.gain.value = 1.0;
 		snd.gain.disconnect();
 		snd.gain.connect(this.compressor);
 		snd.setLoop(true);
+		snd.on = false;
 		snd.load(pathToAudio);
 		snd.position.set(pos.x, pos.y, pos.z);
 		// mesh.add(snd);
@@ -116,6 +165,39 @@ var Audio3d = {
 			document.addEventListener('touchstart', startIOS, false);
 		}
 
+	},
+
+	fadeAllOut: function() {
+		this.paused = true;
+		if (this.webAudioEnabled) {
+			for (var i = 0; i < audioList.length; i++) {
+				if (audioList[i].isPlaying) {
+					audioList[i].fadeOut();
+					// audioList[i].stop();
+				}
+			}
+		}
+		else {
+			for (var i = 0; i < audioList.length; i++) {
+				audioList[i].fadeOut();
+			}
+		}
+	},
+
+	fadeAllIn: function() {
+		this.paused = false;
+		if (this.webAudioEnabled) {
+			for (var i = 0; i < audioList.length; i++) {
+				if (audioList[i].isPlaying) {
+					audioList[i].fadeIn();
+				}
+			}
+		}
+		else {
+			for (var i = 0; i < audioList.length; i++) {
+				audioList[i].fadeIn();
+			}
+		}
 	}
 
 }

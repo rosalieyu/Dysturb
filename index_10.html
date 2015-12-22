@@ -336,13 +336,14 @@
                     controlsEnabled = true;
                     controls.enabled = true;
                     blocker2.style.display = 'none';
+                    Audio3d.fadeAllIn();
                 } else {
                     controls.enabled = false;
                     blocker2.style.display = '-webkit-box';
                     blocker2.style.display = '-moz-box';
                     blocker2.style.display = 'box';
                     instructions.style.display = '';
-                    console.log('index');
+                    Audio3d.fadeAllOut();
                     instructionsReminder.style.display = 'none';
                 }
             };
@@ -498,18 +499,26 @@
     }
 
     function audioPlay(num) {
+        if (Audio3d.paused) return;
         var mediaLength = audioList.length;
+        // console.log(num);
+                console.log('playyyyy ' + num);
 
         for (var i = 0; i < mediaLength; i++) {
-            if (i == num && audioList[i].isPlaying === false) {
-                try {
+            if (i == num && audioList[i].on === false) {
+                if (!audioList[i].isPlaying) {
                     audioList[i].play();
-                } catch (e) {}
-            } else if (i !== num && audioList[i].isPlaying === true) {
+                    audioList[i].isPlaying = true;
+                } else {
+                    audioList[i].fadeIn();
+                }
+            }
+            else if (i !== num && audioList[i].on === true) {
                 try {
-                    audioList[i].isPlaying = false;
-                    audioList[i].pause();
-                } catch (e) {}
+                    audioList[i].fadeOut();
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }
     }
