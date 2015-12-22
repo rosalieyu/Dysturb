@@ -541,7 +541,7 @@
             opacity: 0
         });
         MovingCube = new THREE.Mesh(cubeGeometry, wireMaterial);
-        MovingCube.position.set(0, -50, -500);
+        MovingCube.position.set(0, -650, -500);
         cubeGeometry = new THREE.CubeGeometry(10, 10, 50);
         wireMaterial = new THREE.MeshBasicMaterial({
             wireframe: true,
@@ -871,7 +871,7 @@
             object8.scale.set(24, 24, 24);
             scene.add(object8);
             LOADING.complete(); // switches loading to enter button 
-            collidableMeshList.push(object8);
+            //collidableMeshList.push(object8);
         }, onProgress, onError);
 
         var texture9 = new THREE.Texture();
@@ -889,8 +889,8 @@
                 }
             });
 
-            object9.position.set(0, -500, -11923.37);
-            object9.scale.set(7.8, 7.8, 7.8);
+            object9.position.set(0, -500, -12923.37);
+            object9.scale.set(9, 9, 9);
             scene.add(object9);
             collidableMeshList.push(object9);
         }, onProgress, onError);
@@ -1110,7 +1110,7 @@
                 // Test if we intersect with any obstacle mesh
                 var collisionResults = rayForMovies.intersectObjects(collidableMeshList);
                 // And disable that direction if we do
-                if (collisionResults.length > 0 && collisionResults[0].distance < 900) {
+                if (collisionResults.length > 0 && collisionResults[0].distance < 800) {
                     //console.log('we have hit!');
                     //isHit = true;
                     if (i == 0) {
@@ -1161,7 +1161,7 @@
                     // set based on mouse and camera
                     //rayForMovies.setFromCamera(mouse, camera);
 
-                    var maxDist = 2500;
+                    var maxDist = 2800;
 
                     // get an array of all the movies intersecting the rayForMovies
                     var intersectingMovies = rayForMovies.intersectObjects(movieScreenArray);
@@ -1238,19 +1238,19 @@
                     //  velocity.x += 400.0 * delta;
                     // if (!isHitFront && !isHitBack && !isHitRight && !isHitLeft) {
                     if (moveForward && !isHitFront) {
-                        velocity.z -= 30.0 * delta;
+                        velocity.z -= 15.0 * delta;
                         isHitBack = false;
                     }
                     if (moveBackward && !isHitBack) {
-                        velocity.z += 30.0 * delta;
+                        velocity.z += 15.0 * delta;
                         isHitFront = false;
                     }
                     if (moveLeft && !isHitLeft) {
-                        controls.getObject().rotation.y += 0.3 * delta;
+                        controls.getObject().rotation.y += 0.2 * delta;
                         isHitRight = false;
                     }
                     if (moveRight && !isHitRight) {
-                        controls.getObject().rotation.y -= 0.3 * delta;
+                        controls.getObject().rotation.y -= 0.2 * delta;
                         isHitLeft = false;
                     }
                     if (isHitFront) {
